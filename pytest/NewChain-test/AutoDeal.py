@@ -35,7 +35,7 @@ class log_treatment(object):
         log.close()
 log = log_treatment()
 
-class Deal(object):
+class Deal(log_treatment):
 
     def __init__(self,url,fs_data,js_data,money,password):
 
@@ -51,11 +51,13 @@ class Deal(object):
                 payload = '{"jsonrpc":"2.0","method":"account_unlockAccount","params":["'+fs_index+'","'+self.password+'"],"id":3}'
                 response = requests.post(self.url,data=payload,headers=header)
                 response.raise_for_status()
+                print(response.text)
 
         except Exception as ero:
-            log.log_text(str(ero.args))
+            self.log_text(str(ero.args))
+            # log.log_text(str(ero.args))
 
-    def account_deals(self,):
+    def account_deals(self):
         self.account_unlockAccount()
         try:
             for fs_index in self.fs_data:
@@ -66,20 +68,21 @@ class Deal(object):
                     print(response.text)
 
         except Exception as ero:
-            log.log_text(str(ero.args))
+            self.log_text(str(ero.args))
+            # log.log_text(str(ero.args))
 
 
 if __name__ == "__main__":
 
     url = 'http://39.98.39.224:35645'
-    fs_data = ['0xd6e1b15eDDd2e93FE48e62583FD32C22044e7B6f']
-    js_data = ['0xd3EE25DB3F3eb7b266c347f97504f442ADb91846']
+    fs_data = ['0xB7c5F20eED9d0834b97348142A616CE449510009']
+    js_data = ['0x5e85aAeb9a4974EB24b4660b94451AB491361f1A']
     money = 100
-    password = '1234567'
+    password = '123456'
     run = Deal(url,fs_data,js_data,money,password)
     run.account_deals()
     scheduler = BlockingScheduler()
-    scheduler.add_job(run.account_deals, 'interval',max_instances=10, seconds=10)
+    scheduler.add_job(run.account_deals, 'interval', seconds=10)
     try:
         scheduler.start()
     except:

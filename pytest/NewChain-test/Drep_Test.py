@@ -117,7 +117,7 @@ class BlockMgr(General):
 
  
 # 链接口 用于获取区块信息
-class china(General):
+class chain(General):
 
     def __init__(self,CollectionName,url):
         super().__init__(CollectionName,url)
@@ -451,11 +451,11 @@ class account(General):
         self.General_way(method,params)
     
     # 解锁账号
-    def account_unlockAccount(self,Site):
+    def account_unlockAccount(self,Site,password):
 
         Term = {"name":"account_unlockAccount"}
         method = self.get_method(Term)
-        params = '["'+Site+'"]'
+        params = '["'+Site+'","'+password+'"]'
         self.General_way(method,params)
         
 
@@ -486,7 +486,7 @@ class account(General):
         testcase_list = dict(pynosql.select_testcase('TestCase',Term))
         Launch = testcase_list['Launch']
         Receive = testcase_list['Receive']
-        money = hex(testcase_list['money'])
+        money = hex(testcase_list['money'] * (10**18))
         gasprice = hex(testcase_list['gasprice'])
         gaslimt = hex(testcase_list['gaslimt'])
         params = '["'+Launch+'","'+Receive+'","'+money+'","'+gasprice+'","'+gaslimt+'",""]'
@@ -501,7 +501,7 @@ class account(General):
         testcase_list = dict(pynosql.select_testcase('TestCase',Term))
         Launch = testcase_list['Launch']
         Receive = testcase_list['Receive']
-        money = hex(testcase_list['money'])
+        money = hex(testcase_list['money'] * (10**18))
         gasprice = hex(testcase_list['gasprice'])
         gaslimt = hex(testcase_list['gaslimt'])
         params = '["'+Launch+'","'+Receive+'","'+money+'","'+gasprice+'","'+gaslimt+'","",'+nonce+']'
@@ -684,7 +684,7 @@ account = account(CollectionName,url)
 trace = trace(CollectionName,url)
 log = log(CollectionName,url)
 p2p = p2p(CollectionName,url)
-china = china(CollectionName,url)
+chain = chain(CollectionName,url)
 BlockMgr = BlockMgr(CollectionName,url)
 
 
@@ -726,20 +726,20 @@ def VoteCredit_Scene():
     CollectionName = 'result_msg'
     Trem = {"method":"account_voteCredit"}
     txhash = pynosql.select(CollectionName,Trem,'result')
-    china.getCancelCreditDetail(txhash) #查询投票数据
+    chain.getCancelCreditDetail(txhash) #查询投票数据
     time.sleep(5)
     #取消投票
     Debug('取消投票')
     account.CancelVoteCredit()
     Trem = {"method":"account_cancelVoteCredit"}
     txhash = pynosql.select(CollectionName,Trem,'result')
-    # china.getCancelCreditDetail(txhash) #查询取消数据
+    # chain.getCancelCreditDetail(txhash) #查询取消数据
     # trace.getTransaction(txhash)
     #退票细节
     Debug('退票细节')
     Site = '0xd6e1b15eDDd2e93FE48e62583FD32C22044e7B6f'
-    china.GetCancelCreditDetails(Site)
-    china.GetCandidateAddrs(Site)
+    chain.GetCancelCreditDetails(Site)
+    chain.GetCandidateAddrs(Site)
     Debug('根据地址查询该地址发出的交易，支持分页')
     trace.getSendTransactionByAddr(Site,1,10)
     Debug('获取交易池中的交易信息')
@@ -747,7 +747,7 @@ def VoteCredit_Scene():
     Debug('查询交易是否在交易池')
     BlockMgr.GetTxInPool(txhash)
     Debug('根据地址获取bytecode')
-    china.getByteCode(Site)
+    chain.getByteCode(Site)
 
     # account.listAddress()
     # account.createAccount()
@@ -763,18 +763,39 @@ def VoteCredit_Scene():
     # BlockMgr.gasPrice()
     #gaslimt上限
     # account.estimateGas()
-    # china.getNonce()
+    # chain.getNonce()
     # account.transferWithNonce('1421')
     # BlockMgr.gasPrice()
     
+def test3():
+    # account.openWallet('1234567')
+    # account.account_unlockAccount('0xB7c5F20eED9d0834b97348142A616CE449510009','1234567')
+    account.transfer()
+    # chain.getBalance('0x8c944f5db5ed9395dc5b33d1cab1974fa7199e4c')
+    # chain.getBalance('0xB7c5F20eED9d0834b97348142A616CE449510009')
+    # GetPoolTransactions
+    # print((961999886992010000000)/(10**18))
+    
+    # BlockMgr.GetPoolTransactions('0xB7c5F20eED9d0834b97348142A616CE449510009')
+    # BlockMgr.GetTxInPool('0x5117560b34cc3c87d3447fa0b4b66b523e17299232ec69f81488c42ae7eaa487')
+    # getBlockGasInfo
+    # account.VoteCredit()
+    # chain.getBalance('0x6c09dc42420b79b1222bd62d964e9e2dccc558ea')
+    # chain.GetCandidateAddrs('0xb490ffa71d9d1d9f4472fbc46ee6e4ffd2bb486b')
+
+def test4():
+    # account.listAddress()
+    pass
 
 
 if __name__ == "__main__":
 
     # VoteCredit_Scene()
-    CandidateCredit_Scene()
+    # CandidateCredit_Scene()
+    test3()
+    # test4()
     
-    
+
 '''
 
 class Drep_Deal(object):
