@@ -59,6 +59,8 @@ class General(object):
             message = {"method":method,"result":result,"time":get_time()}
             stropway(Collection,method,message,message)
             print("正常返回结果:{}".format(response.text))
+
+
         except Exception as err:
             print("方法错误:{}".format(err))
             print("错误的结果:{}".format(response.text))
@@ -766,11 +768,26 @@ def VoteCredit_Scene():
     # chain.getNonce()
     # account.transferWithNonce('1421')
     # BlockMgr.gasPrice()
-    
+
 def test3():
+    # account.account_unlockAccount('0x1A61B43d6e53954735dd300D5090599A17F8E4db','123456')
+    BlockMgr.GetPoolTransactions('0x1A61B43d6e53954735dd300D5090599A17F8E4db')
+
+#获取本地所有地址的余额以及存储
+def GetMoneyAddress():
     # account.openWallet('1234567')
-    # account.account_unlockAccount('0xB7c5F20eED9d0834b97348142A616CE449510009','1234567')
-    account.transfer()
+    
+    # account.transfer()
+    CollectionName = 'result_msg'
+    Trem = {"method":"account_listAddress"}
+    address_list = pynosql.select(CollectionName,Trem,'result')
+    for addres in address_list:
+        chain.getBalance(addres)
+        money = pynosql.select('result_msg',{"method":"chain_getBalance"},"result")
+        message = {"address":addres,"money":money}
+        pynosql.insert('MoneyCount',message)
+    # account.listAddress()
+
     # chain.getBalance('0x8c944f5db5ed9395dc5b33d1cab1974fa7199e4c')
     # chain.getBalance('0xB7c5F20eED9d0834b97348142A616CE449510009')
     # GetPoolTransactions

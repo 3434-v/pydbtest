@@ -75,9 +75,9 @@ class Deal(log_treatment):
 if __name__ == "__main__":
 
     url = 'http://39.98.39.224:35645'
-    fs_data = ['0xB7c5F20eED9d0834b97348142A616CE449510009']
-    js_data = ['0x5e85aAeb9a4974EB24b4660b94451AB491361f1A']
-    money = 100
+    fs_data = ['0x1A61B43d6e53954735dd300D5090599A17F8E4db']
+    js_data = ['0x07332150A19Bc85E0416b19F2F6ee255BA34126B','0x14aF424238BD4eA60C356c967D5709AB3f8224ed']
+    money = 100 * (10**18)
     password = '123456'
     run = Deal(url,fs_data,js_data,money,password)
     run.account_deals()
