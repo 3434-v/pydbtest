@@ -802,15 +802,15 @@ def GetMoneyAddress():
 
 def test4():
     # account.listAddress()
-    pass
+    account.dumpPrivkey('0xB7c5F20eED9d0834b97348142A616CE449510009')
 
 
 if __name__ == "__main__":
 
     # VoteCredit_Scene()
     # CandidateCredit_Scene()
-    test3()
-    # test4()
+    # test3()
+    test4()
     
 
 '''
