@@ -75,14 +75,14 @@ class Deal(log_treatment):
 if __name__ == "__main__":
 
     url = 'http://39.98.39.224:35645'
-    fs_data = ['0x1A61B43d6e53954735dd300D5090599A17F8E4db']
+    fs_data = ['0x06B4Ae76f3443Db9161A273B196282CF4B5346d4']
     js_data = ['0x07332150A19Bc85E0416b19F2F6ee255BA34126B','0x14aF424238BD4eA60C356c967D5709AB3f8224ed']
     money = 100 * (10**18)
     password = '123456'
     run = Deal(url,fs_data,js_data,money,password)
     run.account_deals()
     scheduler = BlockingScheduler()
-    scheduler.add_job(run.account_deals, 'interval', seconds=10)
+    scheduler.add_job(run.account_deals, 'interval', seconds=5)
     try:
         scheduler.start()
     except:

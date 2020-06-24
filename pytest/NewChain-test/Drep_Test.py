@@ -110,11 +110,11 @@ class BlockMgr(General):
         self.General_way(method,params)
 
     # 查询交易是否在交易池，如果在，返回交易
-    def GetTxInPool(self,Site):
+    def GetTxInPool(self,hash):
 
         Term = {"name":"GetTxInPool"}
         method = self.get_method(Term)
-        params = '["'+Site+'"]'
+        params = '["'+hash+'"]'
         self.General_way(method,params)
 
  
@@ -531,7 +531,7 @@ class account(General):
         testcase_list = dict(pynosql.select_testcase('TestCase',Term))
         Launch = testcase_list['Launch']
         Receive = testcase_list['Receive']
-        money = hex(testcase_list['money'])
+        money = hex(testcase_list['money'] * (10 ** 18))
         gasprice = hex(testcase_list['gasprice'])
         gaslimt = hex(testcase_list['gaslimt'])
         params = '["'+Launch+'","'+Receive+'","'+money+'","'+gasprice+'","'+gaslimt+'"]'
@@ -801,10 +801,11 @@ def GetMoneyAddress():
     # chain.GetCandidateAddrs('0xb490ffa71d9d1d9f4472fbc46ee6e4ffd2bb486b')
 
 def test4():
-    # account.listAddress()
-    account.dumpPrivkey('0xB7c5F20eED9d0834b97348142A616CE449510009')
-
-
+    
+    # account.VoteCredit()
+    BlockMgr.GetTxInPool('0x52d5bd83f3bea76fb0fcb0dfad8e4e877aba8e935be96eb18c37d8caf30e7070')
+    print(int(0x52b7d2dcc80cd2e4000000))
+    
 if __name__ == "__main__":
 
     # VoteCredit_Scene()

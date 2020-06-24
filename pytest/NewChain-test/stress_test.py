@@ -16,7 +16,7 @@ class deal(TaskSet):
     def deals(self):
         url = 'http://39.98.39.224:35645'
         money = 100 * (10**18)
-        fs_data = ['0x1A61B43d6e53954735dd300D5090599A17F8E4db']
+        fs_data = ['0x06B4Ae76f3443Db9161A273B196282CF4B5346d4']
         js_data = ['0x07332150A19Bc85E0416b19F2F6ee255BA34126B','0x14aF424238BD4eA60C356c967D5709AB3f8224ed']
         for fs_index in fs_data:
             for js_index in js_data:
