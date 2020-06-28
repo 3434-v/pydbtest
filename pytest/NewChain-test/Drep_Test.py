@@ -678,9 +678,9 @@ class consensus(General):
         params = '[""]'
         self.General_way(method,params)
 
-url = 'http://39.98.39.224:35645'
+# url = 'http://39.98.39.224:35645'
+url = 'http://node1.drep.org'
 CollectionName = 'method'
-# url = "http://127.0.0.1:35645"
 consensus = consensus(CollectionName,url)
 account = account(CollectionName,url)
 trace = trace(CollectionName,url)
@@ -810,8 +810,18 @@ if __name__ == "__main__":
 
     # VoteCredit_Scene()
     # CandidateCredit_Scene()
+    # GetMoneyAddress()
+    # chain.getBalance('')
+    # BlockMgr.GetTxInPool('0xfd3505658f04e8726234c03c4c3cf4dc9a6a8855')
+    # account.transfer()
+    chain.getBalance('0x095173ce86a850ff35aed6000917a141421447eb')
+    print((1997525399999999832/ (10 ** 18)))
+    # BlockMgr.GetPoolTransactions('0x095173ce86a850ff35aed6000917a141421447eb')
+    # account.account_unlockAccount('0xbe0ec4bcc55e18cd4d23058c637308b97ee31ed7','Qwer1234')
+    # account.transfer()
+    
     # test3()
-    test4()
+    # test4()
     
 
 '''

@@ -45,6 +45,17 @@ class Deal(log_treatment):
         self.money = money
         self.password = password
 
+    #打开钱包
+
+    def openWallet(self):
+
+        for fs_index in self.fs_data:
+            payload = '{"jsonrpc":"2.0","method":"account_openWallet","params":["'+self.password+'"],"id":3}'
+            response = requests.post(self.url,data=payload,headers=header)
+            response.raise_for_status()
+            print(response.text)
+
+    #解锁账号
     def account_unlockAccount(self):
         try:
             for fs_index in self.fs_data:
@@ -57,7 +68,9 @@ class Deal(log_treatment):
             self.log_text(str(ero.args))
             # log.log_text(str(ero.args))
 
+    #发送交易
     def account_deals(self):
+        self.openWallet()
         self.account_unlockAccount()
         try:
             for fs_index in self.fs_data:
@@ -74,16 +87,16 @@ class Deal(log_treatment):
 
 if __name__ == "__main__":
 
-    url = 'http://39.98.39.224:35645'
-    fs_data = ['0x06B4Ae76f3443Db9161A273B196282CF4B5346d4']
-    js_data = ['0x07332150A19Bc85E0416b19F2F6ee255BA34126B','0x14aF424238BD4eA60C356c967D5709AB3f8224ed']
-    money = 100 * (10**18)
-    password = '123456'
+    url = 'http://node1.drep.org'
+    fs_data = ['0xbe0ec4bcc55e18cd4d23058c637308b97ee31ed7']
+    js_data = ['0xbe0ec4bcc55e18cd4d23058c637308b97ee31ed7']
+    money = 1 * (10**18)
+    password = 'Qwer1234'
     run = Deal(url,fs_data,js_data,money,password)
     run.account_deals()
-    scheduler = BlockingScheduler()
-    scheduler.add_job(run.account_deals, 'interval', seconds=5)
-    try:
-        scheduler.start()
-    except:
-        pass
+    # scheduler = BlockingScheduler()
+    # scheduler.add_job(run.account_deals, 'interval', seconds=5)
+    # try:
+    #     scheduler.start()
+    # except:
+    #     pass
