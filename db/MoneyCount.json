@@ -1,0 +1,14 @@
+{
+  "RECORDS": [
+    {
+      "_id": "5ef5eca45cf548112b8849fe",
+      "address": "0x01E8D0e1916afBF6d501b3aADa10C53eA19F8A39",
+      "money": "0"
+    },
+    {
+      "_id": "5ef5eca45cf548112b8849ff",
+      "address": "0x01f24C6415BbcE8C426185DabE0E3995583d1372",
+      "money": "1000000802931848000000000"
+    }
+  ]
+}

@@ -1,10 +1,11 @@
 
 import requests
-import re,json,os
+import re,json,os,sys
 import random
 import time
 from apscheduler.schedulers.background import BlockingScheduler
 import traceback
+import contextlib
 header = {
 			'Content-Type': "application/json",
 			'cache-control': "no-cache",
@@ -33,27 +34,25 @@ class log_treatment(object):
             log.write(text)
             log.write('\n')
         log.close()
-log = log_treatment()
 
 class Deal(log_treatment):
 
-    def __init__(self,url,fs_data,js_data,money,password):
+    def __init__(self):
+        self.fs_data = ''
+        self.js_data = ''
+        self.url = ''
+        self.password = ''
 
-        self.url = url
-        self.fs_data = fs_data
-        self.js_data = js_data
-        self.money = money
-        self.password = password
+    #重启
+    def Reset_Python(self):
+        print('reset--->python')
+        python = sys.executable
+        os.execl(python,python,*sys.argv)
 
-    #打开钱包
-
-    def openWallet(self):
-
-        for fs_index in self.fs_data:
-            payload = '{"jsonrpc":"2.0","method":"account_openWallet","params":["'+self.password+'"],"id":3}'
-            response = requests.post(self.url,data=payload,headers=header)
-            response.raise_for_status()
-            print(response.text)
+    #随机函数
+    def RangeMoney(self):
+        money = random.randint(1,101) * (10 ** 18)
+        return money
 
     #解锁账号
     def account_unlockAccount(self):
@@ -62,41 +61,47 @@ class Deal(log_treatment):
                 payload = '{"jsonrpc":"2.0","method":"account_unlockAccount","params":["'+fs_index+'","'+self.password+'"],"id":3}'
                 response = requests.post(self.url,data=payload,headers=header)
                 response.raise_for_status()
-                print(response.text)
+                # print(response.text)
 
         except Exception as ero:
             self.log_text(str(ero.args))
-            # log.log_text(str(ero.args))
 
     #发送交易
     def account_deals(self):
-        self.openWallet()
+        self.read_site()
         self.account_unlockAccount()
+        money = self.RangeMoney
+
         try:
             for fs_index in self.fs_data:
                 for js_index in self.js_data:
-                    payload = '{"jsonrpc":"2.0","method":"account_transfer","params":["'+fs_index+'","'+js_index+'","'+hex(self.money)+'","0x110","0x300000",""],"id":3}'
+                    payload = '{"jsonrpc":"2.0","method":"account_transfer","params":["'+fs_index+'","'+js_index+'","'+hex(money)+'","0x110","0x300000",""],"id":3}'
                     response = requests.post(self.url,data=payload,headers=header)
+                    print(payload)
                     response.raise_for_status()
                     print(response.text)
 
         except Exception as ero:
             self.log_text(str(ero.args))
-            # log.log_text(str(ero.args))
+    
+    def read_site(self):
 
+        with open('message.json','r',encoding='utf8') as msg:
+            msg_dict = json.load(msg)
+        msg.close()
+        self.fs_data = msg_dict['fs_data']
+        self.js_data = msg_dict['js_data']
+        self.url = msg_dict['url']
+        self.password = msg_dict['password']
+        print(msg_dict)
 
 if __name__ == "__main__":
 
-    url = 'http://node1.drep.org'
-    fs_data = ['0xbe0ec4bcc55e18cd4d23058c637308b97ee31ed7']
-    js_data = ['0xbe0ec4bcc55e18cd4d23058c637308b97ee31ed7']
-    money = 1 * (10**18)
-    password = 'Qwer1234'
-    run = Deal(url,fs_data,js_data,money,password)
+    run = Deal()
     run.account_deals()
     # scheduler = BlockingScheduler()
     # scheduler.add_job(run.account_deals, 'interval', seconds=5)
     # try:
     #     scheduler.start()
     # except:
-    #     pass
+    #     run.Reset_Python()

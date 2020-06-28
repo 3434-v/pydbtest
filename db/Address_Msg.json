@@ -1,0 +1,24 @@
+{
+  "RECORDS": [
+    {
+      "_id": "5ee8929f707b8c0a270a1213",
+      "Address": "0xaD3dC2D8aedef155eabA42Ab72C1FE480699336c",
+      "Money": "9654989189964405644125294223"
+    },
+    {
+      "_id": "5ee893422258f6455a378802",
+      "Address": "0xaD3dC2D8aedef155eabA42Ab72C1FE480699336c",
+      "Money": "9654989189964405644125294223"
+    },
+    {
+      "_id": "5ee893540258788059c5190a",
+      "Address": "0xaD3dC2D8aedef155eabA42Ab72C1FE480699336c",
+      "Money": "9654989189964405644125294223"
+    },
+    {
+      "_id": "5ee8935e5c2aee0b13fe8ce5",
+      "Address": "0xaD3dC2D8aedef155eabA42Ab72C1FE480699336c",
+      "Money": "9654989189964377552125294123"
+    }
+  ]
+}

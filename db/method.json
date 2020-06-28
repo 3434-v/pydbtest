@@ -1,0 +1,382 @@
+{
+  "RECORDS": [
+    {
+      "_id": "5eeadfeb25d74d1746d37ffc",
+      "describe": "发送已签名的交易",
+      "method": "blockmgr_sendRawTransaction",
+      "name": "sendRawTransaction"
+    },
+    {
+      "_id": "5eeae0a2117ce06beb20d984",
+      "describe": "获取系统的给出的gasprice建议值",
+      "method": "blockmgr_gasPrice",
+      "name": "gasPrice"
+    },
+    {
+      "_id": "5eeae0b5006c9bae3600ebb9",
+      "describe": "取交易池中的交易信息",
+      "method": "blockmgr_getPoolTransactions",
+      "name": "GetPoolTransactions"
+    },
+    {
+      "_id": "5eeae0c4955242d20895b1be",
+      "describe": "获取地址发出的交易总数",
+      "method": "blockmgr_getTransactionCount",
+      "name": "GetTransactionCount"
+    },
+    {
+      "_id": "5eeae0d48adbd552bb6a690f",
+      "describe": "查询交易是否在交易池，如果在，返回交易",
+      "method": "blockmgr_getTxInPool",
+      "name": "GetTxInPool"
+    },
+    {
+      "_id": "5eeae673cf61000023006071",
+      "describe": "区块明细信息",
+      "method": "chain_getBlock",
+      "name": "getblock"
+    },
+    {
+      "_id": "5eeae699cf61000023006072",
+      "describe": "用于获取当前最高区块",
+      "method": "chain_getMaxHeight",
+      "name": "getMaxHeight"
+    },
+    {
+      "_id": "5eeae6b3cf61000023006073",
+      "describe": "获取gas相关信息",
+      "method": "getBlockGasInfo",
+      "name": "getBlockGasInfo"
+    },
+    {
+      "_id": "5eeae6c7cf61000023006074",
+      "describe": "查询地址余额",
+      "method": "chain_getBalance",
+      "name": "getBalance"
+    },
+    {
+      "_id": "5eeae6dbcf61000023006075",
+      "describe": "查询地址在链上的nonce",
+      "method": "chain_getNonce",
+      "name": "getNonce"
+    },
+    {
+      "_id": "5eeae6ffcf61000023006076",
+      "describe": "查询地址的名誉值",
+      "method": "chain_getReputation",
+      "name": "getNonce_s"
+    },
+    {
+      "_id": "5eeae714cf61000023006077",
+      "describe": "获取区块中特定序列的交易",
+      "method": "chain_getTransactionByBlockHeightAndIndex",
+      "name": "getTransactionByBlockHeightAndIndex"
+    },
+    {
+      "_id": "5eeae714cf61000023006078",
+      "describe": "获取区块中特定序列的交易",
+      "method": "chain_getTransactionByBlockHeightAndIndex",
+      "name": "getTransactionByBlockHeightAndIndex"
+    },
+    {
+      "_id": "5eeae728cf61000023006079",
+      "describe": "根据地址获取地址对应的别名",
+      "method": "chain_getAliasByAddress",
+      "name": "getAliasByAddress"
+    },
+    {
+      "_id": "5eeae738cf6100002300607a",
+      "describe": "根据别名获取别名对应的地址",
+      "method": "chain_getAddressByAlias",
+      "name": "getAddressByAlias"
+    },
+    {
+      "_id": "5eeae746cf6100002300607b",
+      "describe": "根据txhash获取receipt信息",
+      "method": "chain_getReceipt",
+      "name": "getReceipt"
+    },
+    {
+      "_id": "5eeae756cf6100002300607c",
+      "describe": "根据txhash获取交易log信息",
+      "method": "chain_getLogs",
+      "name": "getLogs"
+    },
+    {
+      "_id": "5eeae766cf6100002300607d",
+      "describe": "根据txhash获取退质押或者退投票信息",
+      "method": "chain_getCancelCreditDetail",
+      "name": "getCancelCreditDetail"
+    },
+    {
+      "_id": "5eeae783cf6100002300607e",
+      "describe": "根据地址获取bytecode",
+      "method": "chain_getByteCode",
+      "name": "getByteCode"
+    },
+    {
+      "_id": "5eeae792cf6100002300607f",
+      "describe": "根据地址获取stake 所有细节信息",
+      "method": "chain_getCreditDetails",
+      "name": "getVoteCreditDetails"
+    },
+    {
+      "_id": "5eeae7a5cf61000023006080",
+      "describe": "获取所有退票请求的细节",
+      "method": "chain_getCancelCreditDetails",
+      "name": "GetCancelCreditDetails"
+    },
+    {
+      "_id": "5eeae7b6cf61000023006081",
+      "describe": "获取所有候选节点地址和对应的信任值",
+      "method": "chain_getCandidateAddrs",
+      "name": "GetCandidateAddrs"
+    },
+    {
+      "_id": "5eeae7b6cf61000023006082",
+      "describe": "获取所有候选节点地址和对应的信任值",
+      "method": "chain_getCandidateAddrs",
+      "name": "GetCandidateAddrs"
+    },
+    {
+      "_id": "5eeae7d6cf61000023006083",
+      "describe": "年华后三个月利息, 年华后六个月利息, 一年期利息, 一年以上期利息",
+      "method": "chain_getInterestRate",
+      "name": "getInterestRate"
+    },
+    {
+      "_id": "5eeae7e6cf61000023006084",
+      "describe": "获取出块节点换届周期",
+      "method": "chain_getChangeCycle",
+      "name": "getChangeCycle"
+    },
+    {
+      "_id": "5eeae7f7cf61000023006085",
+      "describe": "获取当前连接的节点",
+      "method": "p2p_getPeers",
+      "name": "getPeers"
+    },
+    {
+      "_id": "5eeae80bcf61000023006086",
+      "describe": "添加节点",
+      "method": "p2p_addPeer",
+      "name": "addPeer"
+    },
+    {
+      "_id": "5eeae81acf61000023006087",
+      "describe": "移除节点",
+      "method": "p2p_removePeer",
+      "name": "removePeer"
+    },
+    {
+      "_id": "5eeae837cf61000023006088",
+      "describe": "设置日志级别",
+      "method": "log_setLevel",
+      "name": "setLevel"
+    },
+    {
+      "_id": "5eeae846cf61000023006089",
+      "describe": "分模块设置级别",
+      "method": "log_setVmodule",
+      "name": "setVmodule"
+    },
+    {
+      "_id": "5eeae856cf6100002300608a",
+      "describe": "根据交易hash查询交易字节",
+      "method": "trace_getRawTransaction",
+      "name": "getRawTransaction"
+    },
+    {
+      "_id": "5eeae86bcf6100002300608b",
+      "describe": "根据交易hash查询交易详细信息",
+      "method": "trace_getTransaction",
+      "name": "getTransaction"
+    },
+    {
+      "_id": "5eeae87ccf6100002300608c",
+      "describe": "把交易字节信息反解析成交易详情",
+      "method": "trace_decodeTrasnaction",
+      "name": "decodeTrasnaction"
+    },
+    {
+      "_id": "5eeae88dcf6100002300608d",
+      "describe": "根据地址查询该地址发出的交易，支持分页",
+      "method": "trace_getSendTransactionByAddr",
+      "name": "getSendTransactionByAddr"
+    },
+    {
+      "_id": "5eeae8b3cf6100002300608e",
+      "describe": "根据地址查询该地址接受的交易，支持分页",
+      "method": "trace_getReceiveTransactionByAddr",
+      "name": "getReceiveTransactionByAd"
+    },
+    {
+      "_id": "5eeaf00acf6100002300608f",
+      "describe": "重建trace中的区块记录",
+      "method": "trace_rebuild",
+      "name": "rebuild"
+    },
+    {
+      "_id": "5eeaf028cf61000023006090",
+      "describe": "列出所有本地地址",
+      "method": "account_listAddress",
+      "name": "listAddress"
+    },
+    {
+      "_id": "5eeaf037cf61000023006091",
+      "describe": "创建本地账号",
+      "method": "account_createAccount",
+      "name": "createAccount"
+    },
+    {
+      "_id": "5eeaf063cf61000023006092",
+      "describe": "创建本地钱包",
+      "method": "account_createWallet",
+      "name": "createWallet"
+    },
+    {
+      "_id": "5eeaf079cf61000023006093",
+      "describe": "锁定账号",
+      "method": "account_lockAccount",
+      "name": "lockAccount"
+    },
+    {
+      "_id": "5eeaf088cf61000023006094",
+      "describe": "解锁账号",
+      "method": "account_unlockAccount",
+      "name": "account_unlockAccount"
+    },
+    {
+      "_id": "5eeaf099cf61000023006095",
+      "describe": "打开钱包",
+      "method": "account_openWallet",
+      "name": "openWallet"
+    },
+    {
+      "_id": "5eeaf0a9cf61000023006096",
+      "describe": "关闭钱包",
+      "method": "account_closeWallet",
+      "name": "closeWallet"
+    },
+    {
+      "_id": "5eeaf0b6cf61000023006097",
+      "describe": "转账",
+      "method": "account_transfer",
+      "name": "transfer"
+    },
+    {
+      "_id": "5eeaf0cfcf61000023006098",
+      "describe": "转账",
+      "method": "account_transferWithNonce",
+      "name": "transferWithNonce"
+    },
+    {
+      "_id": "5eeaf0dfcf61000023006099",
+      "describe": "设置别名",
+      "method": "account_setAlias",
+      "name": "setAlias"
+    },
+    {
+      "_id": "5eeaf0eccf6100002300609a",
+      "describe": "投票",
+      "method": "account_voteCredit",
+      "name": "VoteCredit"
+    },
+    {
+      "_id": "5eeaf0ffcf6100002300609b",
+      "describe": "取消投票",
+      "method": "account_cancelVoteCredit",
+      "name": "CancelVoteCredit"
+    },
+    {
+      "_id": "5eeaf10dcf6100002300609c",
+      "describe": "候选节点质押",
+      "method": "account_candidateCredit",
+      "name": "CandidateCredit"
+    },
+    {
+      "_id": "5eeaf11bcf6100002300609d",
+      "describe": "取消候选",
+      "method": "account_cancelCandidateCredit",
+      "name": "CancelCandidateCredit"
+    },
+    {
+      "_id": "5eeaf12bcf6100002300609e",
+      "describe": "读取智能合约（无数据被修改）",
+      "method": "account_readContract",
+      "name": "readContract"
+    },
+    {
+      "_id": "5eeaf138cf6100002300609f",
+      "describe": "估算交易需要多少gas",
+      "method": "account_estimateGas",
+      "name": "estimateGas"
+    },
+    {
+      "_id": "5eeaf148cf610000230060a0",
+      "describe": "执行智能合约（导致数据被修改）",
+      "method": "account_executeContract",
+      "name": "executeContract"
+    },
+    {
+      "_id": "5eeaf156cf610000230060a1",
+      "describe": "部署合约",
+      "method": "account_createCode",
+      "name": "createCode"
+    },
+    {
+      "_id": "5eeaf169cf610000230060a2",
+      "describe": "导出地址对应的私钥",
+      "method": "account_dumpPrivkey",
+      "name": "dumpPrivkey"
+    },
+    {
+      "_id": "5eeaf176cf610000230060a3",
+      "describe": "导出地址对应的公钥",
+      "method": "account_dumpPubkey",
+      "name": "DumpPubkey"
+    },
+    {
+      "_id": "5eeaf1c0cf610000230060a4",
+      "describe": "关闭钱包",
+      "method": "account_sign",
+      "name": "sign"
+    },
+    {
+      "_id": "5eeaf1d5cf610000230060a5",
+      "describe": "生成其他链的地址",
+      "method": "account_generateAddresses",
+      "name": "generateAddresses"
+    },
+    {
+      "_id": "5eeaf1f1cf610000230060a6",
+      "describe": "导入keystore",
+      "method": "account_importKeyStore",
+      "name": "importKeyStore"
+    },
+    {
+      "_id": "5eeaf1fbcf610000230060a7",
+      "describe": "导入私钥",
+      "method": "account_importPrivkey",
+      "name": "importPrivkey"
+    },
+    {
+      "_id": "5eeaf205cf610000230060a8",
+      "describe": "修改leader等待时间 (ms)",
+      "method": "consensus_changeWaitTime",
+      "name": "changeWaitTime"
+    },
+    {
+      "_id": "5eeaf21ccf610000230060a9",
+      "describe": "获取当前出块节点",
+      "method": "consensus_getMiners",
+      "name": "getMiners"
+    },
+    {
+      "_id": "5eeb210dcf610000230060aa",
+      "describe": "需要获取本地的enode，用于P2p链接",
+      "method": "p2p_localNode",
+      "name": "localNode"
+    }
+  ]
+}

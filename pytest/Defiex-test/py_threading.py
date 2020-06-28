@@ -19,7 +19,7 @@ class SqlSave(object):
         #     length.write(str(table_length))
 
         # length.close()
-        self.conn = sqlite3.connect('F:\\Defiex\\AutoTest\\run_test\\hierarchy_testcase\\test.db')
+        self.conn = sqlite3.connect('E:\\pyfile_version\\pytest\\Defiex-test\\test.db')
         self.curse = self.conn.cursor()
         
         return self

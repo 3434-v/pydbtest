@@ -648,11 +648,11 @@ class account(General):
 
     
     # 导入私钥
-    def importPrivkey(self,privkey):
+    def importPrivkey(self,privkey,password):
         
         Term = {"name":"importPrivkey"}
         method = self.get_method(Term)
-        params = '["'+privkey+'"]'
+        params = '["'+privkey+'","'+password+'"]'
         self.General_way(method,params)
 
 
@@ -814,11 +814,20 @@ if __name__ == "__main__":
     # chain.getBalance('')
     # BlockMgr.GetTxInPool('0xfd3505658f04e8726234c03c4c3cf4dc9a6a8855')
     # account.transfer()
-    chain.getBalance('0x095173ce86a850ff35aed6000917a141421447eb')
-    print((1997525399999999832/ (10 ** 18)))
+    # chain.getBalance('0x095173ce86a850ff35aed6000917a141421447eb')
+    # print((1997525399999999832/ (10 ** 18)))
     # BlockMgr.GetPoolTransactions('0x095173ce86a850ff35aed6000917a141421447eb')
-    # account.account_unlockAccount('0xbe0ec4bcc55e18cd4d23058c637308b97ee31ed7','Qwer1234')
+    # account.account_unlockAccount('0xE93191CaC3C7668a8400BB12FC35c878c134EA1a','Qwer1234')
+    # account.dumpPrivkey('0xE93191CaC3C7668a8400BB12FC35c878c134EA1a')
+    # account.createAccount()
+    # account.DumpPubkey('0x92f3842c1dfcb7597a9520a4a00971059747ecb1')
+    # BlockMgr.GetTxInPool('0x02a235fdeaf998437a94a8c12a4b056b5701752db812078a440f31908c41f0bbba')
+    # chain.getBalance('0xbe0ec4bcc55e18cd4d23058c637308b97ee31ed7')
+    print((43997601738768000000 - 43997318058768000000) / (10 ** 18))
+    # account.importPrivkey('4e0e93162e2e8296cbd377e4a687c590c221649c3ae94732cdcf7f2c80c13aec','Qwer1234')
+    # account.dumpPrivkey('0xbe0ec4bcc55e18cd4d23058c637308b97ee31ed7')
     # account.transfer()
+    # account.account_unlockAccount('4e0e93162e2e8296cbd377e4a687c590c221649c3ae94732cdcf7f2c80c13aec','Qwer1234')
     
     # test3()
     # test4()
