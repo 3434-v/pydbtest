@@ -70,8 +70,7 @@ class Deal(log_treatment):
     def account_deals(self):
         self.read_site()
         self.account_unlockAccount()
-        money = self.RangeMoney
-
+        money = self.RangeMoney()
         try:
             for fs_index in self.fs_data:
                 for js_index in self.js_data:
@@ -83,6 +82,7 @@ class Deal(log_treatment):
 
         except Exception as ero:
             self.log_text(str(ero.args))
+            # print(ero.args)
     
     def read_site(self):
 
@@ -93,15 +93,15 @@ class Deal(log_treatment):
         self.js_data = msg_dict['js_data']
         self.url = msg_dict['url']
         self.password = msg_dict['password']
-        print(msg_dict)
+        # print(msg_dict)
 
 if __name__ == "__main__":
 
     run = Deal()
-    run.account_deals()
-    # scheduler = BlockingScheduler()
-    # scheduler.add_job(run.account_deals, 'interval', seconds=5)
-    # try:
-    #     scheduler.start()
-    # except:
-    #     run.Reset_Python()
+    # run.account_deals()
+    scheduler = BlockingScheduler()
+    scheduler.add_job(run.account_deals, 'interval', seconds=5)
+    try:
+        scheduler.start()
+    except:
+        run.Reset_Python()
