@@ -12,6 +12,8 @@ from py_mongodb import TestMongoDB
 pynosql = TestMongoDB('localhost:27017/','test_defiex')
 select = '测试环境'
 
+
+
 class delete_format(object):
 
     def msg_format(self,msg_list):
@@ -20,7 +22,15 @@ class delete_format(object):
 
 formatting = delete_format()
 
-class supernode(object):
+class response(object):
+    
+    def method(self,url,data):
+        response = requests.get(url + data)
+        print(response.text)
+
+
+
+class supernode(response):
 
     def __init__(self,granarys_index):
         self.granarys_index = granarys_index
@@ -53,7 +63,7 @@ class supernode(object):
             url_header = ''.join([url_header for url_tuple in url_header_list if len(url_header_list)!= 0 for url_header in url_tuple])
             url_end = ''.join([url_end for url_tuple in url_end_list if len(url_end_list)!= 0 for url_end in url_tuple])
             urls = url_header + url_end
-        return urls
+        return urls 
 
     def Get_token(self,name):
 
@@ -712,7 +722,37 @@ class supernode(object):
         response = requests.get(url + data)
         print(response.text)
 
+    #交易员申请开通
+    def Apply_DealStaff(self,name):
+
+        url = self.Get_url('交易员申请开通')
+        data = '{"token":"'+self.Get_token(name)+'"}'
+        response = requests.get(url + data)
+        print(response.text)
+
+    #交易员详情查询
+    def DealStaff_msg(self,name):
+
+        url = self.Get_url('交易员详情查询')
+        data = '{"planerid":"11374499021","language":"zh_CN"}'
+        response = requests.get(url + data)
+        print(response.text)
     
+
+    #交易员交易记录
+    def DealStaff_Dealmsg(self,name):
+
+        url = self.Get_url('交易员交易记录查询')
+        data = '{"planerid":"11374499021","page":"1","count":"20"}'
+        self.method(url,data)
+
+    # 交易员跟单盈利查询
+    def DealStaff_gain(self):
+
+        url = self.Get_url('交易员跟单盈利查询')
+        data = '{"planerid":"12076521935","page":"1","count":"20"}'
+        self.method(url,data)
+
     #分享图盈亏百分比计算
     def share_count(self):
         pass
@@ -745,20 +785,16 @@ class supernode(object):
 
 if __name__ == "__main__":
     run = supernode('1')
-    name = '389863294@qq.com'
-    
-    # run.add_money(name)
-    # run.current_granary(name)
-    # run.add_money('166970782407@qq.com')
-    # import uuid
-    # user_id = uuid.uuid4()
-    # print(user_id)
+    name = '166822741790@qq.com'
+    # run.Apply_DealStaff(name)
+    # run.DealStaff_msg(name)
     # run.create_granary(name)
-    # run.current_granary(name)
-    # run.Login(name)
+    # run.DealStaff_gain()
+    # run.Register('')
+    # run.add_money('166822741790@qq.com')
     run.create_granary(name)
-    run.current_granary(name)
-
+    time.sleep(2)
+    run.flat_granary(name)
     def testcase1():
         with save.SqlSave() as execute:
             for index in range(7,11):

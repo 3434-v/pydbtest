@@ -1,12 +1,14 @@
 {
-    "url": "http://node1.drep.org",
+    "url": "http://39.98.39.224:35645",
     "fs_data":[
-        "x3ce86a850ff35aed6000917a141421447eb"
+        "0x7d17376a5A611c768970f7CE99FBE309450bfF6f"
     ],
     "js_data":[
-        "5bbde55446e84716b537df7f09c1e09"
+        "0x9222e68c7df13e822b71273aaf7f96a7e7f5d437",
+        "0x3c284ddc3d1c776e5257268582392d64d150bd3e",
+        "0xfa2910eca57571b93f181bc2884fc1d46bf838b5"
     ],
-    "password": "Qwer1234"
+    "password": "123456"
 }
 
 

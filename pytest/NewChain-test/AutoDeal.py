@@ -51,7 +51,7 @@ class Deal(log_treatment):
 
     #随机函数
     def RangeMoney(self):
-        money = random.randint(1,101) * (10 ** 18)
+        money = random.randint(1,100) * (10 ** 18)
         return money
 
     #解锁账号
@@ -70,13 +70,13 @@ class Deal(log_treatment):
     def account_deals(self):
         self.read_site()
         self.account_unlockAccount()
-        money = self.RangeMoney()
         try:
             for fs_index in self.fs_data:
                 for js_index in self.js_data:
+                    money = self.RangeMoney()
                     payload = '{"jsonrpc":"2.0","method":"account_transfer","params":["'+fs_index+'","'+js_index+'","'+hex(money)+'","0x110","0x300000",""],"id":3}'
                     response = requests.post(self.url,data=payload,headers=header)
-                    print(payload)
+                    # print(payload)
                     response.raise_for_status()
                     print(response.text)
 
@@ -86,7 +86,7 @@ class Deal(log_treatment):
     
     def read_site(self):
 
-        with open('message.json','r',encoding='utf8') as msg:
+        with open('E:\\pyfile_version\\pytest\\NewChain-test\\message.json','r',encoding='utf8') as msg:
             msg_dict = json.load(msg)
         msg.close()
         self.fs_data = msg_dict['fs_data']
@@ -98,7 +98,7 @@ class Deal(log_treatment):
 if __name__ == "__main__":
 
     run = Deal()
-    # run.account_deals()
+    run.account_deals()
     scheduler = BlockingScheduler()
     scheduler.add_job(run.account_deals, 'interval', seconds=5)
     try:

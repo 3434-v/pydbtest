@@ -1,0 +1,28 @@
+1、django-admin startproject xmname（项目名）
+2、cd xmname
+3、python manage.py startapp yyname（应用名）
+4、在yyname中创建中创建一个子路由文件urls.py
+5、在xmname文件中的urls.py(总路由文件)配置好跳转子路由方法
+    from django.urls import include 导入include跳转方法
+    path('yyname/', include('yyname.urls')) 跳转到yyname的urls文件层
+    在yyname文件下的urls文件中进行配置
+    from . import views 先导入views方法
+    urlpatterns = [
+        path('',views.home, name='home'),
+    ]
+
+6、在xmname文件中的settings.py中配置语言以及时区 LANGUAGE_CODE = 'zh-hans' TIME_ZONE = 'Asia/Shanghai'
+7、简易服务器启动，在项目路径中 python manage.py runserver 8080
+8、创建数据表 python manage.py migrate
+9、数据库迁移 python manage.py makemigrations polls
+    查询迁移时使用的sql语句 python manage.py sqlmigrate polls 0001
+    
+10、python manage.py shell 
+    在models.py 每个模型中添加
+    def __str__(self):
+        return self.自定义字段名
+    Question.objects.all() 添加完成后才能显示出值
+
+11、admin账号添加
+    python manage.py createsuperuser
+    时区配置错误会导致访问出现问题

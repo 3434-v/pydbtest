@@ -678,8 +678,9 @@ class consensus(General):
         params = '[""]'
         self.General_way(method,params)
 
-# url = 'http://39.98.39.224:35645'
-url = 'http://node1.drep.org'
+url = 'http://39.98.39.224:35645'
+# url = 'http://node1.drep.org'
+# url = 'http://testnet.drep.org'
 CollectionName = 'method'
 consensus = consensus(CollectionName,url)
 account = account(CollectionName,url)
@@ -823,10 +824,18 @@ if __name__ == "__main__":
     # account.DumpPubkey('0x92f3842c1dfcb7597a9520a4a00971059747ecb1')
     # BlockMgr.GetTxInPool('0x02a235fdeaf998437a94a8c12a4b056b5701752db812078a440f31908c41f0bbba')
     # chain.getBalance('0xbe0ec4bcc55e18cd4d23058c637308b97ee31ed7')
-    print((43997601738768000000 - 43997318058768000000) / (10 ** 18))
-    # account.importPrivkey('4e0e93162e2e8296cbd377e4a687c590c221649c3ae94732cdcf7f2c80c13aec','Qwer1234')
-    # account.dumpPrivkey('0xbe0ec4bcc55e18cd4d23058c637308b97ee31ed7')
+    # GetMoneyAddress()
+    # chain.getBalance('0x8966eb1776b4C52B81B30A9Fd1335b24F187213D')
     # account.transfer()
+    # account.importPrivkey('0xea92ca08b1994a93c745c7a7440682e4352f2e44cc8907642b70a2903d65d565','Qwer1234')
+    # chain.getBalance('0xfd3505658f04e8726234c03c4c3cf4dc9a6a8855')
+    # account.transfer()
+    # account.importPrivkey('0x8e89233e4c15f08a1e1affede9de683f4b534647855e6bc49781754d368dec03','Qwer1234')
+    # chain.getBalance('0x7d17376a5A611c768970f7CE99FBE309450bfF6f')
+    # account.createAccount()
+    # account.transfer()
+    account.createAccount()
+    # BlockMgr.GetTxInPool('0xe8ef84e4739a83fd22a32f06d2dd113abb2d56632d4fa29569438702ec7c03a8')
     # account.account_unlockAccount('4e0e93162e2e8296cbd377e4a687c590c221649c3ae94732cdcf7f2c80c13aec','Qwer1234')
     
     # test3()
