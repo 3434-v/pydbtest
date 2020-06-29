@@ -26,3 +26,9 @@
 11、admin账号添加
     python manage.py createsuperuser
     时区配置错误会导致访问出现问题
+12、异常问题处理显示Class 'Question' has no 'objects' member
+    在python中的setting.py文件中添加
+    "python.linting.pylintArgs": [
+        "--load-plugins=pylint_django", #添加后不报objects的错误
+        "--disable=C0111" #添加后不报没有注释函数的错误
+    ]
