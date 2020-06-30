@@ -1,0 +1,11 @@
+{% if latest_choice_list %}
+	<ul>
+	{% for choice in latest_choice_list %}
+		<li><a href="/polls/{{choice.id}}">{{choice.Choice_text}}</a></li>
+	{% endfor %}
+	</ul>
+	
+{% else %}
+	<p>No polls are available.</p>
+{% endif %}
+	

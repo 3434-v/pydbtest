@@ -9,8 +9,8 @@ import py_threading as save
 import threading
 from py_mongodb import TestMongoDB
 #环境选择
-pynosql = TestMongoDB('localhost:27017/','test_defiex')
-select = '测试环境'
+pynosql = TestMongoDB('localhost:27017/', 'test_defiex')
+select = '预发布环境'
 
 
 
@@ -124,8 +124,9 @@ class supernode(response):
         #         url = url_header[0][0] + url_end[0][0]
         #         password = 'yangxun19990728'
 
+
     #注册      
-    def Register(self,sharename):
+    def Register(self, sharename):
         with save.SqlSave() as execute:
             msg = execute.join_table(select)
             url = self.Get_url('注册')
@@ -133,22 +134,22 @@ class supernode(response):
             register_type = '2'
             name = self.random_name(register_type)
             password = 'b49a9e2a50d24396e08ca047a09588a7'
-            shareid = execute.select('userid','Name_ResponseMsg','name',sharename)
-            requestcode = execute.select('invitecode','Name_ResponseMsg','name',sharename)
-            share_id = {True:formatting.msg_format(shareid),False:'0'}[len(shareid) != 0]
-            request_code = {True:formatting.msg_format(requestcode),False:' '}[len(requestcode) != 0]
+            shareid = execute.select('userid', 'Name_ResponseMsg', 'name', sharename)
+            requestcode = execute.select('invitecode', 'Name_ResponseMsg', 'name', sharename)
+            share_id = {True:formatting.msg_format(shareid), False:'0'}[len(shareid) != 0]
+            request_code = {True:formatting.msg_format(requestcode), False:' '}[len(requestcode) != 0]
             data = '{"username":"'+name+'","type":"'+register_type+'","countryid":"191","pwd":"'+password+'","code":"'+msg[0][6]+'","channel":{"plat":"h5","share_id":"'+share_id+'","activityid":"1","invitecode":"'+request_code+'"}}'
             requests.get(url+data)
             # print(url+data)
-            execute.multilevel(name,request_code,share_id)
-            execute.general(name,password,select)
+            execute.multilevel(name, request_code, share_id)
+            execute.general(name, password, select)
             execute.handle_log('insert->general')
-            message = {"Name":name,"Password":password,"Environment":select}
-            pynosql.insert('Register_account',message)
-
+            message = {"Name":name, "Password": password, "Environment":select}
+            pynosql.insert('Register_account', message)
         self.Login(name)
         return name
     
+
     #获取管理端token
     def admin_token(self):
         with save.SqlSave() as execute:
@@ -156,24 +157,24 @@ class supernode(response):
             urls = self.Get_url('管理端登录')
             data = '{"user":"'+code_msg[0][4]+'","pwd":"'+code_msg[0][5]+'"}'
             response = requests.get(urls + data)
-            login_token = ' '.join(re.findall('"token": "(.*?)"',str(response.text)))
+            login_token = ' '.join(re.findall('"token": "(.*?)"', str(response.text)))
         return login_token
 
 
 
     #管理端审核kyc
-    def check_kyc(self,name):
+    def check_kyc(self, name):
         with save.SqlSave() as execute:
             login_token = self.admin_token()
-            userid = execute.select('userid','Name_ResponseMsg','name',name)
+            userid = execute.select('userid', 'Name_ResponseMsg', 'name', name)
             data = '{"type":10003,"userid":"'+userid[0][0]+'","state":0,"token":"'+login_token+'"}'
             urls = self.Get_url('管理端kyc审核')
             response = requests.get(urls + data)
-            msg = ' '.join(re.findall('"msg": "(.*?)"',str(response.text)))
+            msg = ' '.join(re.findall('"msg": "(.*?)"', str(response.text)))
             return msg
 
     #kyc认证
-    def kyc(self,name):
+    def kyc(self, name):
         self.Login(name)
         with save.SqlSave() as execute:
             url = self.Get_url('kyc')
@@ -234,7 +235,33 @@ class supernode(response):
                 self.super_apply(name)
             execute.supernode(name,select)
             execute.handle_log('insert->supernode')
-    
+
+    #分页查询所有持仓记录
+    def keep_granary(self,name):
+
+        url = self.Get_url('分页查询所有持仓记录')
+        data = '{"token":"'+self.Get_token(name)+'","page":"1","count":"20"}'
+        urls = url + data
+        response = requests.get(urls)
+        try:
+            totalcount = ''.join(re.findall('"totalcount": "(.*?)",',str(response.text)))
+            return totalcount
+        except:
+            pass
+
+    # 分页查询所有平仓记录
+    def flatgranary_record(self,name):
+
+        url = self.Get_url('分页查询所有平仓记录')
+        data = '{"token":"'+self.Get_token(name)+'","page":"1","count":"20","symbol":""}'
+        urls = url + data
+        response = requests.get(urls)
+        try:
+            totalcount = ''.join(re.findall('"totalcount": "(.*?)",',str(response.text)))
+            return totalcount
+        except:
+            pass
+
     def formula(self,name):
         with save.SqlSave() as execute:
             message = execute.select('*','test_msg','id',self.granarys_index)
@@ -243,6 +270,7 @@ class supernode(response):
             create_money = float(message[0][3])
             pry = float(message[0][4])
             formalities_ratio = float(message[0][5])
+            granary = message[0][7]
             
             url = self.Get_url('行情')
             granarys = formatting.msg_format(execute.select('granary','test_msg','id',self.granarys_index))
@@ -254,32 +282,46 @@ class supernode(response):
             Cmoney = ''.join(re.findall('"LP": "(.*?)",',str(response.text)))
             direction = formatting.msg_format(execute.select('direction','test_msg','id',self.granarys_index))
             
+
+            #交易系数
+            Deal_coefficient = create_money * pry
+            if Deal_coefficient > 2000:
+                coefficient = 0.5
+            elif 1000 <= Deal_coefficient <= 2000:
+                coefficient = random.randint(1,4) / 10
+            elif Deal_coefficient < 1000:
+                coefficient = 0.1
+
+            if granary == 'btc':
+                basics = 0.0005
+            else:
+                basics = 0.0008
+
+            #点差
+            spread = basics * coefficient
+            print(spread)
+
             if direction == '1':
-                count_monry = round(float(Cmoney) * (1.0 - 0.0002),4)
+                if granary == 'btc':
+                    count_monry = round(float(Cmoney) * (1.0 - spread),4)
+                else:
+                    count_monry = round(float(Cmoney) * (1.0 - spread),4)
+
                 spot = count_monry - (spratio_ratio * create_money + 0.0 + formalities_ratio*pry*create_money)*(count_monry / (pry*create_money))
                 spot1 = count_monry + (slratio_ratio * create_money - 0.0 - formalities_ratio*pry*create_money)*(count_monry / (pry*create_money))
                 # print(count_monry,spot,spot1)
                 return round(spot,4),round(spot1,4),str(count_monry)
             else:
-                count_monry = round(float(Cmoney) * (1.0 + 0.0002),4)
+                if granary == 'btc':
+                    count_monry = round(float(Cmoney) * (1.0 + spread),4)
+                else:
+                    count_monry = round(float(Cmoney) * (1.0 + spread),4)
+
                 spot = count_monry + (spratio_ratio * create_money + 0.0 + formalities_ratio*pry*create_money)*(count_monry / (pry*create_money))
                 spot1 = count_monry - (slratio_ratio * create_money - 0.0 - formalities_ratio*pry*create_money)*(count_monry / (pry*create_money))
                 # print(count_monry,spot,spot1)
                 return round(spot,4),round(spot1,4),str(count_monry)
 
-
-            # count_monry = round(float(Cmoney) * (1.0 + 0.0002),2)
-            # print(count_monry)
-            #止盈百分比例
-            
-            
-
-            # spratio_ratio = 0.4
-            # slratio_ratio = 0.3
-            # create_money = 300
-            # pry = 100
-            # formalities_ratio = 0.0004
-            
             # execute.test_msg(spratio_ratio,slratio_ratio,create_money,pry,formalities_ratio,'2')
     #预计止盈止损
     def predict_money(self,name):
@@ -450,7 +492,7 @@ class supernode(response):
             print(urls + data)
             response = requests.get(urls + data)
             # print(data)
-            print(response.text)
+            # print(response.text)
             orderid = self.extract('"orderid": "(.*?)"',response)
             balanceold = self.extract('"balanceold": "(.*?)",',response)
             balance = self.extract('"balance": "(.*?)",',response)
@@ -462,7 +504,7 @@ class supernode(response):
             slratio = self.extract('"slratio": "(.*?)",',response)
             slprice = self.extract('"slprice": "(.*?)",',response)
             message = execute.select('*','test_msg','id',self.granarys_index)
-            # print(openprice,cmoney)
+            print(openprice,cmoney)
             if openprice == cmoney:
                 testcase2 = {True:1,False:0}[message[0][1] == spratio]
                 testcase3 = {True:1,False:0}[message[0][2] == spprice]
@@ -493,7 +535,7 @@ class supernode(response):
 
     #平仓
     def flat_granary(self,name):
-        self.Login(name)
+        # self.Login(name)
         with save.SqlSave() as execute:
             url = self.Get_url('平仓')
             orderid_list = execute.select('orderid','granary','name',name)
@@ -599,7 +641,7 @@ class supernode(response):
             
 
     #现金限价建仓
-    def current_granary(self,name):
+    def current_granary(self,name,types):
         # self.Login(name)
         with save.SqlSave() as execute:
             message = execute.select('*','test_msg','testcase',self.granarys_index)
@@ -609,34 +651,52 @@ class supernode(response):
             lever = message[0][4]
             price = self.Get_price()
             #select 参数 1:限价单 2：强制转换的市价单
-            select = 1
-            if select == 2:
+            typeselect = int(types)
+            if typeselect == 2:
                 if direction == '1':
                     #2涨，1跌
                     price_money = str(float(price) - 0.1)
                 elif direction == '2':
                     print(float(price))
                     price_money = str(float(price) + 0.1)
+                print(price,price_money)
+                url = self.Get_url('现金限价建仓')
+                data = '{"token":"'+self.Get_token(name)+'","symbol":"'+symobl+'","type":"'+direction+'","amount":"'+amount+'","lever":"'+lever+'","price":"'+price_money+'"}'
+                response = requests.get(url + data)
+                print(url + data)
+                print(response.text)
+                orderid = self.extract('"orderid": "(.*?)"',response)
+                balanceold = self.extract('"balanceold": "(.*?)",',response)
+                balance = self.extract('"balance": "(.*?)",',response)
+                openprice = self.extract('"openprice": "(.*?)",',response)
+                openfee = self.extract('"openfee": "(.*?)",',response)
+                forceprice = self.extract('"forceprice": "(.*?)",',response)
+                spratio = self.extract('"spratio": "(.*?)",',response)
+                spprice = self.extract('"spprice": "(.*?)",',response)
+                slratio = self.extract('"slratio": "(.*?)",',response)
+                slprice = self.extract('"slprice": "(.*?)",',response)
+                execute.granary(name,symobl,orderid,select,balanceold,balance,openprice,openfee,forceprice,direction)
+
             elif select == 1:
                 if direction == '1':
                     price_money = str(float(price) + 0.1)
                 elif direction == '2':
                     price_money = str(float(price) - 0.1)
             # self.Login(name)
-            print(price)
-            print(price_money)
-            url = self.Get_url('现金限价建仓')
-            data = '{"token":"'+self.Get_token(name)+'","symbol":"'+symobl+'","type":"'+direction+'","amount":"'+amount+'","lever":"'+lever+'","price":"'+price_money+'"}'
-            response = requests.get(url + data)
-            print(url + data)
-            print(response.text)
-            orderid = self.extract('"orderid": "(.*?)"',response)
-            balanceold = self.extract('"balanceold": "(.*?)"',response)
-            balance = self.extract('"balance": "(.*?)"',response)
-            wttime = self.extract('"wttime": "(.*?)"',response)
-            # curprice = self.extract('"curprice": "(.*?)"',response)
-            execute.current_granary(name,balanceold,balance,orderid,wttime,price_money,message[0][8])
-
+                print(price,price_money)
+                url = self.Get_url('现金限价建仓')
+                data = '{"token":"'+self.Get_token(name)+'","symbol":"'+symobl+'","type":"'+direction+'","amount":"'+amount+'","lever":"'+lever+'","price":"'+price_money+'"}'
+                response = requests.get(url + data)
+                print(url + data)
+                print(response.text)
+                orderid = self.extract('"orderid": "(.*?)"',response)
+                balanceold = self.extract('"balanceold": "(.*?)"',response)
+                balance = self.extract('"balance": "(.*?)"',response)
+                wttime = self.extract('"wttime": "(.*?)"',response)
+                # curprice = self.extract('"curprice": "(.*?)"',response)
+                execute.current_granary(name,balanceold,balance,orderid,wttime,price_money,message[0][8])
+            
+            
 
     
     #分页查询所有限价单记录
@@ -652,10 +712,13 @@ class supernode(response):
     def delete_CurrentGranary(self,name):
         self.Login(name)
         url = self.Get_url('限价单撤单')
-        data = '{"token":"'+self.Get_token(name)+'","orderid":"15"}'
-        response = requests.get(url + data)
-        print(url + data)
-        print(response.text)
+        with save.SqlSave() as execute:
+            orderid = formatting.msg_format(execute.select('orderid', 'current_granary', 'name', name))
+            print(orderid)
+            data = '{"token":"'+self.Get_token(name)+'","orderid":"'+orderid+'"}'
+            response = requests.get(url + data)
+            print(url + data)
+            print(response.text)
 
     #余额、冻结赠金
     def get_frostmoney(self,name):
@@ -757,6 +820,10 @@ class supernode(response):
     def share_count(self):
         pass
 
+
+
+
+
 # test = supernode()
 
 # class count_threading(threading.Thread):
@@ -783,60 +850,48 @@ class supernode(response):
 #     # test2.join()
 #     pass
 
+
+#限价单转市价单--->平仓
+def test1():
+    for index in range(1,9):
+        run = supernode(str(index))
+        name = run.Register('')
+        run.add_money(name)
+        # run.create_granary(name)
+        types = 2
+        run.current_granary(name, types)
+        time.sleep(3)
+        run.flat_granary(name)
+
+#限价委托单--->撤单
+def test2():
+    for index in range(1,9):
+        run = supernode(str(index))
+        name = run.Register('')
+        run.add_money(name)
+        types = 1
+        run.current_granary(name, types)
+        time.sleep(3)
+        run.delete_CurrentGranary(name)
+
+def TestCreate():
+    name = '166971840546@qq.com'
+    for index in range(1,9):
+        run = supernode(str(index))
+        run.create_granary(name)
+        # run.Register('')
+        # run.add_money(name)
+        # run.flatgranary_record(name)
+        time.sleep(3)
+        # run.current_granary(name)
+        # time.sleep(3)
+        # run.fund_granary(name)
+
+
 if __name__ == "__main__":
-    run = supernode('1')
-    name = '166822741790@qq.com'
-    # run.Apply_DealStaff(name)
-    # run.DealStaff_msg(name)
-    # run.create_granary(name)
-    # run.DealStaff_gain()
-    # run.Register('')
-    # run.add_money('166822741790@qq.com')
-    run.create_granary(name)
-    time.sleep(2)
-    run.flat_granary(name)
-    def testcase1():
-        with save.SqlSave() as execute:
-            for index in range(7,11):
-                msg = execute.select('name','TopUpSite','id',str(index))
-                # run.Top_msg(msg[0][0])
-                # run.add_money(msg[0][0])
-                # time.sleep(5)
-                # run.kyc(msg[0][0])
-                # run.check_kyc(msg[0][0])
-                # time.sleep(5)
-                # run.get_frostmoney(msg[0][0])
-                # run.Withdraw_msg(msg[0][0])
-                # run.get_frostmoney(msg[0][0])
-                # run.kyc(msg[0][0])
-                # run.check_kyc(msg[0][0])
-                # run.add_money(msg[0][0])
-                run.Withdraw_msg(msg[0][0])
-                time.sleep(60)
-                run.Withdraw_recode(msg[0][0])
-                # run.get_frostmoney(msg[0][0])
-
-    # testcase1()
-
     
 
-    # testcase1()
-    # run.create_granary(name)
-    # for index in range(10):
-    #     run.current_granary(name)
-    #     time.sleep(5)
-    # run.create_granary(name)
-    # run.current_granary(name)
-    # run.Withdraw_msg(name)
-    # run.Withdraw_recode(name)
-
-    # def testcase2():
-    #     for index in range(5):
-    #         name = run.Register('')
-    #         run.get_TopUpSite(name)
-    #         time.sleep(2)
-        
-
+    test1()
     # response_msg = ''
     # response_msg.encode('utf-8').decode('unicode-escape')
 
