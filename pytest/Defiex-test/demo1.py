@@ -9,7 +9,7 @@ import json
 import sqlitesave as save
 
 from mongosave import TestMongoDB
-
+from CommonMethod import UnifyWays
 # import mongosave.TestMongoDB as TestMongoDB
 
 # 环境选择
@@ -26,15 +26,15 @@ class delete_format(object):
 formatting = delete_format()
 
 
-class UnifyWay(object):
+# class UnifyWay(object):
+#
+#     def deamd(self, url, data):
+#         response = requests.get(url + data)
+#         print(url + data)
+#         print(response.text)
 
-    def deamd(self, url, data):
-        response = requests.get(url + data)
-        print(url + data)
-        print(response.text)
 
-
-class supernode(UnifyWay):
+class supernode(object):
 
     def __init__(self, granarys_index):
         self.granarys_index = granarys_index
@@ -142,14 +142,14 @@ class supernode(UnifyWay):
             name = self.random_name(register_type)
             password = 'b49a9e2a50d24396e08ca047a09588a7'
             shareid = execute.select('userid', 'Name_ResponseMsg', 'name', sharename)
+            print(shareid)
             requestcode = execute.select('invitecode', 'Name_ResponseMsg', 'name', sharename)
             share_id = {True: formatting.msg_format(shareid), False: '0'}[len(shareid) != 0]
             request_code = {True: formatting.msg_format(requestcode), False: ' '}[len(requestcode) != 0]
             data = '{"username":"' + name + '","type":"' + register_type + '","countryid":"191","pwd":"' + password + '","code":"' + \
-                   msg[0][
-                       6] + '","channel":{"plat":"h5","share_id":"' + share_id + '","activityid":"1","invitecode":"' + request_code + '"}}'
+                   msg[0][6] + '","channel":{"plat":"h5","share_id":"' + share_id + '","activityid":"1","invitecode":"' + request_code + '"}}'
             requests.get(url + data)
-            # print(url+data)
+            print(url+data)
             execute.multilevel(name, request_code, share_id)
             execute.general(name, password, select)
             execute.handle_log('insert->general')
@@ -206,14 +206,17 @@ class supernode(UnifyWay):
         return msg
 
     # 管理端添加money
-    def add_money(self, name):
+    def add_money(self, name, money):
         # self.Login(name)
+        moneys = money * 100
+        # reward 1:赠金 0:现金
+        reward = '0'
         with save.SqlSave() as execute:
             urls = self.Get_url('管理端添加money')
             userid = execute.select('userid', 'Name_ResponseMsg', 'name', name)
-            # reward 1:赠金 0:现金
+
             data = '{"type":10201,"userid":"' + userid[0][
-                0] + '","money":2000000,"remark":"测试","token":"' + self.admin_token() + '","reward":"0"}'
+                0] + '","money":'+str(moneys)+',"remark":"测试","token":"' + self.admin_token() + '","reward":"'+reward+'"}'
             response = requests.get(urls + data)
             msg = ' '.join(re.findall('msg": "(.*?)"', str(response.text)))
             print(response.text)
@@ -237,7 +240,7 @@ class supernode(UnifyWay):
             old_msg = execute.select('msg', 'supermsg', 'explain', '资金不足')
             msgs = {True: 1, False: 0}[msg == old_msg[0][0]]
             if msgs:
-                msg = self.add_money(name)
+                msg = self.add_money(name, 20000)
             msgs = {True: 1, False: 0}[msg == 'OK']
             if msgs:
                 self.super_apply(name)
@@ -510,7 +513,7 @@ class supernode(UnifyWay):
             print(urls + data)
             response = requests.get(urls + data)
             # print(data)
-            # print(response.text)
+            print(response.text)
             orderid = self.extract('"orderid": "(.*?)"', response)
             balanceold = self.extract('"balanceold": "(.*?)",', response)
             balance = self.extract('"balance": "(.*?)",', response)
@@ -811,7 +814,8 @@ class supernode(UnifyWay):
 class DealStaff(supernode):
 
     def __init__(self):
-        pass
+
+        self.unify = UnifyWays()
 
     # sqlite数据格式化处理
     def formatting(self, message):
@@ -821,34 +825,37 @@ class DealStaff(supernode):
     # 交易员申请开通
     def apply(self, name):
         url = self.Get_url('交易员申请开通')
-        data = '{"token":"' + self.Get_token(name) + '"}'
-        self.deamd(url, data)
+        data = '{"token":"' + self.Get_token(name) + '", "language":"zh_CN"}'
+        response = self.unify.deamds(url, data)
+        return response
 
     # 交易员详情查询
     def select_detail(self, name):
         with save.SqlSave() as execute:
             userid = self.formatting(execute.select('userid', 'Name_ResponseMsg', 'name', name))
             url = self.Get_url('交易员详情查询')
-            data = '{"planerid":"' + userid + '","language":"zh_CN"}'
-            self.deamd(url, data)
+            data = '{"planerid":"' + userid + '", "language":"zh_CN"}'
+            self.unify.deamds(url, data)
 
-    # 交易员交易记录查询s
+    # 交易员交易记录查询sf
     def deal_record(self, name):
         url = self.Get_url('交易员交易记录查询')
         data = '{"planerid":"12076521935","page":"1","count":"20"}'
-        self.deamd(url, data)
+        self.unify.deamds(url, data)
 
     # 交易员跟单盈利查询
     def deal_gain(self, name):
         url = self.Get_url('交易员跟单盈利查询')
         data = '{"planerid":"12076521935","page":"1","count":"20"}'
-        self.deamd(url, data)
+        self.unify.deamds(url, data)
 
     # 交易员列表查询
     def trader_list(self):
         url = self.Get_url('交易员列表查询')
-        data = '{"ordertype":"1","language":"en"}'
-        self.deamd(url, data)
+        data = '{"ordertype":"1"}'
+        planerid_str = json.dumps(self.unify.deamds(url, data))
+        planerid_list = re.findall('"planerid": "(.*?)"', planerid_str)
+        return planerid_list
 
     # 用户跟单某个交易员
     def user_trader(self):
@@ -856,108 +863,115 @@ class DealStaff(supernode):
         data = '{"token":"d9077bd0010e42471ea423f91644edb8","planerid":"12321423523","referrerid":"2174438592",' \
                '"opentype":"1","openamount":"50.00","openamountdaymax":"500.00","openamountholdmax":"300.00",' \
                '"openamountslrate":"0.60"} '
-        self.deamd(url, data)
+        self.unify.deamds(url, data)
 
     # 用户跟单详情查询
     def user_detail(self):
         url = self.Get_url('用户跟单详情查询')
         data = '{"token":"d9077bd0010e42471ea423f91644edb8"}'
-        self.deamd(url, data)
+        self.unify.deamds(url, data)
 
     # 用户修改跟单参数
     def user_remove_parameter(self):
-        url = self.url('用户修改跟单参数')
+        url = self.Get_url('用户修改跟单参数')
         data = '{"token":"d9077bd0010e42471ea423f91644edb8","planerid":"12321423523","pause":"1","opentype":"1",' \
                '"openamount":"50.00","openamountdaymax":"500.00","openamountholdmax":"300.00",' \
                '"openamountslrate":"0.60"} '
-        self.deamd(url, data)
+        self.unify.deamds(url, data)
 
     # 用户取消跟单某个交易员
     def cancel_deal(self):
-        url = self.url('用户取消跟单某个交易员')
+        url = self.Get_url('用户取消跟单某个交易员')
         data = '{"token":"d9077bd0010e42471ea423f91644edb8","planerid":"12321423523"}'
-        self.deamd(url, data)
+        self.unify.deamds(url, data)
 
     # 用户跟单历史查询
     def user_deal_history(self):
-        url = self.url('用户跟单历史查询')
+        url = self.Get_url('用户跟单历史查询')
         data = '{"token":"d9077bd0010e42471ea423f91644edb8","planerid":"42133897219"}'
-        self.deamd(url, data)
+        self.unify.deamds(url, data)
 
     # 交易员修改信息
     def trader_remove_message(self):
-        url = self.url('交易员修改信息')
+        url = self.Get_url('交易员修改信息')
         data = '{"token":"d9077bd0010e42471ea423f91644edb8","type":"1","info":"内容"}'
-        self.deamd(url, data)
+        self.unify.deamds(url, data)
 
     # 交易员跟单提成每日汇总查询
     def trader_everyday_royalties(self):
-        url = self.url('交易员跟单提成每日汇总查询')
+        url = self.Get_url('交易员跟单提成每日汇总查询')
         data = '{"token":"d9077bd0010e42471ea423f91644edb8","page":"1","count":"20"}'
-        self.deamd(url, data)
+        self.unify.deamds(url, data)
 
     # 交易员跟单提成每日明细查询
     def everyday_detail(self):
-        url = self.url('交易员跟单提成每日明细查询')
+        url = self.Get_url('交易员跟单提成每日明细查询')
         data = '{"token":"d9077bd0010e42471ea423f91644edb8","tradedate":"152132138900"}'
-        self.deamd(url, data)
+        self.unify.deamds(url, data)
 
     # 推荐人详情查询
     def referrer_detail(self):
-        url = self.url('推荐人详情查询')
+        url = self.Get_url('推荐人详情查询')
         data = '{"token":"d9077bd0010e42471ea423f91644edb8"}'
-        self.deamd(url, data)
+        self.unify.deamds(url, data)
 
     # 推荐人跟单用户信息查询
     def referrer_user_detail(self):
-        url = self.url('推荐人跟单用户信息查询')
+        url = self.Get_url('推荐人跟单用户信息查询')
         data = '{"token":"d9077bd0010e42471ea423f91644edb8"}'
-        self.deamd(url, data)
+        self.unify.deamds(url, data)
 
     # 推荐人每日提成汇总信息查询
     def referrer_everyday_collect(self):
-        url = self.url('推荐人每日提成汇总信息查询')
+        url = self.Get_url('推荐人每日提成汇总信息查询')
         data = '{"token":"d9077bd0010e42471ea423f91644edb8"}'
-        self.deamd(url, data)
+        self.unify.deamds(url, data)
 
     # 推荐人每日提成明细查询
     def referrer_everyday_deduct(self):
-        url = self.url('推荐人每日提成明细查询')
+        url = self.Get_url('推荐人每日提成明细查询')
         data = '{"token":"d9077bd0010e42471ea423f91644edb8"}'
-        self.deamd(url, data)
+        self.unify.deamds(url, data)
 
     # 交易员标签信息查询
     def trader_label(self):
-        url = self.url('交易员标签信息查询')
+        url = self.Get_url('交易员标签信息查询')
         data = '{"language":"en"}'
-        self.deamd(url, data)
+        self.unify.deamds(url, data)
 
 
-# test = supernode()
+# 交易员
+def dealtest1():
+    deal = DealStaff()
+    run = supernode('1')
+    name = run.Register('')
+    time.sleep(2)
+    # 0: 申请成功 1851: 余额不足 1852: kyc没通过 1853: 正在跟单别的交易员 1854: 已开通 1855: 审核中
+    # 开通流程
+    if deal.apply(name)["code"] == '1851':
+        run.add_money(name, 50)
+        if deal.apply(name)["code"] == '1852':
+            run.kyc(name)
+            run.check_kyc(name)
+            deal.apply(name)
+            run.get_frostmoney(name)
+    # 验证开通后列表是否存在
+    trader = deal.trader_list()
+    with save.SqlSave() as execute:
+        userid = UnifyWays().formatting(execute.select('userid', 'Name_ResponseMsg', 'name', name))
+        if userid in trader:
+            print('成功')
 
-# class count_threading(threading.Thread):
-
-#     def __init__(self,name):
-#         threading.Thread.__init__(self)
-#         self.test = supernode()
-#         self.name = name
-
-#     def run(self):
-#         url = self.test.Get_url('行情')
-#         data = '{"symbol":"btc"}'
-#         print(requests.get(url+data).text)
-#         self.test.create_granary(self.name)
-
-# def thread():
-#      # name = '166295818208@qq.com'
-#     # names = '389863294@qq.com'
-#     # test1 = count_threading(name)
-#     # test2 = count_threading(names)
-#     # test1.start()
-#     # test2.start()
-#     # test1.join()
-#     # test2.join()
-#     pass
+# 特定经纪人比例
+def broker():
+    run = supernode('1')
+    name = '166422582748@qq.com'
+    # name = run.Register(name)
+    run.add_money(name)
+    # run.get_frostmoney(name)
+    run.create_granary(name)
+    # time.sleep(2)
+    # run.flat_granary(name)
 
 
 # 限价单转市价单--->平仓
@@ -985,22 +999,12 @@ def test2():
         run.delete_CurrentGranary(name)
 
 
-# 交易员
-def dealtest1():
-    deal = DealStaff()
-    run = supernode('1')
-    name = run.Register('')
-    time.sleep(2)
-    deal.apply(name)
-
-
 def TestCreate():
     name = '166971840546@qq.com'
     for index in range(1, 9):
         run = supernode(str(index))
         run.create_granary(name)
         # run.Register('')
-        # run.add_money(name)
         # run.flatgranary_record(name)
         time.sleep(3)
         # run.current_granary(name)
@@ -1010,4 +1014,5 @@ def TestCreate():
 
 if __name__ == "__main__":
     select = '测试环境'
+    # broker()
     dealtest1()
