@@ -7,6 +7,7 @@ from django.template import loader
 from django.urls import reverse
 from django.views import generic
 
+
 class IndexView(generic.ListView):
     template_name = 'polls/index.html'
     context_object_name = 'latest_question_list'
@@ -14,18 +15,20 @@ class IndexView(generic.ListView):
     def get_queryset(self):
         return Question.objects.order_by('-pub_date')[:5]
 
+
 class DetailView(generic.DeleteView):
     model = Question
     template_name = 'polls/detail.html'
+
 
 class ResultsView(generic.DetailView):
     model = Question
     template_name = 'polls/results.html'
 
 
-
 def home(request):
     return HttpResponse("python-django 3.0")
+
 
 # def detail(request, question_id):
 #     return HttpResponse("detailmessage:{}".format(question_id))
@@ -45,14 +48,11 @@ def vote(request, question_id):
             'question': question,
             'error_message': "You dint't select a choice.",
         })
-    
+
     else:
         selected_choice.votes += 1
         selected_choice.save()
         return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
-
-
-
 
 
 # def index(request):
@@ -68,7 +68,7 @@ def index(request):
     latest_question_list = Question.objects.order_by('-pub_date')[:5]
     context = {'latest_question_list': latest_question_list}
     return render(request, 'polls/index.html', context)
-    
+
 
 def indextest(request):
     latest_choice_list = Choice.objects.order_by('-votes')[:5]

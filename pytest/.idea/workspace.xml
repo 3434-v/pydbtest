@@ -26,11 +26,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bc89319f-036d-4e2d-84fa-9114895a9624" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TestPlatform/polls/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/../TestPlatform/polls/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Defiex-test/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Defiex-test/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Defiex-test/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Defiex-test/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Defiex-test/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Defiex-test/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Defiex-test/demo1.py" beforeDir="false" afterPath="$PROJECT_DIR$/Defiex-test/demo1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Defiex-test/sqlitesave.py" beforeDir="false" afterPath="$PROJECT_DIR$/Defiex-test/sqlitesave.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Defiex-test/test.db" beforeDir="false" afterPath="$PROJECT_DIR$/Defiex-test/test.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdb/id_cache.db-shm" beforeDir="false" afterPath="$PROJECT_DIR$/testdb/id_cache.db-shm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdb/id_cache.db-wal" beforeDir="false" afterPath="$PROJECT_DIR$/testdb/id_cache.db-wal" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,8 +63,9 @@
     <property name="DatabaseDriversLRU" value="sqlite" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../TestPlatform" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -158,6 +164,9 @@
       <workItem from="1593568215368" duration="5000" />
       <workItem from="1593568246146" duration="21398000" />
       <workItem from="1593594166496" duration="45000" />
+      <workItem from="1593594221293" duration="6038000" />
+      <workItem from="1593604711515" duration="450000" />
+      <workItem from="1593605346136" duration="506000" />
     </task>
     <servers />
   </component>
@@ -189,62 +198,70 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="395" y="91" key="#Inspections" timestamp="1593594375506">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="395" y="91" key="#Inspections/0.0.1536.824@0.0.1536.824" timestamp="1593594375506" />
     <state x="651" y="274" key="#Notifications" timestamp="1593581493668">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="651" y="274" key="#Notifications/0.0.1536.824@0.0.1536.824" timestamp="1593581493668" />
-    <state x="169" y="254" key="#SQL_Dialects" timestamp="1593568769252">
+    <state x="169" y="254" key="#SQL_Dialects" timestamp="1593594336652">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="169" y="254" key="#SQL_Dialects/0.0.1536.824@0.0.1536.824" timestamp="1593568769252" />
+    <state x="169" y="254" key="#SQL_Dialects/0.0.1536.824@0.0.1536.824" timestamp="1593594336652" />
     <state x="361" y="71" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1593587421682">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="361" y="71" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1593587421682" />
-    <state x="638" y="177" key="FileChooserDialogImpl" timestamp="1593593954933">
+    <state x="638" y="177" key="FileChooserDialogImpl" timestamp="1593605851755">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="638" y="177" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1593593954933" />
-    <state width="1493" height="163" key="GridCell.Tab.0.bottom" timestamp="1593594151652">
+    <state x="638" y="177" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1593605851755" />
+    <state width="1493" height="163" key="GridCell.Tab.0.bottom" timestamp="1593605852744">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="163" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1593594151652" />
-    <state width="1493" height="163" key="GridCell.Tab.0.center" timestamp="1593594151652">
+    <state width="1493" height="163" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1593605852744" />
+    <state width="1493" height="163" key="GridCell.Tab.0.center" timestamp="1593605852744">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="163" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1593594151652" />
-    <state width="1493" height="163" key="GridCell.Tab.0.left" timestamp="1593594151652">
+    <state width="1493" height="163" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1593605852744" />
+    <state width="1493" height="163" key="GridCell.Tab.0.left" timestamp="1593605852744">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="163" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1593594151652" />
-    <state width="1493" height="163" key="GridCell.Tab.0.right" timestamp="1593594151652">
+    <state width="1493" height="163" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1593605852744" />
+    <state width="1493" height="163" key="GridCell.Tab.0.right" timestamp="1593605852744">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="163" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1593594151652" />
-    <state width="1493" height="261" key="GridCell.Tab.1.bottom" timestamp="1593584155521">
+    <state width="1493" height="163" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1593605852744" />
+    <state width="1493" height="261" key="GridCell.Tab.1.bottom" timestamp="1593600264459">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="261" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1593584155521" />
-    <state width="1493" height="261" key="GridCell.Tab.1.center" timestamp="1593584155521">
+    <state width="1493" height="261" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1593600264459" />
+    <state width="1493" height="261" key="GridCell.Tab.1.center" timestamp="1593600264459">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="261" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1593584155521" />
-    <state width="1493" height="261" key="GridCell.Tab.1.left" timestamp="1593584155521">
+    <state width="1493" height="261" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1593600264459" />
+    <state width="1493" height="261" key="GridCell.Tab.1.left" timestamp="1593600264459">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="261" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1593584155521" />
-    <state width="1493" height="261" key="GridCell.Tab.1.right" timestamp="1593584155521">
+    <state width="1493" height="261" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1593600264459" />
+    <state width="1493" height="261" key="GridCell.Tab.1.right" timestamp="1593600264459">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="261" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1593584155521" />
+    <state width="1493" height="261" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1593600264459" />
     <state width="212" height="477" key="HiddenNamespacesPopup" timestamp="1593587426608">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="212" height="477" key="HiddenNamespacesPopup/0.0.1536.824@0.0.1536.824" timestamp="1593587426608" />
-    <state x="192" y="51" key="SettingsEditor" timestamp="1593594186382">
+    <state x="192" y="51" key="SettingsEditor" timestamp="1593594791304">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="192" y="51" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1593594186382" />
+    <state x="192" y="51" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1593594791304" />
+    <state x="522" y="0" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1593594361623">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="522" y="0" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1536.824@0.0.1536.824" timestamp="1593594361623" />
     <state x="563" y="325" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1593584457628">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -256,7 +273,7 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/pytest$CommonMethod.coverage" NAME="CommonMethod Coverage Results" MODIFIED="1593584050761" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Defiex-test" />
-    <SUITE FILE_PATH="coverage/pytest$demo1.coverage" NAME="demo1 Coverage Results" MODIFIED="1593593713500" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Defiex-test" />
+    <SUITE FILE_PATH="coverage/pytest$demo1.coverage" NAME="demo1 Coverage Results" MODIFIED="1593605789602" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Defiex-test" />
     <SUITE FILE_PATH="coverage/pytest$mongodbsave.coverage" NAME="mongodbsave Coverage Results" MODIFIED="1593569560679" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Defiex-test" />
   </component>
 </project>

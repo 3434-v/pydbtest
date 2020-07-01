@@ -73,7 +73,7 @@ class supernode(object):
         return urls
 
     def Get_token(self, name):
-
+        # self.Login(name)
         with save.SqlSave() as execute:
             token_msg_list = execute.select('token', 'Name_ResponseMsg', 'name', name)
             token = ''.join(
@@ -822,6 +822,13 @@ class DealStaff(supernode):
         msg = ''.join([msg for msg_tuple in message if len(message) != 0 for msg in msg_tuple])
         return msg
 
+    # 管理端审核交易员
+    def check_trader(self, userid):
+        admin_token = self.admin_token()
+        url = self.Get_url('交易员审核')
+        data = '{"type":10211, "token":"'+admin_token+'", "userid":"'+userid+'", "state":"1"}'
+        self.unify.deamds(url, data)
+
     # 交易员申请开通
     def apply(self, name):
         url = self.Get_url('交易员申请开通')
@@ -858,17 +865,17 @@ class DealStaff(supernode):
         return planerid_list
 
     # 用户跟单某个交易员
-    def user_trader(self):
+    def user_trader(self, name, planerid, referrerid):
         url = self.Get_url('用户跟单某个交易员')
-        data = '{"token":"d9077bd0010e42471ea423f91644edb8","planerid":"12321423523","referrerid":"2174438592",' \
-               '"opentype":"1","openamount":"50.00","openamountdaymax":"500.00","openamountholdmax":"300.00",' \
-               '"openamountslrate":"0.60"} '
+        data = '{"token":"'+self.Get_token(name)+'","planerid":"'+planerid+'","referrerid":"'+referrerid+'",' \
+               '"opentype":"1","openamount":"50.00","openamountdaymax":"0","openamountholdmax":"0",' \
+               '"openamountslrate":"0"} '
         self.unify.deamds(url, data)
 
     # 用户跟单详情查询
-    def user_detail(self):
+    def user_detail(self, name):
         url = self.Get_url('用户跟单详情查询')
-        data = '{"token":"d9077bd0010e42471ea423f91644edb8"}'
+        data = '{"token":"'+self.Get_token(name)+'"}'
         self.unify.deamds(url, data)
 
     # 用户修改跟单参数
@@ -960,7 +967,20 @@ def dealtest1():
     with save.SqlSave() as execute:
         userid = UnifyWays().formatting(execute.select('userid', 'Name_ResponseMsg', 'name', name))
         if userid in trader:
-            print('成功')
+            deal.check_trader(userid)
+            execute.trader(name, userid, select)
+
+
+# 用户跟单交易员
+def dealtest2():
+    deal = DealStaff()
+    run = supernode('1')
+    withname = '389863294@qq.com'
+    planerid = '12913441377'
+    referrerid = '0'
+    # deal.user_trader(withname, planerid, referrerid)
+    # deal.trader_list()
+    deal.user_detail(withname)
 
 # 特定经纪人比例
 def broker():
@@ -1015,4 +1035,5 @@ def TestCreate():
 if __name__ == "__main__":
     select = '测试环境'
     # broker()
-    dealtest1()
+    # dealtest1()
+    dealtest2()

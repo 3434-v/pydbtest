@@ -255,6 +255,17 @@ class SqlSave(object):
         except:
             self.curse.execute(insert_sql)
 
+    # 交易员表
+    def trader(self, name, planerid, environment):
+        times = self.get_time()
+        create_sql = 'create table trader(id integer primary key autoincrement, name text, planerid text, environment text, time text)'
+        insert_sql = 'insert into trader(name, planerid, environment, time) values("{}", "{}", "{}", "{}")'.format(name, planerid, environment, times)
+        try:
+            self.curse.execute(create_sql)
+            self.curse.execute(insert_sql)
+        except:
+            self.curse.execute(insert_sql)
+
 
 # def way(func):
 #     with SqlSave() as run:
