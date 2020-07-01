@@ -1,14 +1,18 @@
 #!/usr/bin/python3
 
 import threading
-import time,datetime
+import time
+import datetime
 import requests
 import sqlite3
 import contextlib
+
 exitFlag = 0
+
+
 class SqlSave(object):
     def __init__(self):
-        self.table_list = ['general','supernode','Admin_testname','url']
+        self.table_list = ['general', 'supernode', 'Admin_testname', 'url']
 
     def __enter__(self):
         # table_length = len(self.table_list)
@@ -21,12 +25,12 @@ class SqlSave(object):
         # length.close()
         self.conn = sqlite3.connect('E:\\pyfile_version\\pytest\\Defiex-test\\test.db')
         self.curse = self.conn.cursor()
-        
+
         return self
 
     def __exit__(self, exc_type, exc_val, exc_t):
-        
-        self.curse.close() 
+
+        self.curse.close()
         self.conn.commit()
         self.conn.close()
 
@@ -38,213 +42,227 @@ class SqlSave(object):
     #         self.curse.execute(insert_sql)
     #     except:
     #         self.curse.execute(insert_sql)
-    
-    #url尾椎表
-    def url(self,urlname,url):
-        create_sql = 'create table url(id integer primary key autoincrement,urlname text,url text)'
-        insert_sql = 'insert into url(urlname,url) values("{}","{}")'.format(urlname,url)
+
+    # url尾椎表
+    def url(self, urlname, url):
+        create_sql = 'create table url(id integer primary key autoincrement, urlname text, url text)'
+        insert_sql = 'insert into url(urlname,url) values("{}","{}")'.format(urlname, url)
         try:
             self.curse.execute(create_sql)
             self.curse.execute(insert_sql)
         except:
             self.curse.execute(insert_sql)
 
-    #普通账号表
-    def general(self,name,password,environment):
-        create_sql = 'create table general(id integer primary key autoincrement,name text,password text,environment text)'
-        insert_sql = 'insert into general(name,password,environment) values("{}","{}","{}")'.format(name,password,environment)
+    # 普通账号表
+    def general(self, name, password, environment):
+        create_sql = 'create table general(id integer primary key autoincrement, name text, password text, environment text)'
+        insert_sql = 'insert into general(name, password, environment) values("{}", "{}", "{}")'.format(name, password,
+                                                                                                        environment)
         try:
             self.curse.execute(create_sql)
             self.curse.execute(insert_sql)
         except:
             self.curse.execute(insert_sql)
 
-    #超级节点账号表
-    def supernode(self,name,environment):
-        create_sql = 'create table supernode(id integer primary key autoincrement,name varchar(100),environment text)'
-        insert_sql = 'insert into supernode(name,environment) values("{}","{}")'.format(name,environment)
+    # 超级节点账号表
+    def supernode(self, name, environment):
+        create_sql = "create table supernode(id integer primary key autoincrement,name varchar(100),environment text)"
+        insert_sql = 'insert into supernode(name,environment) values("{}","{}")'.format(name, environment)
         try:
             self.curse.execute(create_sql)
             self.curse.execute(insert_sql)
         except:
             self.curse.execute(insert_sql)
 
-    #管理后台账号表
-    def Admin_testname(self,name,password,code):
+    # 管理后台账号表
+    def Admin_testname(self, name, password, code):
         create_sql = 'create table Admin_testname(id integer primary key autoincrement,name varchar(100),password varchar(100),code varchar(100))'
-        insert_sql = 'insert into Admin_testname(name,password,code) values("{}","{}","{}")'.format(name,password,code)
+        insert_sql = 'insert into Admin_testname(name,password,code) values("{}","{}","{}")'.format(name, password,
+                                                                                                    code)
         try:
             self.curse.execute(create_sql)
             self.curse.execute(insert_sql)
         except:
             self.curse.execute(insert_sql)
 
-    #get内容获取
-    def select(self,field,table,condition,data):
-        select_sql = 'select {} from {} where {}="{}"'.format(field,table,condition,data)
+    # get内容获取
+    def select(self, field, table, condition, data):
+        select_sql = 'select {} from {} where {}="{}"'.format(field, table, condition, data)
         self.curse.execute(select_sql)
         msg = self.curse.fetchall()
         return msg
-    
-    def selects(self,tableName):
+
+    def selects(self, tableName):
         select_sql = 'select name,password,code from {}'.format(tableName)
         self.curse.execute(select_sql)
         msg = self.curse.fetchall()
         return msg
 
-    #操作日志表
-    def handle_log(self,handle):
+    # 操作日志表
+    def handle_log(self, handle):
         time = self.get_time()
         create_sql = 'create table handle_log(id integer primary key autoincrement,time varchar(200),handle_type text)'
-        insert_sql = 'insert into handle_log(time,handle_type) values("{}","{}")'.format(time,handle)
+        insert_sql = 'insert into handle_log(time,handle_type) values("{}","{}")'.format(time, handle)
         try:
             self.curse.execute(create_sql)
             self.curse.execute(insert_sql)
         except:
             self.curse.execute(insert_sql)
-    
+
     def get_time(self):
-        otherStyleTime = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
+        otherStyleTime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
         # print(otherStyleTime)
         return otherStyleTime
 
-    #环境表
-    def environment(self,name,url):
+    # 环境表
+    def environment(self, name, url):
         create_sql = 'create table environment(id integer primary key autoincrement,name varchar(100),url varchar(100))'
-        insert_sql = 'insert into environment(name,url) values("{}","{}")'.format(name,url)
+        insert_sql = 'insert into environment(name,url) values("{}","{}")'.format(name, url)
         try:
             self.curse.execute(create_sql)
             self.curse.execute(insert_sql)
         except:
             self.curse.execute(insert_sql)
 
-    #response返回信息表
-    def Name_ResponseMsg(self,name,userid,token,invitecode,environment):
+    # response返回信息表
+    def Name_ResponseMsg(self, name, userid, token, invitecode, environment):
         times = self.get_time()
         create_sql = 'create table Name_ResponseMsg(id integer primary key autoincrement,name text not null unique,userid text,token text,invitecode text,gettime text,environment text)'
-        insert_sql = 'insert into Name_ResponseMsg(name,userid,token,invitecode,gettime,environment) values("{}","{}","{}","{}","{}","{}")'.format(name,userid,token,invitecode,times,environment)
+        insert_sql = 'insert into Name_ResponseMsg(name,userid,token,invitecode,gettime,environment) values("{}","{}","{}","{}","{}","{}")'.format(
+            name, userid, token, invitecode, times, environment)
         try:
             self.curse.execute(create_sql)
             self.curse.execute(insert_sql)
         except:
             self.curse.execute(insert_sql)
 
-    #更新token
-    def update(self,table,token,name):
+    # 更新token
+    def update(self, table, token, name):
         times = self.get_time()
         print(times)
-        update_sql = 'update {} set token="{}",gettime="{}" where name="{}"'.format(table,token,times,name)
+        update_sql = 'update {} set token="{}",gettime="{}" where name="{}"'.format(table, token, times, name)
         self.curse.execute(update_sql)
 
-    #多表连接
-    def join_table(self,environment):
-        join_sql = 'select * from environment join Admin_testname on environment.id=Admin_testname.id where environment.name="{}"'.format(environment)
+    # 多表连接
+    def join_table(self, environment):
+        join_sql = 'select * from environment join Admin_testname on environment.id=Admin_testname.id where environment.name="{}"'.format(
+            environment)
         self.curse.execute(join_sql)
         msg = self.curse.fetchall()
         # print(msg)
         return msg
 
-    #超级节点流程情况数据
-    def supermsg(self,explain,msg):
+    # 超级节点流程情况数据
+    def supermsg(self, explain, msg):
         create_sql = 'create table supermsg(id integer primary key autoincrement,explain text not null unique,msg text)'
-        insert_sql = 'insert into supermsg(explain,msg) values("{}","{}")'.format(explain,msg)
+        insert_sql = 'insert into supermsg(explain,msg) values("{}","{}")'.format(explain, msg)
         try:
             self.curse.execute(create_sql)
             self.curse.execute(insert_sql)
         except:
             self.curse.execute(insert_sql)
 
-    #建仓数据
-    def granary(self,name,symbol,orderid,environment,balanceold,balance,openprice,openfee,forceprice,direction):
+    # 建仓数据
+    def granary(self, name, symbol, orderid, environment, balanceold, balance, openprice, openfee, forceprice,
+                direction):
         create_sql = 'create table granary(id integer primary key autoincrement,name text,symbol text,orderid text,environment text,balanceold text,balance text,openprice text,openfee text,forceprice text,direction text)'
-        insert_sql = 'insert into granary(name,symbol,orderid,environment,balanceold,balance,openprice,openfee,forceprice,direction) values("{}","{}","{}","{}","{}","{}","{}","{}","{}","{}")'.format(name,symbol,orderid,environment,balanceold,balance,openprice,openfee,forceprice,direction)
+        insert_sql = 'insert into granary(name,symbol,orderid,environment,balanceold,balance,openprice,openfee,forceprice,direction) values("{}","{}","{}","{}","{}","{}","{}","{}","{}","{}")'.format(
+            name, symbol, orderid, environment, balanceold, balance, openprice, openfee, forceprice, direction)
         try:
             self.curse.execute(create_sql)
             self.curse.execute(insert_sql)
         except:
             self.curse.execute(insert_sql)
-    #删除数据
-    def delete(self,table,condition,data):
-        delete_sql = 'delete from {} where {}="{}"'.format(table,condition,data)
+
+    # 删除数据
+    def delete(self, table, condition, data):
+        delete_sql = 'delete from {} where {}="{}"'.format(table, condition, data)
         try:
             self.curse.execute(delete_sql)
         except:
             self.curse.execute(delete_sql)
 
-    #多级关联专用表
-    def multilevel(self,name,invitecode,shareid):
+    # 多级关联专用表
+    def multilevel(self, name, invitecode, shareid):
         create_sql = 'create table multilevel(id integer primary key autoincrement,name text,invitecode text,shareid text)'
-        insert_sql = 'insert into multilevel(name,invitecode,shareid) values("{}","{}","{}")'.format(name,invitecode,shareid)
+        insert_sql = 'insert into multilevel(name,invitecode,shareid) values("{}","{}","{}")'.format(name, invitecode,
+                                                                                                     shareid)
         try:
             self.curse.execute(create_sql)
             self.curse.execute(insert_sql)
         except:
             self.curse.execute(insert_sql)
 
-    #测试验证数据
-    def testcase(self,state,msg):
+    # 测试验证数据
+    def testcase(self, state, msg):
         time = self.get_time()
         create_sql = 'create table testcase(id integer primary key autoincrement,state text,msg text,time text)'
-        insert_sql = 'insert into testcase(state,msg,time) values("{}","{}","{}")'.format(state,msg,time)
+        insert_sql = 'insert into testcase(state,msg,time) values("{}","{}","{}")'.format(state, msg, time)
         try:
             self.curse.execute(create_sql)
             self.curse.execute(insert_sql)
         except:
             self.curse.execute(insert_sql)
 
-    #建仓时测试数据输入表
-    def test_msg(self,spratio_ratio,slratio_ratio,create_money,pry,formalities_ratio,direction):
+    # 建仓时测试数据输入表
+    def test_msg(self, spratio_ratio, slratio_ratio, create_money, pry, formalities_ratio, direction):
         create_sql = 'create table test_msg(id integer primary key autoincrement,spratio_ratio text,slratio_ratio text,create_money text,pry text,formalities_ratio text,direction text)'
-        insert_sql = 'insert into test_msg(spratio_ratio,slratio_ratio,create_money,pry,formalities_ratio,direction) values("{}","{}","{}","{}","{}","{}")'.format(spratio_ratio,slratio_ratio,create_money,pry,formalities_ratio,direction)
+        insert_sql = 'insert into test_msg(spratio_ratio,slratio_ratio,create_money,pry,formalities_ratio,direction) values("{}","{}","{}","{}","{}","{}")'.format(
+            spratio_ratio, slratio_ratio, create_money, pry, formalities_ratio, direction)
         try:
             self.curse.execute(create_sql)
             self.curse.execute(insert_sql)
         except:
             self.curse.execute(insert_sql)
 
-    #现金现价建仓数据表
-    def current_granary(self,name,balanceold,balance,orderid,wttime,price_money,testcase):
+    # 现金现价建仓数据表
+    def current_granary(self, name, balanceold, balance, orderid, wttime, price_money, testcase):
         create_sql = 'create table current_granary(id integer primary key autoincrement,name text,balanceold text,balance text,orderid text,wttime text,price_money text,testcase text)'
-        insert_sql = 'insert into current_granary(name,balanceold,balance,orderid,wttime,price_money,testcase) values("{}","{}","{}","{}","{}","{}","{}")'.format(name,balanceold,balance,orderid,wttime,price_money,testcase)
+        insert_sql = 'insert into current_granary(name,balanceold,balance,orderid,wttime,price_money,testcase) values("{}","{}","{}","{}","{}","{}","{}")'.format(
+            name, balanceold, balance, orderid, wttime, price_money, testcase)
         try:
             self.curse.execute(create_sql)
             self.curse.execute(insert_sql)
         except:
             self.curse.execute(insert_sql)
 
-    #各种金额数据表
+    # 各种金额数据表
     def all_money(self):
         '''
         余额、赠金、冻结赠金
         '''
 
-    #充币地址
-    def TopUpSite(self,name,ETH_ERC20,BTC_OMNI,TRX_TRC20):
+    # 充币地址
+    def TopUpSite(self, name, ETH_ERC20, BTC_OMNI, TRX_TRC20):
         create_sql = 'create table TopUpSite(id integer primary key autoincrement,name text,ETH_ERC20 text,BTC_OMNI text,TRX_TRC20 text)'
-        insert_sql = 'insert into TopUpSite(name,ETH_ERC20,BTC_OMNI,TRX_TRC20) values("{}","{}","{}","{}")'.format(name,ETH_ERC20,BTC_OMNI,TRX_TRC20)
+        insert_sql = 'insert into TopUpSite(name,ETH_ERC20,BTC_OMNI,TRX_TRC20) values("{}","{}","{}","{}")'.format(name,
+                                                                                                                   ETH_ERC20,
+                                                                                                                   BTC_OMNI,
+                                                                                                                   TRX_TRC20)
         try:
             self.curse.execute(create_sql)
             self.curse.execute(insert_sql)
         except:
             self.curse.execute(insert_sql)
 
-    #获取提币纪录
-    def Withdraw_recod(self,name,txid):
+    # 获取提币纪录
+    def Withdraw_recod(self, name, txid):
         create_sql = 'create table Withdraw_recod(id integer primary key autoincrement,name text,txid text)'
-        insert_sql = 'insert into Withdraw_recod(name,txid) values("{}","{}")'.format(name,txid)
+        insert_sql = 'insert into Withdraw_recod(name,txid) values("{}","{}")'.format(name, txid)
         try:
             self.curse.execute(create_sql)
             self.curse.execute(insert_sql)
         except:
             self.curse.execute(insert_sql)
 
-# def way(func):        
+
+# def way(func):
 #     with SqlSave() as run:
 #         return run
 # @way
 # def exit():
 #     return 'hanle_log'
-    
+
 
 # class Resource():
 #     def __enter__(self):
@@ -252,10 +270,10 @@ class SqlSave(object):
 #         return self
 #     def __exit__(self, exc_type, exc_val, exc_tb):
 #         print('===close resource connection===')
-        
+
 #     def operate(self):
 #         print('===in operation===')
-        
+
 # with Resource() as res:
 #     res.operate()
 
@@ -297,12 +315,6 @@ class SqlSave(object):
 # thread2.join()
 # stop = time.time()
 # print ("退出主线程",stop-start)
-
-
-
-
-
-
 
 
 '''
@@ -414,7 +426,6 @@ for t in threads:
     t.join()
 print ("退出主线程")
 '''
-
 
 '''
 XXXX点触发止盈/止损平仓
