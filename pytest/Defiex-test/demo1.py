@@ -1,29 +1,27 @@
 import requests
 import re
 import time
-import datetime
 import random
-import os.path
-import hashlib
 import json
 import sqlitesave as save
 
 from mongosave import TestMongoDB
-from CommonMethod import UnifyWays
+from CommonMethod import deamds, formatting, gain_url
+
 # import mongosave.TestMongoDB as TestMongoDB
 
 # 环境选择
 pynosql = TestMongoDB('localhost:27017/', 'test_defiex')
 
 
-class delete_format(object):
-
-    def msg_format(self, msg_list):
-        msg = ''.join([msg for msg_tuple in msg_list if len(msg_list) != 0 for msg in msg_tuple])
-        return msg
-
-
-formatting = delete_format()
+# class delete_format(object):
+#
+#     def msg_format(self, msg_list):
+#         msg = ''.join([msg for msg_tuple in msg_list if len(msg_list) != 0 for msg in msg_tuple])
+#         return msg
+#
+#
+# formatting = delete_format()
 
 
 # class UnifyWay(object):
@@ -144,12 +142,13 @@ class supernode(object):
             shareid = execute.select('userid', 'Name_ResponseMsg', 'name', sharename)
             print(shareid)
             requestcode = execute.select('invitecode', 'Name_ResponseMsg', 'name', sharename)
-            share_id = {True: formatting.msg_format(shareid), False: '0'}[len(shareid) != 0]
-            request_code = {True: formatting.msg_format(requestcode), False: ' '}[len(requestcode) != 0]
+            share_id = {True: formatting(shareid), False: '0'}[len(shareid) != 0]
+            request_code = {True: formatting(requestcode), False: ' '}[len(requestcode) != 0]
             data = '{"username":"' + name + '","type":"' + register_type + '","countryid":"191","pwd":"' + password + '","code":"' + \
-                   msg[0][6] + '","channel":{"plat":"h5","share_id":"' + share_id + '","activityid":"1","invitecode":"' + request_code + '"}}'
+                   msg[0][
+                       6] + '","channel":{"plat":"h5","share_id":"' + share_id + '","activityid":"1","invitecode":"' + request_code + '"}}'
             requests.get(url + data)
-            print(url+data)
+            print(url + data)
             execute.multilevel(name, request_code, share_id)
             execute.general(name, password, select)
             execute.handle_log('insert->general')
@@ -206,20 +205,22 @@ class supernode(object):
         return msg
 
     # 管理端添加money
-    def add_money(self, name, money):
-        # self.Login(name)
+    def add_money(self, name: str, money: int):
+        self.Login(name)
         moneys = money * 100
         # reward 1:赠金 0:现金
         reward = '0'
         with save.SqlSave() as execute:
             urls = self.Get_url('管理端添加money')
-            userid = execute.select('userid', 'Name_ResponseMsg', 'name', name)
-
-            data = '{"type":10201,"userid":"' + userid[0][
-                0] + '","money":'+str(moneys)+',"remark":"测试","token":"' + self.admin_token() + '","reward":"'+reward+'"}'
-            response = requests.get(urls + data)
-            msg = ' '.join(re.findall('msg": "(.*?)"', str(response.text)))
-            print(response.text)
+            userid = formatting(execute.select('userid', 'Name_ResponseMsg', 'name', name))
+            print(userid)
+            data = {
+                "type": 10201, "userid": userid,
+                "money": str(moneys), "remark": "测试",
+                "token": self.admin_token(), "reward": reward
+            }
+            response = json.dumps(deamds(urls, data))
+            msg = ' '.join(re.findall('msg": "(.*?)"', str(response)))
             return msg
 
     # 超级节点申请流程
@@ -814,137 +815,201 @@ class supernode(object):
 class DealStaff(supernode):
 
     def __init__(self):
-
-        self.unify = UnifyWays()
-
-    # sqlite数据格式化处理
-    def formatting(self, message):
-        msg = ''.join([msg for msg_tuple in message if len(message) != 0 for msg in msg_tuple])
-        return msg
+        pass
 
     # 管理端审核交易员
-    def check_trader(self, userid):
+    def check_trader(self, userid: str, state: str):
         admin_token = self.admin_token()
+        # state 1:审核通过 0:审核失败
+        # state = '1'
         url = self.Get_url('交易员审核')
-        data = '{"type":10211, "token":"'+admin_token+'", "userid":"'+userid+'", "state":"1"}'
-        self.unify.deamds(url, data)
+        data = {
+            "type": 10211, "token": admin_token,
+            "userid": userid, "state": state
+        }
+        deamds(url, data)
 
     # 交易员申请开通
     def apply(self, name):
         url = self.Get_url('交易员申请开通')
-        data = '{"token":"' + self.Get_token(name) + '", "language":"zh_CN"}'
-        response = self.unify.deamds(url, data)
+        data = {
+            "token": self.Get_token(name),
+            "language": "zh_CN"
+        }
+        response = deamds(url, data)
         return response
 
     # 交易员详情查询
     def select_detail(self, name):
         with save.SqlSave() as execute:
-            userid = self.formatting(execute.select('userid', 'Name_ResponseMsg', 'name', name))
+            userid = formatting(execute.select('userid', 'Name_ResponseMsg', 'name', name))
             url = self.Get_url('交易员详情查询')
-            data = '{"planerid":"' + userid + '", "language":"zh_CN"}'
-            self.unify.deamds(url, data)
+            data = {
+                "planerid": userid,
+                "language": "zh_CN"
+            }
+            deamds(url, data)
 
-    # 交易员交易记录查询sf
+    # 交易员交易记录查询
     def deal_record(self, name):
+        with save.SqlSave() as execute:
+            userid = formatting(execute.select('userid', 'Name_ResponseMsg', 'name', name))
         url = self.Get_url('交易员交易记录查询')
-        data = '{"planerid":"12076521935","page":"1","count":"20"}'
-        self.unify.deamds(url, data)
+        data = {
+            "planerid": userid,
+            "page": "1", "count": "20"
+        }
+        deamds(url, data)
 
     # 交易员跟单盈利查询
     def deal_gain(self, name):
+        with save.SqlSave() as execute:
+            userid = formatting(execute.select('userid', 'Name_ResponseMsg', 'name', name))
         url = self.Get_url('交易员跟单盈利查询')
-        data = '{"planerid":"12076521935","page":"1","count":"20"}'
-        self.unify.deamds(url, data)
+        data = {
+            "planerid": userid,
+            "page": "1", "count": "20"
+        }
+        deamds(url, data)
 
     # 交易员列表查询
     def trader_list(self):
         url = self.Get_url('交易员列表查询')
-        data = '{"ordertype":"1"}'
-        planerid_str = json.dumps(self.unify.deamds(url, data))
+        data = {
+            "ordertype": "1"
+        }
+        planerid_str = json.dumps(deamds(url, data))
         planerid_list = re.findall('"planerid": "(.*?)"', planerid_str)
         return planerid_list
 
     # 用户跟单某个交易员
     def user_trader(self, name, planerid, referrerid):
+        opentype = '1'
+        openamount = '50'
+        openamountdaymax = '500'
+        openamountholdmax = '1000'
+        openamountslrate = '0.5'
         url = self.Get_url('用户跟单某个交易员')
-        data = '{"token":"'+self.Get_token(name)+'","planerid":"'+planerid+'","referrerid":"'+referrerid+'",' \
-               '"opentype":"1","openamount":"50.00","openamountdaymax":"0","openamountholdmax":"0",' \
-               '"openamountslrate":"0"} '
-        self.unify.deamds(url, data)
+        data = {
+            "token": self.Get_token(name), "planerid": planerid, "referrerid": referrerid,
+            "opentype": opentype, "openamount": openamount, "openamountdaymax": openamountdaymax,
+            "openamountholdmax": openamountholdmax, "openamountslrate": openamountslrate
+        }
+        deamds(url, data)
 
     # 用户跟单详情查询
     def user_detail(self, name):
         url = self.Get_url('用户跟单详情查询')
-        data = '{"token":"'+self.Get_token(name)+'"}'
-        self.unify.deamds(url, data)
+        data = {
+            "token": self.Get_token(name)
+        }
+        deamds(url, data)
 
     # 用户修改跟单参数
-    def user_remove_parameter(self):
+    def user_remove_parameter(self, name, planerid):
+        # 是否暂停1: 是0: 否
+        pause = '1'
+        openamount = '500'
+        openamountdaymax = '1000'
+        openamountholdmax = '2000'
+        openamountslrate = '0.5'
         url = self.Get_url('用户修改跟单参数')
-        data = '{"token":"d9077bd0010e42471ea423f91644edb8","planerid":"12321423523","pause":"1","opentype":"1",' \
-               '"openamount":"50.00","openamountdaymax":"500.00","openamountholdmax":"300.00",' \
-               '"openamountslrate":"0.60"} '
-        self.unify.deamds(url, data)
+        data = {
+            "token": self.Get_token(name),
+            "planerid": planerid, "pause": pause, "opentype": "1",
+            "openamount": openamount, "openamountdaymax": openamountdaymax,
+            "openamountholdmax": openamountholdmax, "openamountslrate": openamountslrate
+        }
+        deamds(url, data)
 
     # 用户取消跟单某个交易员
-    def cancel_deal(self):
+    def cancel_deal(self, name, planerid):
         url = self.Get_url('用户取消跟单某个交易员')
-        data = '{"token":"d9077bd0010e42471ea423f91644edb8","planerid":"12321423523"}'
-        self.unify.deamds(url, data)
+        data = {
+            "token": self.Get_token(name),
+            "planerid": planerid
+        }
+
+        deamds(url, data)
 
     # 用户跟单历史查询
-    def user_deal_history(self):
+    def user_deal_history(self, name, planerid):
         url = self.Get_url('用户跟单历史查询')
-        data = '{"token":"d9077bd0010e42471ea423f91644edb8","planerid":"42133897219"}'
-        self.unify.deamds(url, data)
+        data = {
+            "token": self.Get_token(name),
+            "planerid": planerid
+        }
+        deamds(url, data)
 
     # 交易员修改信息
-    def trader_remove_message(self):
+    def trader_remove_message(self, name):
         url = self.Get_url('交易员修改信息')
-        data = '{"token":"d9077bd0010e42471ea423f91644edb8","type":"1","info":"内容"}'
-        self.unify.deamds(url, data)
+        # 1: 确认跟单规则 2: 带单开关 3: 个人描述 4: 标签
+        types = '4'
+        info = '1000804'
+        data = {
+            "token": self.Get_token(name),
+            "type": types, "info": info
+        }
+        deamds(url, data)
 
     # 交易员跟单提成每日汇总查询
-    def trader_everyday_royalties(self):
+    def trader_everyday_royalties(self, name):
         url = self.Get_url('交易员跟单提成每日汇总查询')
-        data = '{"token":"d9077bd0010e42471ea423f91644edb8","page":"1","count":"20"}'
-        self.unify.deamds(url, data)
+        data = {
+            "token": self.Get_token(name),
+            "page": "1", "count": "20"
+        }
+        deamds(url, data)
 
     # 交易员跟单提成每日明细查询
-    def everyday_detail(self):
+    def everyday_detail(self, name):
         url = self.Get_url('交易员跟单提成每日明细查询')
-        data = '{"token":"d9077bd0010e42471ea423f91644edb8","tradedate":"152132138900"}'
-        self.unify.deamds(url, data)
+        data = {
+            "token": self.Get_token(name),
+            "tradedate": "152132138900"
+        }
+        deamds(url, data)
 
     # 推荐人详情查询
-    def referrer_detail(self):
+    def referrer_detail(self, name):
         url = self.Get_url('推荐人详情查询')
-        data = '{"token":"d9077bd0010e42471ea423f91644edb8"}'
-        self.unify.deamds(url, data)
+        data = {
+            "token": self.Get_token(name)
+        }
+        deamds(url, data)
 
     # 推荐人跟单用户信息查询
-    def referrer_user_detail(self):
+    def referrer_user_detail(self, name):
         url = self.Get_url('推荐人跟单用户信息查询')
-        data = '{"token":"d9077bd0010e42471ea423f91644edb8"}'
-        self.unify.deamds(url, data)
+        data = {
+            "token": self.Get_token(name)
+        }
+        deamds(url, data)
 
     # 推荐人每日提成汇总信息查询
-    def referrer_everyday_collect(self):
+    def referrer_everyday_collect(self, name):
         url = self.Get_url('推荐人每日提成汇总信息查询')
-        data = '{"token":"d9077bd0010e42471ea423f91644edb8"}'
-        self.unify.deamds(url, data)
+        data = {
+            "token": self.Get_token(name)
+        }
+        deamds(url, data)
 
     # 推荐人每日提成明细查询
-    def referrer_everyday_deduct(self):
+    def referrer_everyday_deduct(self, name):
         url = self.Get_url('推荐人每日提成明细查询')
-        data = '{"token":"d9077bd0010e42471ea423f91644edb8"}'
-        self.unify.deamds(url, data)
+        data = {
+            "token": self.Get_token(name)
+        }
+        deamds(url, data)
 
     # 交易员标签信息查询
     def trader_label(self):
         url = self.Get_url('交易员标签信息查询')
-        data = '{"language":"en"}'
-        self.unify.deamds(url, data)
+        data = {
+            "language": "en"
+        }
+        deamds(url, data)
 
 
 # 交易员
@@ -962,13 +1027,26 @@ def dealtest1():
             run.check_kyc(name)
             deal.apply(name)
             run.get_frostmoney(name)
-    # 验证开通后列表是否存在
+    # 验证申请成功后列表是否存在
     trader = deal.trader_list()
     with save.SqlSave() as execute:
-        userid = UnifyWays().formatting(execute.select('userid', 'Name_ResponseMsg', 'name', name))
+        userid = formatting(execute.select('userid', 'Name_ResponseMsg', 'name', name))
         if userid in trader:
-            deal.check_trader(userid)
-            execute.trader(name, userid, select)
+            # 审核通过
+            state = '1'
+            deal.check_trader(userid, state)
+            execute.trader(name, userid, select, state)
+
+
+# 用户、交易员、交易员三级关系建立
+def dealtest4():
+    deal = DealStaff()
+    run = supernode('1')
+    # 1、注册三个新账户分别拿出name、userid
+
+
+    
+    # deal.check_trader(dealid, '1')
 
 
 # 用户跟单交易员
@@ -976,11 +1054,27 @@ def dealtest2():
     deal = DealStaff()
     run = supernode('1')
     withname = '389863294@qq.com'
-    planerid = '12913441377'
+    planerid = '12241273568'
     referrerid = '0'
-    # deal.user_trader(withname, planerid, referrerid)
-    # deal.trader_list()
+    deal.user_trader(withname, planerid, referrerid)
+    deal.trader_list()
+    deal.cancel_deal(withname, planerid)
+    deal.user_remove_parameter(withname, planerid)
     deal.user_detail(withname)
+
+
+# 交易员信息修改
+def dealtest3():
+    deal = DealStaff()
+    run = supernode('1')
+    withname = '389863294@qq.com'
+    dealname = '166453511870@qq.com'
+    deal.trader_remove_message(dealname)
+    userid = '12241273568'
+    deal.trader_label()
+    deal.select_detail(dealname)
+    # deal.check_trader(userid)
+
 
 # 特定经纪人比例
 def broker():
@@ -1036,4 +1130,5 @@ if __name__ == "__main__":
     select = '测试环境'
     # broker()
     # dealtest1()
-    dealtest2()
+    # dealtest3()
+    dealtest4()

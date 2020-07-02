@@ -256,10 +256,10 @@ class SqlSave(object):
             self.curse.execute(insert_sql)
 
     # 交易员表
-    def trader(self, name, planerid, environment):
+    def trader(self, name, planerid, environment, state):
         times = self.get_time()
-        create_sql = 'create table trader(id integer primary key autoincrement, name text, planerid text, environment text, time text)'
-        insert_sql = 'insert into trader(name, planerid, environment, time) values("{}", "{}", "{}", "{}")'.format(name, planerid, environment, times)
+        create_sql = 'create table trader(id integer primary key autoincrement, name text, planerid text, environment text, time text, state text)'
+        insert_sql = 'insert into trader(name, planerid, environment, state, time) values("{}", "{}", "{}", "{}", "{}")'.format(name, planerid, environment, state, times)
         try:
             self.curse.execute(create_sql)
             self.curse.execute(insert_sql)

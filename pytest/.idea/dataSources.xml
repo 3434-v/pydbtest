@@ -7,11 +7,5 @@
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:E:\pyfile_version\pytest\Defiex-test\test.db</jdbc-url>
     </data-source>
-    <data-source source="LOCAL" name="identifier.sqlite" uuid="c880b6fb-a52b-4106-b552-6a36d52cee88">
-      <driver-ref>sqlite.xerial</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:identifier.sqlite</jdbc-url>
-    </data-source>
   </component>
 </project>
