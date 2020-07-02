@@ -6,8 +6,18 @@ import datetime
 import requests
 import sqlite3
 import contextlib
+import json
 
 exitFlag = 0
+
+
+def context() -> str:
+    with open('deploy.json', 'r', encoding='utf8') as depl:
+        depl_dict = json.load(depl)
+    depl.close()
+    select = depl_dict["environment"]
+    print(select)
+    return select
 
 
 class SqlSave(object):
@@ -266,6 +276,33 @@ class SqlSave(object):
         except:
             self.curse.execute(insert_sql)
 
+
+    # 交易员、用户、推荐人数据测试表
+    def trader_test(self, user, userid, dealuser, dealuserid, recommenduser, recommenduserid):
+        times = self.get_time()
+        create_sql = 'create table trader_test(' \
+                     'testid integer primary key autoincrement, user text, userid text,' \
+                     'dealuser text, dealuserid text, '\
+                     'recommenduser text, recommenduserid text, environment text'\
+                     ')'
+
+        insert_sql = 'insert into trader_test(' \
+                     'user, userid, dealuser, dealuserid, recommenduser, recommenduserid, environment'\
+                     ') values(' \
+                     '"{}", "{}", "{}", "{}", "{}", "{}", "{}"'\
+                     ')'.format(user, userid, dealuser, dealuserid, recommenduser, recommenduserid, context())
+        try:
+            self.curse.execute(create_sql)
+            self.curse.execute(insert_sql)
+        except:
+            self.curse.execute(insert_sql)
+
+    # 交易员三级关系测试数据
+    def trader_test_select(self, testid, table):
+        select_sql = 'select * from {} where testid="{}"'.format(table, testid)
+        self.curse.execute(select_sql)
+        testmsg = self.curse.fetchall()
+        return testmsg
 
 # def way(func):
 #     with SqlSave() as run:

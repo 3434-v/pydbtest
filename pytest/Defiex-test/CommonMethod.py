@@ -33,6 +33,11 @@ def context() -> str:
     return select
 
 
+def extract(regular: str, msg: str):
+    message = ''.join(re.findall('"{}": "(.*?)",'.format(regular), msg))
+    return message
+
+
 def gain_url(self, urlname):
     with save.SqlSave() as execute:
         url_header_list = execute.select('url', 'environment', 'name', context())
