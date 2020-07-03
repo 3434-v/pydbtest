@@ -879,7 +879,7 @@ class DealStaff(supernode):
         deamds(url, data)
 
     # 交易员跟单盈利查询
-    def deal_gain(self, name: str):
+    def deal_gain(self, name: str) -> None:
         with save.SqlSave() as execute:
             userid = formatting(execute.select('userid', 'Name_ResponseMsg', 'name', name))
         url = self.Get_url('交易员跟单盈利查询')

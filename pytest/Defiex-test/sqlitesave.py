@@ -21,6 +21,7 @@ def context() -> str:
     return select
 
 
+
 class SqlSave(object):
     def __init__(self):
         self.table_list = ['general', 'supernode', 'Admin_testname', 'url']
@@ -50,6 +51,14 @@ class SqlSave(object):
     #         self.curse.execute(insert_sql)
     #     except:
     #         self.curse.execute(insert_sql)
+
+    # 判断表是否存在
+    def table_exist(self, tablename: str) -> int:
+        exist_sql = 'SELECT COUNT(*) as CNT FROM sqlite_master WHERE type = "table" AND name = "{}"'.format(tablename)
+        self.curse.execute(exist_sql)
+        msg = self.curse.fetchall()
+        return msg[0][0]
+
 
     # url尾椎表
     def url(self, urlname, url):
@@ -301,6 +310,13 @@ class SqlSave(object):
         self.curse.execute(select_sql)
         testmsg = self.curse.fetchall()
         return testmsg
+
+    # user更新token
+    def updates(self, table, token, name, gettime):
+        times = self.get_time()
+        print(times)
+        update_sql = 'update {} set token="{}",gettime="{}" where name="{}"'.format(table, token, times, name)
+        self.curse.execute(update_sql)
 
 # def way(func):
 #     with SqlSave() as run:
