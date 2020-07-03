@@ -55,7 +55,7 @@ class supernode(object):
         return urls
 
     def Get_token(self, name: str) -> str:
-        self.Login(name)
+        # self.Login(name)
         with save.SqlSave() as execute:
             token = formatting(execute.select('token', 'Name_ResponseMsg', 'name', name))
             return token
@@ -978,11 +978,11 @@ class DealStaff(supernode):
         deamds(url, data)
 
     # 交易员跟单提成每日明细查询
-    def everyday_detail(self, name):
+    def everyday_detail(self, name, timestamp):
         url = self.Get_url('交易员跟单提成每日明细查询')
         data = {
             "token": self.Get_token(name),
-            "tradedate": "152132138900"
+            "tradedate": timestamp
         }
         deamds(url, data)
 
@@ -1011,10 +1011,11 @@ class DealStaff(supernode):
         deamds(url, data)
 
     # 推荐人每日提成明细查询
-    def referrer_everyday_deduct(self, name):
+    def referrer_everyday_deduct(self, name, tradedate):
         url = self.Get_url('推荐人每日提成明细查询')
         data = {
-            "token": self.Get_token(name)
+            "token": self.Get_token(name),
+            "tradedate": tradedate
         }
         deamds(url, data)
 
@@ -1097,9 +1098,35 @@ def dealtest5():
         # deal.user_trader(user, dealuserid, recommenduserid)
         # deal.referrer_detail(recommenduser)
         # deal.referrer_user_detail(recommenduser)
-        run.create_granary(dealuser)
-        run.keep_granary(user)
-        run.keep_granary(dealuser)
+
+        # 交易员建平仓
+        # run.create_granary(dealuser)
+        # time.sleep(3)
+        # run.flat_granary(dealuser)
+
+        # 交易员信息查询
+        # deal.trader_everyday_royalties(dealuser)
+        # deal.everyday_detail(dealuser, '1593744020')
+        # deal.deal_record(dealuser)
+        # deal.deal_gain(dealuser)
+
+        # 用户跟单信息
+        deal.user_deal_history(user, userid)
+        # deal.user_detail(user)
+
+        # 推荐人信息查询
+        # deal.referrer_detail(recommenduser)
+        # deal.referrer_user_detail(recommenduser)
+        # deal.referrer_everyday_collect(recommenduser)
+        # deal.referrer_everyday_deduct(recommenduser, '1593744020')
+
+        # 查询持仓、平仓记录
+        # time.sleep(2)
+        # deal.deal_gain(dealuser)
+        # run.keep_granary(user)
+        # run.flatgranary_record(user)
+        # run.keep_granary(dealuser)
+        # run.flatgranary_record(dealuser)
 
 
 # 用户跟单交易员
@@ -1187,10 +1214,10 @@ def TestCreate():
 if __name__ == "__main__":
     select = context()
     # broker()
-    dealtest1()
+    # dealtest1()
     # dealtest3()
     # dealtest4()
-    # dealtest5()
-    name = '18770185021'
-    run = supernode('1')
+    dealtest5()
+    # name = '18770185021'
+    # run = supernode('1')
     # run.create_granary(name)
