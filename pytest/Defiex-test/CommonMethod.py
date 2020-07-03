@@ -2,7 +2,6 @@ import requests
 import re
 import json
 import sqlitesave as save
-import time
 
 
 def deamds(url: str, data: dict) -> json:

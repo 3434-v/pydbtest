@@ -746,22 +746,25 @@ class supernode(object):
         response = json.dumps(deamds(url, data))
 
     # 获取存储充币地址
-    def get_TopUpSite(self, name):
+    def get_TopUpSite(self, name: str) -> None:
         # 币种类型 1:OMNI_USDT 3:ERC20_USDT …
         site_list = ['1', '3', '4']
         site_msg = []
         # site_type = '3'
         url = self.Get_url('获取充币地址')
         for site_type in site_list:
-            data = '{"token":"' + self.Get_token(name) + '","type":"' + site_type + '"}'
-            response = requests.get(url + data)
-            addr = ''.join(re.findall('"addr": "(.*?)"', str(response.text)))
+            data = {
+                "token": self.Get_token(name),
+                "type": site_type
+            }
+            response = json.dumps(deamds(url, data))
+            addr = extract('addr', response)
             site_msg.append(addr)
         with save.SqlSave() as execute:
             execute.TopUpSite(name, site_msg[1], site_msg[0], site_msg[2])
 
     # 提币以及信息获取
-    def Withdraw_msg(self, name):
+    def Withdraw_msg(self, name: str) -> None:
         self.Login(name)
         # ERC-20
         addr = '0x777D76e24da310D91B0C3b48767E898772F198F7'
@@ -772,36 +775,43 @@ class supernode(object):
 
         url = self.Get_url('提币')
         amount = '2'
-        data = '{"token":"' + self.Get_token(
-            name) + '","type":"' + money_type + '","amount":"' + amount + '","addr":"' + addr + '","code":"xwwwwx"}'
-        response = requests.get(url + data)
-        print(response.text)
-        bank_order_id = ' '.join(re.findall('"bank_order_id": "(.*?)"', str(response.text)))
+        data = {
+            "token": self.Get_token(name), "type": money_type,
+            "amount": amount, "addr": addr, "code": "xwwwwx"
+        }
+        response = json.dumps(deamds(url, data))
+        bank_order_id = extract('bank_order_id', response)
         admin_url = self.Get_url('管理端审核提币')
-        admin_data = '{"type":10204,"orderid":"' + bank_order_id + '","verify":1,"token":"' + self.admin_token() + '"}'
-        admin_response = requests.get(admin_url + admin_data)
+        admin_data = {
+            "type": 10204, "orderid": bank_order_id,
+            "verify": 1, "token": self.admin_token()
+        }
+        admin_response = json.dumps(deamds(admin_url, admin_data))
         time.sleep(20)
         self.Withdraw_recode(name)
-        print(admin_response.text)
 
     # 获取提币纪录
-    def Withdraw_recode(self, name):
+    def Withdraw_recode(self, name: str) -> None:
         self.Login(name)
         url = self.Get_url('获取提币纪录')
         # http://47.90.62.21:9003/api/trade/queryoutorderall.do?p={"page":"1","count":"20"}
-        data = '{"token":"' + self.Get_token(name) + '","page":"1","count":"20"}'
-        response = requests.get(url + data)
-        print(response.text)
-        txid = ' '.join(re.findall('"txid": "(.*?)"', str(response.text)))
+        data = {
+            "token": self.Get_token(name),
+            "page": "1", "count": "20"
+        }
+        response = json.dumps(deamds(url, data))
+        txid = extract('txid', response)
         with save.SqlSave() as execute:
             execute.Withdraw_recod(name, txid)
 
     # 获取充值纪录
-    def Top_msg(self, name):
+    def Top_msg(self, name: str) -> None:
         url = self.Get_url('获取充值纪录')
-        data = '{"token":"' + self.Get_token(name) + '","page":"1","count":"20"}'
-        response = requests.get(url + data)
-        print(response.text)
+        data = {
+            "token": self.Get_token(name),
+            "page": "1", "count": "20"
+        }
+        response = json.dumps(deamds(url, data))
 
     # 分享图盈亏百分比计算
     def share_count(self):
@@ -815,7 +825,7 @@ class DealStaff(supernode):
         pass
 
     # 查询最新资产
-    def select_money(self, name):
+    def select_money(self, name: str) -> None:
         url = self.Get_url('查询最新资产')
         data = {
             "token": self.Get_token(name)
@@ -823,7 +833,7 @@ class DealStaff(supernode):
         deamds(url, data)
 
     # 管理端审核交易员
-    def check_trader(self, userid: str, state: str):
+    def check_trader(self, userid: str, state: str) -> None:
         admin_token = self.admin_token()
         # state 1:审核通过 0:审核失败
         # state = '1'
@@ -835,7 +845,7 @@ class DealStaff(supernode):
         deamds(url, data)
 
     # 交易员申请开通
-    def apply(self, name):
+    def apply(self, name: str) -> str:
         url = self.Get_url('交易员申请开通')
         data = {
             "token": self.Get_token(name),
@@ -845,7 +855,7 @@ class DealStaff(supernode):
         return response
 
     # 交易员详情查询
-    def select_detail(self, name):
+    def select_detail(self, name: str) -> None:
         with save.SqlSave() as execute:
             userid = formatting(execute.select('userid', 'Name_ResponseMsg', 'name', name))
             url = self.Get_url('交易员详情查询')
@@ -856,7 +866,7 @@ class DealStaff(supernode):
             deamds(url, data)
 
     # 交易员交易记录查询
-    def deal_record(self, name):
+    def deal_record(self, name: str) -> None:
         with save.SqlSave() as execute:
             userid = formatting(execute.select('userid', 'Name_ResponseMsg', 'name', name))
         url = self.Get_url('交易员交易记录查询')

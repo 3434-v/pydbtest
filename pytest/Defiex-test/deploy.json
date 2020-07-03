@@ -1,3 +1,4 @@
 {
-    "environment": "测试环境"
+    "environment": "测试环境",
+    "test_msg": "1"
 }
