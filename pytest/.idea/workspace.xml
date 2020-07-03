@@ -28,7 +28,7 @@
     <list default="true" id="bc89319f-036d-4e2d-84fa-9114895a9624" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Defiex-test/demo1.py" beforeDir="false" afterPath="$PROJECT_DIR$/Defiex-test/demo1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Defiex-test/deploy.json" beforeDir="false" afterPath="$PROJECT_DIR$/Defiex-test/deploy.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Defiex-test/test.db" beforeDir="false" afterPath="$PROJECT_DIR$/Defiex-test/test.db" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -170,6 +170,7 @@
       <workItem from="1593670229284" duration="16198000" />
       <workItem from="1593695042841" duration="6340000" />
       <workItem from="1593739133339" duration="1186000" />
+      <workItem from="1593741999880" duration="193000" />
     </task>
     <servers />
   </component>
@@ -288,7 +289,7 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/pytest$CommonMethod.coverage" NAME="CommonMethod Coverage Results" MODIFIED="1593671193960" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Defiex-test" />
-    <SUITE FILE_PATH="coverage/pytest$demo1.coverage" NAME="demo1 Coverage Results" MODIFIED="1593701219120" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Defiex-test" />
+    <SUITE FILE_PATH="coverage/pytest$demo1.coverage" NAME="demo1 Coverage Results" MODIFIED="1593742208842" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Defiex-test" />
     <SUITE FILE_PATH="coverage/pytest$mongodbsave.coverage" NAME="mongodbsave Coverage Results" MODIFIED="1593569560679" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Defiex-test" />
   </component>
 </project>

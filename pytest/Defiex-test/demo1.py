@@ -54,21 +54,21 @@ class supernode(object):
             urls = url_header + url_end
         return urls
 
-    def Get_token(self, names: str) -> str:
+    def Get_token(self, name: str) -> str:
         self.Login(name)
         with save.SqlSave() as execute:
-            token = formatting(execute.select('token', 'Name_ResponseMsg', 'name', names))
+            token = formatting(execute.select('token', 'Name_ResponseMsg', 'name', name))
             return token
 
     def random_name(self, types: str) -> str:
         # 1手机、2邮箱
         msg = {True: 1, False: 0}[types == '1']
         index = random.randint(100, 999999999)
-        names = '166' + str(index)
+        name = '166' + str(index)
         if msg:
-            return names
+            return name
         else:
-            return names + '@qq.com'
+            return name + '@qq.com'
 
     # 登录
     def Login(self, name: str) -> None:
@@ -1132,7 +1132,7 @@ def dealtest3():
 # 特定经纪人比例
 def broker():
     deal = DealStaff()
-    run = supernode('1')
+    run = supernode()
     name = '166978513636@qq.com'
     # name = run.Register(name)
     # run.add_money(name, 100000)
@@ -1187,10 +1187,10 @@ def TestCreate():
 if __name__ == "__main__":
     select = context()
     # broker()
-    # dealtest1()
+    dealtest1()
     # dealtest3()
     # dealtest4()
     # dealtest5()
     name = '18770185021'
     run = supernode('1')
-    run.create_granary(name)
+    # run.create_granary(name)
