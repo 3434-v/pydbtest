@@ -7,6 +7,7 @@ import requests
 import sqlite3
 import contextlib
 import json
+import os
 
 exitFlag = 0
 
@@ -25,17 +26,14 @@ class SqlSave(object):
         self.table_list = ['general', 'supernode', 'Admin_testname', 'url']
 
     def __enter__(self):
-        # table_length = len(self.table_list)
-        # with open('table.txt','w+') as length:
-        #     old_length = length.readlines()
-        # length.close()
-        # with open('table.txt','w+') as length:
-        #     length.write(str(table_length))
-
-        # length.close()
-        self.conn = sqlite3.connect('E:\\pyfile_version\\pytest\\Defiex-test\\test.db')
+        workpath = os.getcwd()
+        '''
+        os.path.realpath(__file__) 获取当前文件绝对路径
+        os.path.split(os.path.realpath(__file__)) 获取当前文件绝对路径跟文件名
+        os.getcwd() 获取当前工作路径
+        '''
+        self.conn = sqlite3.connect(workpath + '\\test.db')
         self.curse = self.conn.cursor()
-
         return self
 
     def __exit__(self, exc_type, exc_val, exc_t):

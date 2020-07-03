@@ -90,6 +90,7 @@ class supernode(object):
             "pwd": password
         }
         response = deamds(url, data)
+        print(response)
         token = response["info"]["token"]
         userid = response["info"]["userid"]
         invitecode = response["info"]["invitecode"]
@@ -136,6 +137,7 @@ class supernode(object):
                 "Environment": select
             }
             pynosql.insert('Register_account', message)
+        print('------------')
         self.Login(name)
         return name
 
@@ -215,7 +217,7 @@ class supernode(object):
                 "token": self.admin_token(), "reward": reward
             }
             response = json.dumps(deamds(urls, data))
-            msg = ' '.join(re.findall('msg": "(.*?)"', str(response)))
+            msg = extract('msg', response)
             return msg
 
     # 超级节点申请流程
@@ -654,7 +656,7 @@ class supernode(object):
                 execute.testcase(state, msg)
 
     # 现金限价建仓
-    def current_granary(self, name: str, types: str) ->None:
+    def current_granary(self, name: str, types: str) -> None:
         # self.Login(name)
         with save.SqlSave() as execute:
             message = execute.select('*', 'test_msg', 'testcase', self.granarys_index)
@@ -821,7 +823,7 @@ class supernode(object):
 # 交易员接口类
 class DealStaff(supernode):
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     # 查询最新资产
@@ -845,7 +847,7 @@ class DealStaff(supernode):
         deamds(url, data)
 
     # 交易员申请开通
-    def apply(self, name: str) -> str:
+    def apply(self, name: str) -> json:
         url = self.Get_url('交易员申请开通')
         data = {
             "token": self.Get_token(name),
@@ -877,7 +879,7 @@ class DealStaff(supernode):
         deamds(url, data)
 
     # 交易员跟单盈利查询
-    def deal_gain(self, name):
+    def deal_gain(self, name: str):
         with save.SqlSave() as execute:
             userid = formatting(execute.select('userid', 'Name_ResponseMsg', 'name', name))
         url = self.Get_url('交易员跟单盈利查询')
@@ -898,7 +900,7 @@ class DealStaff(supernode):
         return planerid_list
 
     # 用户跟单某个交易员
-    def user_trader(self, name, planerid, referrerid):
+    def user_trader(self, name: str, planerid: str, referrerid: str):
         opentype = '1'
         openamount = '50'
         openamountdaymax = '500'
@@ -913,7 +915,7 @@ class DealStaff(supernode):
         deamds(url, data)
 
     # 用户跟单详情查询
-    def user_detail(self, name):
+    def user_detail(self, name: str):
         url = self.Get_url('用户跟单详情查询')
         data = {
             "token": self.Get_token(name)
@@ -921,7 +923,7 @@ class DealStaff(supernode):
         deamds(url, data)
 
     # 用户修改跟单参数
-    def user_remove_parameter(self, name, planerid):
+    def user_remove_parameter(self, name: str, planerid: str):
         # 是否暂停1: 是0: 否
         pause = '1'
         openamount = '500'
@@ -938,7 +940,7 @@ class DealStaff(supernode):
         deamds(url, data)
 
     # 用户取消跟单某个交易员
-    def cancel_deal(self, name, planerid):
+    def cancel_deal(self, name: str, planerid: str):
         url = self.Get_url('用户取消跟单某个交易员')
         data = {
             "token": self.Get_token(name),
@@ -961,7 +963,20 @@ class DealStaff(supernode):
         url = self.Get_url('交易员修改信息')
         # 1: 确认跟单规则 2: 带单开关 3: 个人描述 4: 标签
         types = '4'
-        info = '1000804'
+        info = ''
+        if types == '4':
+            index = random.randint(801, 810)
+            info = '1000' + str(index)
+            # info = "['1000801']"
+        elif types == '1':
+            # 1:已确认0: 没有
+            info = '1'
+        elif types == '2':
+            # 1:关闭 0:打开
+            info = '0'
+        elif types == '3':
+            info = 'AAABBBCCCDDDEEEFFFGGGHHHIIIJJJKKKVVVLLLMMM'
+        print(info)
         data = {
             "token": self.Get_token(name),
             "type": types, "info": info
@@ -1100,7 +1115,7 @@ def dealtest5():
         # deal.referrer_user_detail(recommenduser)
 
         # 交易员建平仓
-        # run.create_granary(dealuser)
+        run.create_granary(dealuser)
         # time.sleep(3)
         # run.flat_granary(dealuser)
 
@@ -1109,10 +1124,16 @@ def dealtest5():
         # deal.everyday_detail(dealuser, '1593744020')
         # deal.deal_record(dealuser)
         # deal.deal_gain(dealuser)
+        # deal.trader_label()
+        # deal.trader_remove_message(dealuser)
+        # deal.select_detail(dealuser)
 
         # 用户跟单信息
-        deal.user_deal_history(user, userid)
+        # deal.user_deal_history(user, userid)
         # deal.user_detail(user)
+
+        # 用户修改跟单操作
+        # deal.user_remove_parameter(user, userid)
 
         # 推荐人信息查询
         # deal.referrer_detail(recommenduser)
@@ -1217,7 +1238,9 @@ if __name__ == "__main__":
     # dealtest1()
     # dealtest3()
     # dealtest4()
-    dealtest5()
-    # name = '18770185021'
-    # run = supernode('1')
+    # dealtest5()
+    name = '18770185021'
+    run = supernode('1')
+    run.Register('')
+    # run.add_money(name, 1000)
     # run.create_granary(name)

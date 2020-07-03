@@ -27,8 +27,11 @@
   <component name="ChangeListManager">
     <list default="true" id="bc89319f-036d-4e2d-84fa-9114895a9624" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Defiex-test/demo1.py" beforeDir="false" afterPath="$PROJECT_DIR$/Defiex-test/demo1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Defiex-test/sqlitesave.py" beforeDir="false" afterPath="$PROJECT_DIR$/Defiex-test/sqlitesave.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Defiex-test/test.db" beforeDir="false" afterPath="$PROJECT_DIR$/Defiex-test/test.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Defiex-test/test.sql" beforeDir="false" afterPath="$PROJECT_DIR$/Defiex-test/pytrigger.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Defiex-test/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/Defiex-test/Dtests.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdb/id_cache.db" beforeDir="false" afterPath="$PROJECT_DIR$/testdb/id_cache.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/testdb/id_cache.db-shm" beforeDir="false" afterPath="$PROJECT_DIR$/testdb/id_cache.db-shm" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/testdb/id_cache.db-wal" beforeDir="false" afterPath="$PROJECT_DIR$/testdb/id_cache.db-wal" afterDir="false" />
     </list>
@@ -40,9 +43,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Python Script" />
         <option value="package.json" />
         <option value="HTTP Request" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -75,8 +78,13 @@
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
   </component>
-  <component name="RunManager" selected="Python.tests">
-    <configuration name="CommonMethod" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.pytrigger">
+    <configuration name="test.sql" type="DatabaseScript" editBeforeRun="true" temporary="true" nameIsGenerated="true">
+      <script-file value="$PROJECT_DIR$/Defiex-test/test.sql" />
+      <script-mode>FILE</script-mode>
+      <method v="2" />
+    </configuration>
+    <configuration name="Dtests (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="pytest" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -89,7 +97,29 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Defiex-test/CommonMethod.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Defiex-test/Dtests.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Dtests" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="pytest" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Defiex-test" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="E:\pyfile_version\pytest\Defiex-test\Dtests.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -120,7 +150,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="tests" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="pyasync" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="pytest" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -133,7 +163,29 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="E:\pyfile_version\pytest\Defiex-test\tests.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Defiex-test/pyasync.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytrigger" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="pytest" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Defiex-test" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Defiex-test/pytrigger.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -144,9 +196,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.tests" />
-        <item itemvalue="Python.CommonMethod" />
-        <item itemvalue="Python.mongodbsave" />
+        <item itemvalue="Python.pytrigger" />
+        <item itemvalue="Python.pyasync" />
+        <item itemvalue="Python.Dtests (1)" />
+        <item itemvalue="Database Script.test.sql" />
+        <item itemvalue="Python.Dtests" />
       </list>
     </recent_temporary>
   </component>
@@ -172,7 +226,8 @@
       <workItem from="1593695042841" duration="6340000" />
       <workItem from="1593739133339" duration="1186000" />
       <workItem from="1593741999880" duration="3004000" />
-      <workItem from="1593745020610" duration="41000" />
+      <workItem from="1593745020610" duration="17657000" />
+      <workItem from="1593778323376" duration="450000" />
     </task>
     <servers />
   </component>
@@ -212,10 +267,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="651" y="274" key="#Notifications/0.0.1536.824@0.0.1536.824" timestamp="1593581493668" />
-    <state x="169" y="254" key="#SQL_Dialects" timestamp="1593684856761">
+    <state x="169" y="254" key="#SQL_Dialects" timestamp="1593756171032">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="169" y="254" key="#SQL_Dialects/0.0.1536.824@0.0.1536.824" timestamp="1593684856761" />
+    <state x="169" y="254" key="#SQL_Dialects/0.0.1536.824@0.0.1536.824" timestamp="1593756171032" />
     <state x="361" y="71" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1593587421682">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -224,42 +279,46 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="406" y="179" key="#com.intellij.ide.fileTemplates.ui.ConfigureTemplatesDialog/0.0.1536.824@0.0.1536.824" timestamp="1593684766405" />
+    <state x="465" y="59" key="#test.sql" timestamp="1593756205953">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="465" y="59" key="#test.sql/0.0.1536.824@0.0.1536.824" timestamp="1593756205953" />
     <state x="638" y="177" key="FileChooserDialogImpl" timestamp="1593605851755">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="638" y="177" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1593605851755" />
-    <state width="1493" height="155" key="GridCell.Tab.0.bottom" timestamp="1593745050804">
+    <state width="1493" height="188" key="GridCell.Tab.0.bottom" timestamp="1593766498061">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="155" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1593745050804" />
-    <state width="1493" height="155" key="GridCell.Tab.0.center" timestamp="1593745050804">
+    <state width="1493" height="188" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1593766498061" />
+    <state width="1493" height="188" key="GridCell.Tab.0.center" timestamp="1593766498061">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="155" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1593745050804" />
-    <state width="1493" height="155" key="GridCell.Tab.0.left" timestamp="1593745050803">
+    <state width="1493" height="188" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1593766498061" />
+    <state width="1493" height="188" key="GridCell.Tab.0.left" timestamp="1593766498061">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="155" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1593745050803" />
-    <state width="1493" height="155" key="GridCell.Tab.0.right" timestamp="1593745050804">
+    <state width="1493" height="188" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1593766498061" />
+    <state width="1493" height="188" key="GridCell.Tab.0.right" timestamp="1593766498061">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="155" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1593745050804" />
-    <state width="1493" height="261" key="GridCell.Tab.1.bottom" timestamp="1593600264459">
+    <state width="1493" height="188" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1593766498061" />
+    <state width="1493" height="117" key="GridCell.Tab.1.bottom" timestamp="1593763071267">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="261" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1593600264459" />
-    <state width="1493" height="261" key="GridCell.Tab.1.center" timestamp="1593600264459">
+    <state width="1493" height="117" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1593763071267" />
+    <state width="1493" height="117" key="GridCell.Tab.1.center" timestamp="1593763071266">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="261" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1593600264459" />
-    <state width="1493" height="261" key="GridCell.Tab.1.left" timestamp="1593600264459">
+    <state width="1493" height="117" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1593763071266" />
+    <state width="1493" height="117" key="GridCell.Tab.1.left" timestamp="1593763071266">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="261" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1593600264459" />
-    <state width="1493" height="261" key="GridCell.Tab.1.right" timestamp="1593600264459">
+    <state width="1493" height="117" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1593763071266" />
+    <state width="1493" height="117" key="GridCell.Tab.1.right" timestamp="1593763071266">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="261" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1593600264459" />
+    <state width="1493" height="117" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1593763071266" />
     <state width="212" height="477" key="HiddenNamespacesPopup" timestamp="1593654472790">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -290,8 +349,12 @@
     <state x="491" y="324" key="vcs.readOnlyHandler.ReadOnlyStatusDialog/0.0.1536.824@0.0.1536.824" timestamp="1593654895774" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/pytest$pyasync.coverage" NAME="pyasync Coverage Results" MODIFIED="1593766520035" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Defiex-test" />
     <SUITE FILE_PATH="coverage/pytest$CommonMethod.coverage" NAME="CommonMethod Coverage Results" MODIFIED="1593671193960" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Defiex-test" />
+    <SUITE FILE_PATH="coverage/pytest$Dtests__1_.coverage" NAME="Dtests (1) Coverage Results" MODIFIED="1593763952886" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Defiex-test" />
     <SUITE FILE_PATH="coverage/pytest$demo1.coverage" NAME="tests Coverage Results" MODIFIED="1593745136707" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Defiex-test" />
+    <SUITE FILE_PATH="coverage/pytest$pytrigger.coverage" NAME="pytrigger Coverage Results" MODIFIED="1593778777445" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Defiex-test" />
     <SUITE FILE_PATH="coverage/pytest$mongodbsave.coverage" NAME="mongodbsave Coverage Results" MODIFIED="1593569560679" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Defiex-test" />
+    <SUITE FILE_PATH="coverage/pytest$tests__1_.coverage" NAME="tests (1) Coverage Results" MODIFIED="1593745247700" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Defiex-test" />
   </component>
 </project>
