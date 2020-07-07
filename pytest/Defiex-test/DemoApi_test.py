@@ -1,17 +1,17 @@
 import requests
 import json
-
+import re
 
 
 
 url = 'http://test.api.houtaii.com/v2/project/publish'
 header = {
-    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjExMDE5LCJwaG9uZV9udW1iZXIiOiIxNTA0NDA1NDgwMCIsInJvbGUiOjMsInVtZW5nX2RldmljZSI6IkFpQVZSQm5oZ1BodjFZUER0Zl9lekxoRW5rd3pwYUVDN2tsMGp6QXFZaDdaIiwiaWF0IjoxNTk0MDI0NDQyLCJleHAiOjE1OTY2MTY0NDJ9.1axW3AUbNH6YJP-rjmkvEtHFwGXiy5ogLQ3trX3yfek",
-    "user-agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1"
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjExMDkwLCJwaG9uZV9udW1iZXIiOiIxMzk3OTU3MDAwNCIsInJvbGUiOjIsInVtZW5nX2RldmljZSI6IkFpQVZSQm5oZ1BodjFZUER0Zl9lekxoRW5rd3pwYUVDN2tsMGp6QXFZaDdaIiwiaWF0IjoxNTk0MDg3Mzk4LCJleHAiOjE1OTY2NzkzOTh9.oNdVT-IkkgI01X10rO2grkhD2kyzV8IA-x_XvRJecrw",
+    'Content-Type': 'application/json;charset=UTF-8'
 }
 data = {
     "project_draft_id":0,
-    "project_name":"测试添加多个职位是否成功",
+    "project_name":"123",
     "pro_cate_id":785,
     "introduct":"",
     "introduct_image":"",
@@ -22,7 +22,7 @@ data = {
     "date_end":"2020-07-31",
     "time_end":"17:00",
     "address_type":2,
-    "address":"上海市徐汇区虹桥路777号(近淮海西路)汇京国际广场",
+    "address":"123445",
     "city_code":"310104",
     "lat":"31.19596291",
     "lng":"121.4236145",
@@ -52,14 +52,11 @@ data = {
     }]
 }
 
-
 data_json = json.dumps(data)
-print(type(data_json))
-data_json = json.loads(data_json)
-
-print(type(data_json))
 response = requests.post(url, data=data_json, headers=header)
-print(response.text)
+msg = ''.join(re.findall('"message":"(.*?)"', str(response.text)))
+msg_str = msg.encode('utf-8').decode('unicode-escape')
+print(msg_str)
 
 
 

@@ -2,12 +2,15 @@ import requests
 import re
 import json
 import sqlitesave as save
+from pymysqlsave import MysqlSave as mysave
 
 
 # 公共reques请求函数
 def deamds(url: str, data: dict) -> json:
-    # json.loads(str)
-    # json.dumps(json)
+    # loads()：将json数据转化成dict数据
+    # dumps()：将dict数据转化成json数据
+    # load()：读取json文件数据，转成dict数据
+    # dump()：将dict数据转化成json数据后写入json文件
     # time.sleep(1)
     data = json.dumps(data)
     data_json = json.loads(data)

@@ -4,26 +4,17 @@ import time
 import random
 import json
 import sqlitesave as save
-
+from pymysqlsave import MysqlSave as mysave
 from mongosave import TestMongoDB
 from CommonMethod import deamds, \
     formatting, context, extract,\
     userlogin, usertoken, gain_url
-
-# import mongosave.TestMongoDB as TestMongoDB
-
-# 环境选择
-pynosql = TestMongoDB('localhost:27017/', 'test_defiex')
 
 
 class supernode(object):
 
     def __init__(self, granarys_index):
         self.granarys_index = granarys_index
-
-    # def extract(self, regular, msg):
-    #     message = ''.join(re.findall('"{}": "(.*?)"'.format(regular), msg))
-    #     return message
 
     # 获取实时行情价
     def Get_price(self):
@@ -83,8 +74,6 @@ class supernode(object):
                 # 给予的默认密码
                 password = 'b49a9e2a50d24396e08ca047a09588a7'
                 execute.general(name, password, select)
-                execute.handle_log('insert->general')
-            execute.handle_log('GetTable->url、environment、general')
         name = data[0][1]
         password = data[0][2]
         data = {
@@ -96,11 +85,6 @@ class supernode(object):
         token = response["info"]["token"]
         userid = response["info"]["userid"]
         invitecode = response["info"]["invitecode"]
-        # sql存储
-        # message = {"Name":name,"Userid":userid,"Toekn":token,"Invitecode":invitecode,"Environment":select,"GetTime":self.get_time()}
-        # pynosql.update('AccountMessage',name,message)
-        # nosql存储
-        # pynosql.insert('AccountMessage', json.loads(str(response.text)))
         try:
             with save.SqlSave() as execute:
                 execute.Name_ResponseMsg(name, userid, token, invitecode, select)

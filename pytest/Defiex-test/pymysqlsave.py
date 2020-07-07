@@ -8,23 +8,124 @@ class MysqlSave(object):
         数据库参数配置区域
         """
         self.path = 'localhost'
+        self.port = 3306
         self.username = 'root'
         self.password = '19990728'
         self.dbname = 'pymysql_defiex'
+        self.db = pymysql.connect(
+            host=self.path, port=self.port, db=self.dbname,
+            user=self.username, password=self.password, charset='utf8'
+        )
+        """
+        Cursor
+        普通的游标对象，默认创建的游标对象
+        SSCursor
+        不缓存游标，主要用于当操作需要返回大量数据的时候
+        DictCursor
+        以字典的形式返回操作结果
+        SSDictCursor
+        不缓存游标，将结果以字典的形式进行返回
+        """
+        # 创建游标，操作返回数据为字典类型
+        self.cursor = self.db.cursor(cursor=pymysql.cursors.DictCursor)
 
     def __enter__(self):
-
-        self.db = pymysql.connect(
-            self.path, self.username, self.password, self.dbname, charset='utf8'
-        )
-        self.cursor = self.db.cursor()
+        # 返回self全局变量
+        return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        # 提交数据库并执行
+        self.db.commit()
+        # 关闭游标
         self.cursor.close()
+        # 关闭数据库连接
         self.db.close()
 
-    def user(self, name: str, password: str, environment: str) -> None:
-        createsql = """
-            CREATE TABLE user(id )
-        
-        """
+    def __dictchangesql(self, message: dict) -> str and tuple:
+        keylist = []
+        valuelist = []
+        for key, value in message.items():
+            keylist.append(key)
+            valuelist.append(value)
+        keytuple = tuple(keylist)
+        valuetuple = tuple(valuelist)
+        keystr = str(keytuple).replace('\'', "")
+        return keystr, valuetuple
+
+    def insert(self, tablename: str, message: dict) -> None:
+        keystr, valuetuple = self.__dictchangesql(message)
+        insertsql = """INSERT INTO {}{} VALUES{}
+        """.format(tablename, keystr, valuetuple).replace("\n", "")
+        print(insertsql)
+        self.cursor.execute(insertsql)
+
+    def create(self, tablename: str, message: list) -> dict:
+        messages = tuple(message)
+        message_str = str(messages).replace('\'', "")
+        createsql = """CREATE TABLE {}{}""".format(tablename, message_str)
+        print(createsql)
+        self.cursor.execute(createsql)
+
+    def select(self, selectfield: list, tablename: str, condition: dict):
+        selectfieldstr = str(','.join(selectfield))
+        conditionlist = []
+        for key, value in condition.items():
+            conditionlist.append(key + '="' + value + '"')
+        conditionstr = str(','.join(conditionlist))
+        selectsql = """SELECT {} FROM {} WHERE {}
+            """.format(selectfieldstr, tablename, conditionstr)
+        print(selectsql)
+        self.cursor.execute(selectsql)
+        data = self.cursor.fetchall()
+        print(data)
+        return data
+
+    def update(self, tablename: str, message: dict, condition: dict) -> None:
+        conditionlsit = []
+        for key, value in condition.items():
+            conditionlsit.append(key + '="' + value + '"')
+        conditionstr = str(' and '.join(conditionlsit)).replace('\'', "")
+        messagelist = []
+        for key, value in message.items():
+            messagelist.append(key + '="' + value + '"')
+        # print(messagelist)
+        messagestr = str(','.join(messagelist)).replace('\'', "")
+        print(messagestr)
+        updatesql = """UPDATE {} SET {} WHERE {}
+            """.format(tablename, messagestr, conditionstr).replace('\n', "")
+        print(updatesql)
+        self.cursor.execute(updatesql)
+
+
+with MysqlSave() as db:
+    message_dict = {
+        "id": "1",
+        "uid": "2"
+    }
+
+    message_list = [
+        'id int primary key auto_increment',
+        'name varchar(200)',
+        'url varchar(200)'
+    ]
+
+    # 数据
+    insert_message = {
+        'username': '389863294@qq.com',
+        'password': '12345678',
+        'md5_password': '25d55ad283aa400af464c76d713c07ad',
+        'environment': '预发布环境',
+        'time': '2020-05-25 10:46:24'
+    }
+
+    select_message = [
+        'url'
+    ]
+
+    select_dict = {
+        'name': '测试环境'
+    }
+    # db.create('domain', message_list)
+    # db.insert('user', insert_message)
+    # db.update('xxx',message_update,update_condition)
+    db.select(select_message, 'domain', select_dict)
