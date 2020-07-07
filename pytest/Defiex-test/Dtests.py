@@ -6,7 +6,9 @@ import json
 import sqlitesave as save
 
 from mongosave import TestMongoDB
-from CommonMethod import deamds, formatting, context, extract
+from CommonMethod import deamds, \
+    formatting, context, extract,\
+    userlogin, usertoken, gain_url
 
 # import mongosave.TestMongoDB as TestMongoDB
 
@@ -63,12 +65,12 @@ class supernode(object):
     def random_name(self, types: str) -> str:
         # 1手机、2邮箱
         msg = {True: 1, False: 0}[types == '1']
-        index = random.randint(100, 999999999)
+        index = random.randint(100, 9999)
         name = '166' + str(index)
         if msg:
             return name
         else:
-            return name + '@qq.com'
+            return name + '@test.com'
 
     # 登录
     def Login(self, name: str) -> None:
@@ -115,7 +117,9 @@ class supernode(object):
             url = self.Get_url('注册')
             register_type = '2'
             name = self.random_name(register_type)
-            password = 'b49a9e2a50d24396e08ca047a09588a7'
+            # name = names
+            # password = 'b49a9e2a50d24396e08ca047a09588a7'
+            password = '25d55ad283aa400af464c76d713c07ad'
             shareid = execute.select('userid', 'Name_ResponseMsg', 'name', sharename)
             print(shareid)
             requestcode = execute.select('invitecode', 'Name_ResponseMsg', 'name', sharename)
@@ -820,6 +824,86 @@ class supernode(object):
         pass
 
 
+# 经纪人接口类
+class Broker(object):
+    # 查询经纪人汇总信息
+    def select_broker_allmessage(self, brokername: str) -> None:
+        url = gain_url('查询经纪人汇总信息')
+        data = {
+            "token": usertoken(brokername)
+        }
+        response = json.dumps(deamds(url, data))
+
+    # 查询经纪人每日信息
+    def select_broker_everydaymsg(self, brokername: str) -> None:
+        url = gain_url('查询经纪人每日信息')
+        data = {
+            "token": usertoken(brokername)
+        }
+        response = json.dumps(deamds(url, data))
+
+    # 查询经纪人返利金额的可取余额
+    def select_broker_canmoney(self, brokername: str) -> None:
+        url = gain_url('查询经纪人返利金额的可取余额')
+        data = {
+            "token": usertoken(brokername)
+        }
+        response = json.dumps(deamds(url, data))
+
+    # 返佣提现到交易账户余额
+    def brokerage_turn_balance(self, brokername: str) -> None:
+        url = gain_url('返佣提现到交易账户余额')
+        data = {
+            "token": usertoken(brokername)
+        }
+        response = json.dumps(deamds(url, data))
+
+    # 查询经纪人的提拥流水
+    def brokerage_water(self, brokername: str) -> None:
+        url = gain_url('返佣提现到交易账户余额')
+        data = {
+            "token": usertoken(brokername),
+            "page": "1", "count": "20"
+        }
+        response = json.dumps(deamds(url, data))
+
+    # 查询经纪人的最近注册的好友
+    def broker_bull(self, brokername: str) -> None:
+        url = gain_url('查询经纪人的最近注册的好友')
+        data = {
+            "token": usertoken(brokername)
+        }
+        response = json.dumps(deamds(url, data))
+
+    # 查询经纪人最近时间段各项信息
+    def select_broker_timemsg(self, brokername: str) -> None:
+
+        """
+        day: 0全部 默认1当天 7当周 30当月
+        data : 默认1注册好友 2充值金额 3手续费
+        order : 排序方式 默认1降序 2升序
+        """
+        day, data = '1', '1'
+        url = gain_url('查询经纪人最近时间段各项信息')
+        datas = {
+            "token": usertoken(brokername),
+            "day": day, "data": data,
+            "order": "1", "page": "1", "count": "20"
+        }
+        response = json.dumps(deamds(url, datas))
+
+    # 查询经纪人某天返利明细
+    def select_someday_message(self, brokername: str) -> None:
+        tradedate = '1578499200'
+        url = gain_url('查询经纪人某天返利明细')
+        data = {
+            "token": usertoken(brokername),
+            "tradedate": tradedate,
+            "page": "1", "count": "20"
+        }
+        response = json.dumps(deamds(url, data))
+
+
 # 交易员接口类
 class DealStaff(supernode):
 
@@ -1180,16 +1264,72 @@ def dealtest3():
 # 特定经纪人比例
 def broker():
     deal = DealStaff()
-    run = supernode()
-    name = '166978513636@qq.com'
-    # name = run.Register(name)
+    run = supernode('1')
+    bro = Broker()
+    brokername = '166704969518@qq.com'
+    # brokername 下级 lever_name1
+    brokername_lever_name1 = '166437696110@qq.com'
+    # lever_name1 下级 lever_name1_lever1
+    lever_name1_lever1 = '166548174922@qq.com'
+    lever_name1_lever2 = '166104864389@qq.com'
+    lever_name1_lever3 = '166569425729@qq.com'
+    lever_name1_lever4 = '166412381797@qq.com'
+    lever_name1_lever5 = '166403847067@qq.com'
+    lever_name1_lever6 = '166704846808@qq.com'
+    # newname = run.Register('')
+    # bro.select_broker_allmessage(newname)
+    # run.add_money(lever_name1_lever6, 10)
+    # deal.select_money(lever_name1_lever5)
+    for index in range(40):
+        newname = run.Register(brokername)
+        run.add_money(newname, 1000)
+        run.create_granary(newname)
+        time.sleep(3)
+
+    # run.create_granary(lever_name1_lever4)
+    # run.add_money(lever_name1_lever4, 1000)
+    # deal.select_money(lever_name1_lever5)
+
+    # bro.select_broker_allmessage(brokername)
+    # bro.select_broker_allmessage(brokername_lever_name1)
+    # bro.select_broker_allmessage(lever_name1_lever1)
+    # bro.select_broker_allmessage(lever_name1_lever2)
+    # bro.select_broker_allmessage(lever_name1_lever3)
+    # bro.select_broker_allmessage(lever_name1_lever4)
+
+    # bro.broker_bull(brokername)
+
+    # bro.select_broker_everydaymsg(brokername_lever_name1)
+
+    # run.add_money(lever_name1_lever2, 1000)
+    # deal.select_money(lever_name1_lever2)
+    # run.create_granary(lever_name1_lever2)
+    # deal.select_money(lever_name1_lever2)
+    # deal.select_money(lever_name1_lever1)
+
+    # run.Register(lever_name1)
+    # run.keep_granary(name)
+
+    # bro.brokerage_water(brokername)
+    # run.Register('12284041406')
+    # 查询经纪人总信息
+    # bro.select_broker_allmessage(name)
+    # run.add_money(name, 1000)
+
+    # run.create_granary(name)
+    # deal.select_money(name)
     # run.add_money(name, 100000)
+    # deal.select_money(name)
     # run.add_money(name, 10000)
     # deal.select_money(name)
     # run.get_frostmoney(name)
-    run.create_granary(name)
-    deal.select_money(name)
     # run.create_granary(name)
+    # deal.select_money(name)
+    # bro.select_broker_allmessage(name)
+    # bro.select_broker_everydaymsg(name)
+    # bro.select_broker_canmoney(name)
+    # run.create_granary(name)
+    # bro.select_broker_timemsg(name)
     # time.sleep(2)
     # run.flat_granary(name)
 
@@ -1234,13 +1374,23 @@ def TestCreate():
 
 if __name__ == "__main__":
     select = context()
-    # broker()
+    broker()
     # dealtest1()
     # dealtest3()
     # dealtest4()
     # dealtest5()
-    name = '18770185021'
-    run = supernode('1')
-    run.Register('')
+    # name = '389863294@qq.com'
+
+    # run = supernode('1')
+    # for index in range(10):
+        # name = 'preview' + str(index) + '@test.com'
+        # run.add_money(name, 10000)
+        # run.Register('', name)
+        # time.sleep(1)
+
+    # run.Login('166704969518@qq.com')
+    # run = supernode('1')
+    # run.Login(name)
+    # run.Register('')
     # run.add_money(name, 1000)
     # run.create_granary(name)

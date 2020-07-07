@@ -54,6 +54,7 @@ def gain_url(urlname):
 
 # 用户token获取函数
 def usertoken(username: str) -> str:
+    # userlogin(username)
     with save.SqlSave() as execute:
         token = formatting(
             execute.select('token', 'Name_ResponseMsg', 'name', username)
@@ -75,7 +76,8 @@ def userlogin(username: str) -> None:
         sqldata = execute.select('*', 'general', 'name', username)
         # 判断是否存在此用户
         if len(sqldata) == 0:
-            # password = 'b49a9e2a50d24396e08ca047a09588a7'
+            password = 'b49a9e2a50d24396e08ca047a09588a7'
+            # userlogin(username)
             # execute.general(username, password, context())
             exit(0)
         else:
@@ -104,7 +106,8 @@ def userlogin(username: str) -> None:
                 print('异常')
 
 
-userlogin('389863294@qq.com')
+# brokername = '166704969518@qq.com'
+# userlogin(brokername)
 
 # exist('Name_ResponseMsg')
 

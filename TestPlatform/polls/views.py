@@ -1,11 +1,14 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import Http404
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 # Create your views here.
 from polls.models import Question, Choice
 from django.template import loader
 from django.urls import reverse
 from django.views import generic
+import json, requests
+import polls.inform
+
 
 
 class IndexView(generic.ListView):
@@ -87,3 +90,44 @@ def indextest(request):
 def detail(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
     return render(request, 'polls/detail.html', {'question': question})
+
+
+# 请求内容格式转换函数
+def bytes_switch_dict(msg: bytes) -> dict:
+
+    msg_str = str(msg, encoding='utf-8')
+    # print(msg_str)
+    msg_list = []
+    msg_dict = {}
+    count = 0
+    for index in range(len(msg_str)):
+        if msg_str[index] == '&':
+            msg_list.append(msg_str[count: index])
+            count = index + 1
+    msg_list.append(msg_str[count:])
+    # print(msg_list)
+    dict_count = 0
+    for list_index in msg_list:
+        for index in range(len(list_index)):
+            if list_index[index] == '=':
+                array = list_index[dict_count: index]
+                msg_dict[array] = list_index[index+1:]
+    print(msg_dict)
+    return msg_dict
+
+
+def readim(request):
+    if request.method == "POST":
+        request_data_dict = bytes_switch_dict(request.body)
+        if request_data_dict['type'] == '1':
+            returndata = polls.inform.WX_robot(request_data_dict['msg'])
+            return JsonResponse({"status": "WX_robot", "msg": returndata})
+        elif request_data_dict['type'] == '2':
+            returndata = polls.inform.DD_robot(request_data_dict['msg'])
+            return JsonResponse({"status": "DD_robot", "msg": returndata})
+        else:
+            return JsonResponse({"status": "-1", "msg": "不支持的请求类型"})
+    elif request.method == "GET":
+        return JsonResponse({"status": "-1", "msg": "暂不支持GET请求"})
+
+
