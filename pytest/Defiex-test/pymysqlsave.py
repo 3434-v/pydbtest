@@ -71,26 +71,26 @@ class MysqlSave(object):
         conditionlist = []
         for key, value in condition.items():
             conditionlist.append(key + '="' + value + '"')
-        conditionstr = str(','.join(conditionlist))
+        conditionstr = str(' or '.join(conditionlist))
         selectsql = """SELECT {} FROM {} WHERE {}
             """.format(selectfieldstr, tablename, conditionstr)
-        print(selectsql)
+        # print(selectsql)
         self.cursor.execute(selectsql)
         data = self.cursor.fetchall()
-        print(data)
+        # print(data)
         return data
 
     def update(self, tablename: str, message: dict, condition: dict) -> None:
         conditionlsit = []
         for key, value in condition.items():
             conditionlsit.append(key + '="' + value + '"')
-        conditionstr = str(' and '.join(conditionlsit)).replace('\'', "")
+        conditionstr = str(' or '.join(conditionlsit)).replace('\'', "")
         messagelist = []
         for key, value in message.items():
             messagelist.append(key + '="' + value + '"')
         # print(messagelist)
         messagestr = str(','.join(messagelist)).replace('\'', "")
-        print(messagestr)
+        # print(messagestr)
         updatesql = """UPDATE {} SET {} WHERE {}
             """.format(tablename, messagestr, conditionstr).replace('\n', "")
         print(updatesql)
@@ -98,34 +98,15 @@ class MysqlSave(object):
 
 
 with MysqlSave() as db:
-    message_dict = {
-        "id": "1",
-        "uid": "2"
-    }
-
-    message_list = [
-        'id int primary key auto_increment',
-        'name varchar(200)',
-        'url varchar(200)'
+    create_message = [
+        'traderuser varchar(50) not null',
+        'channel varchar(200) not null',
+        'nickname varchar(200) not null',
+        'gettime varchar(30)',
+        'createtime varchar(30)',
+        'environment varchar(30)'
     ]
-
-    # 数据
-    insert_message = {
-        'username': '389863294@qq.com',
-        'password': '12345678',
-        'md5_password': '25d55ad283aa400af464c76d713c07ad',
-        'environment': '预发布环境',
-        'time': '2020-05-25 10:46:24'
-    }
-
-    select_message = [
-        'url'
-    ]
-
-    select_dict = {
-        'name': '测试环境'
-    }
-    # db.create('domain', message_list)
+    # db.create('traderuser', create_message)
     # db.insert('user', insert_message)
     # db.update('xxx',message_update,update_condition)
-    db.select(select_message, 'domain', select_dict)
+    # db.select(select_message, 'domain', select_dict)

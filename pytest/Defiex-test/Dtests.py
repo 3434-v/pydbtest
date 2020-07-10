@@ -63,7 +63,7 @@ class supernode(object):
         else:
             return name + '@test.com'
 
-    # 登录
+    # 登录s
     def Login(self, name: str) -> None:
 
         with save.SqlSave() as execute:
@@ -124,7 +124,7 @@ class supernode(object):
                 "Password": password,
                 "Environment": select
             }
-            pynosql.insert('Register_account', message)
+
         print('------------')
         self.Login(name)
         return name
@@ -481,7 +481,7 @@ class supernode(object):
     # 现金建仓
     def create_granary(self, name: str) -> None:
         print('------------')
-        # self.Login(name)
+        self.Login(name)
         with save.SqlSave() as execute:
             urls = self.Get_url('建仓')
             # granary = ['btc','eth','eos','ltc','bch','etc','xrp','bsv']
@@ -896,7 +896,7 @@ class DealStaff(supernode):
 
     # 查询最新资产
     def select_money(self, name: str) -> None:
-        url = self.Get_url('查询最新资产')
+        url = gain_url('查询最新资产')
         data = {
             "token": self.Get_token(name)
         }
@@ -907,7 +907,7 @@ class DealStaff(supernode):
         admin_token = self.admin_token()
         # state 1:审核通过 0:审核失败
         # state = '1'
-        url = self.Get_url('交易员审核')
+        url = gain_url('交易员审核')
         data = {
             "type": 10211, "token": admin_token,
             "userid": userid, "state": state
@@ -916,7 +916,7 @@ class DealStaff(supernode):
 
     # 交易员申请开通
     def apply(self, name: str) -> json:
-        url = self.Get_url('交易员申请开通')
+        url = gain_url('交易员申请开通')
         data = {
             "token": self.Get_token(name),
             "language": "zh_CN"
@@ -928,7 +928,7 @@ class DealStaff(supernode):
     def select_detail(self, name: str) -> None:
         with save.SqlSave() as execute:
             userid = formatting(execute.select('userid', 'Name_ResponseMsg', 'name', name))
-            url = self.Get_url('交易员详情查询')
+            url = gain_url('交易员详情查询')
             data = {
                 "planerid": userid,
                 "language": "zh_CN"
@@ -939,7 +939,7 @@ class DealStaff(supernode):
     def deal_record(self, name: str) -> None:
         with save.SqlSave() as execute:
             userid = formatting(execute.select('userid', 'Name_ResponseMsg', 'name', name))
-        url = self.Get_url('交易员交易记录查询')
+        url = gain_url('交易员交易记录查询')
         data = {
             "planerid": userid,
             "page": "1", "count": "20"
@@ -950,7 +950,7 @@ class DealStaff(supernode):
     def deal_gain(self, name: str) -> None:
         with save.SqlSave() as execute:
             userid = formatting(execute.select('userid', 'Name_ResponseMsg', 'name', name))
-        url = self.Get_url('交易员跟单盈利查询')
+        url = gain_url('交易员跟单盈利查询')
         data = {
             "planerid": userid,
             "page": "1", "count": "20"
@@ -959,7 +959,7 @@ class DealStaff(supernode):
 
     # 交易员列表查询
     def trader_list(self):
-        url = self.Get_url('交易员列表查询')
+        url = gain_url('交易员列表查询')
         data = {
             "ordertype": "1"
         }
@@ -974,7 +974,7 @@ class DealStaff(supernode):
         openamountdaymax = '500'
         openamountholdmax = '1000'
         openamountslrate = '0.5'
-        url = self.Get_url('用户跟单某个交易员')
+        url = gain_url('用户跟单某个交易员')
         data = {
             "token": self.Get_token(name), "planerid": planerid, "referrerid": referrerid,
             "opentype": opentype, "openamount": openamount, "openamountdaymax": openamountdaymax,
@@ -984,7 +984,7 @@ class DealStaff(supernode):
 
     # 用户跟单详情查询
     def user_detail(self, name: str):
-        url = self.Get_url('用户跟单详情查询')
+        url = gain_url('用户跟单详情查询')
         data = {
             "token": self.Get_token(name)
         }
@@ -998,7 +998,7 @@ class DealStaff(supernode):
         openamountdaymax = '1000'
         openamountholdmax = '2000'
         openamountslrate = '0.5'
-        url = self.Get_url('用户修改跟单参数')
+        url = gain_url('用户修改跟单参数')
         data = {
             "token": self.Get_token(name),
             "planerid": planerid, "pause": pause, "opentype": "1",
@@ -1009,7 +1009,7 @@ class DealStaff(supernode):
 
     # 用户取消跟单某个交易员
     def cancel_deal(self, name: str, planerid: str):
-        url = self.Get_url('用户取消跟单某个交易员')
+        url = gain_url('用户取消跟单某个交易员')
         data = {
             "token": self.Get_token(name),
             "planerid": planerid
@@ -1019,7 +1019,7 @@ class DealStaff(supernode):
 
     # 用户跟单历史查询
     def user_deal_history(self, name, planerid):
-        url = self.Get_url('用户跟单历史查询')
+        url = gain_url('用户跟单历史查询')
         data = {
             "token": self.Get_token(name),
             "planerid": planerid
@@ -1027,10 +1027,10 @@ class DealStaff(supernode):
         deamds(url, data)
 
     # 交易员修改信息
-    def trader_remove_message(self, name):
-        url = self.Get_url('交易员修改信息')
+    def trader_remove_message(self, name, types: str):
+        url = gain_url('交易员修改信息')
         # 1: 确认跟单规则 2: 带单开关 3: 个人描述 4: 标签
-        types = '4'
+        # types = '2'
         info = ''
         if types == '4':
             index = random.randint(801, 810)
@@ -1041,7 +1041,7 @@ class DealStaff(supernode):
             info = '1'
         elif types == '2':
             # 1:关闭 0:打开
-            info = '0'
+            info = '1'
         elif types == '3':
             info = 'AAABBBCCCDDDEEEFFFGGGHHHIIIJJJKKKVVVLLLMMM'
         print(info)
@@ -1053,7 +1053,7 @@ class DealStaff(supernode):
 
     # 交易员跟单提成每日汇总查询
     def trader_everyday_royalties(self, name):
-        url = self.Get_url('交易员跟单提成每日汇总查询')
+        url = gain_url('交易员跟单提成每日汇总查询')
         data = {
             "token": self.Get_token(name),
             "page": "1", "count": "20"
@@ -1062,7 +1062,7 @@ class DealStaff(supernode):
 
     # 交易员跟单提成每日明细查询
     def everyday_detail(self, name, timestamp):
-        url = self.Get_url('交易员跟单提成每日明细查询')
+        url = gain_url('交易员跟单提成每日明细查询')
         data = {
             "token": self.Get_token(name),
             "tradedate": timestamp
@@ -1071,7 +1071,7 @@ class DealStaff(supernode):
 
     # 推荐人详情查询
     def referrer_detail(self, name):
-        url = self.Get_url('推荐人详情查询')
+        url = gain_url('推荐人详情查询')
         data = {
             "token": self.Get_token(name)
         }
@@ -1079,7 +1079,7 @@ class DealStaff(supernode):
 
     # 推荐人跟单用户信息查询
     def referrer_user_detail(self, name):
-        url = self.Get_url('推荐人跟单用户信息查询')
+        url = gain_url('推荐人跟单用户信息查询')
         data = {
             "token": self.Get_token(name)
         }
@@ -1087,7 +1087,7 @@ class DealStaff(supernode):
 
     # 推荐人每日提成汇总信息查询
     def referrer_everyday_collect(self, name):
-        url = self.Get_url('推荐人每日提成汇总信息查询')
+        url = gain_url('推荐人每日提成汇总信息查询')
         data = {
             "token": self.Get_token(name)
         }
@@ -1095,7 +1095,7 @@ class DealStaff(supernode):
 
     # 推荐人每日提成明细查询
     def referrer_everyday_deduct(self, name, tradedate):
-        url = self.Get_url('推荐人每日提成明细查询')
+        url = gain_url('推荐人每日提成明细查询')
         data = {
             "token": self.Get_token(name),
             "tradedate": tradedate
@@ -1104,7 +1104,7 @@ class DealStaff(supernode):
 
     # 交易员标签信息查询
     def trader_label(self):
-        url = self.Get_url('交易员标签信息查询')
+        url = gain_url('交易员标签信息查询')
         data = {}
         deamds(url, data)
 
@@ -1236,12 +1236,14 @@ def dealtest2():
 def dealtest3():
     deal = DealStaff()
     run = supernode('1')
-    withname = '389863294@qq.com'
-    dealname = '166453511870@qq.com'
-    deal.trader_remove_message(dealname)
-    userid = '12241273568'
-    deal.trader_label()
-    deal.select_detail(dealname)
+    # withname = '389863294@qq.com'
+    # run.kyc()
+    # run.Login(withname)
+    # dealname = '166453511870@qq.com'
+    # deal.trader_remove_message(dealname)
+    # userid = '12241273568'
+    # deal.trader_label()
+    # deal.select_detail(withname)
     # deal.check_trader(userid)
 
 
@@ -1250,7 +1252,11 @@ def broker():
     deal = DealStaff()
     run = supernode('1')
     bro = Broker()
-    brokername = '166704969518@qq.com'
+    # brokername = '166437696110@qq.com'
+    # run.Register(brokername)
+    levername = '389863294@qq.com'
+    # run.add_money(levername, 10000)
+    run.create_granary(levername)
     # brokername 下级 lever_name1
     brokername_lever_name1 = '166437696110@qq.com'
     # lever_name1 下级 lever_name1_lever1
@@ -1264,12 +1270,23 @@ def broker():
     # bro.select_broker_allmessage(newname)
     # run.add_money(lever_name1_lever6, 10)
     # deal.select_money(lever_name1_lever5)
-    for index in range(40):
-        newname = run.Register(brokername)
-        run.add_money(newname, 1000)
-        run.create_granary(newname)
-        time.sleep(3)
+    # newname = '1663064@test.com'
 
+    brokername = '166704969518@qq.com'
+    brockn2 = '1663480@test.com'
+    brockn3 = '1661836@test.com'
+    brockn4 = '1667021@test.com'
+    brockn5 = '166410@test.com'
+
+
+    # for index in range(1):
+    #     newname = run.Register(brockn4)
+    #     run.add_money(newname, 1000)
+    #     run.create_granary(newname)
+    #     time.sleep(3)
+
+    # run.kyc(brockn5)
+    # run.check_kyc(brockn5)
     # run.create_granary(lever_name1_lever4)
     # run.add_money(lever_name1_lever4, 1000)
     # deal.select_money(lever_name1_lever5)
@@ -1358,6 +1375,8 @@ def TestCreate():
 
 if __name__ == "__main__":
     select = context()
+    # run.create_granary(name)
+    # dealtest3()
     broker()
     # dealtest1()
     # dealtest3()
