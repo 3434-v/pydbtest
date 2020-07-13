@@ -96,6 +96,9 @@ class MysqlSave(object):
         print(updatesql)
         self.cursor.execute(updatesql)
 
+    def delete(self, tablename: str, condition: dict) -> None:
+        pass
+
 
 with MysqlSave() as db:
     create_message = [

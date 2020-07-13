@@ -281,6 +281,7 @@ def testdata() -> dict:
 
 def formula(name: str):
     testmsg = testdata()
+    coefficient = '0.0'
     spratio_ratio = float(testmsg['spratio_ratio'])
     slratio_ratio = float(testmsg['slratio_ratio'])
     create_money = float(testmsg['create_money'])
@@ -348,8 +349,63 @@ def create_granary(username: str) -> None:
         "lever": testmsg['pry'], "topprice": top_money,
         "botprice": bot_money
     }
+    response = deamds(url, data)['info']
+    response['username'] = username
+    response['testcase'] = testmsg['id']
+    # 建表
+    # with mysave.MysqlSave() as execute:
+    #     message = []
+    #     response['username'] = username
+    #     response['testcase'] = testmsg['id']
+    #     for key in response.keys():
+    #         message.append(key + ' varchar(20)')
+    #     execute.create('granary_message', message)
+    with mysave.MysqlSave() as execute:
+        execute.insert('granary_message', response)
+
+
+# 平仓
+def flat_granary(username: str) -> None:
+    url = gain_url('平仓')
+    with mysave.MysqlSave() as execute:
+        orderid_list = execute.select(
+            ['orderid'], 'granary_message', {'username': username}
+        )
+        for dictmsg in orderid_list:
+            orderid = dictmsg['orderid']
+            data = {
+                "token": usertoken(username),
+                "orderid": orderid
+            }
+            resoonse = deamds(url, data)
+            if resoonse['msg'] == 'OK':
+                pass
+
+
+
+
+# 分页查询所有持仓记录
+def keep_granary(username: str) -> str:
+    url = gain_url('分页查询所有持仓记录')
+    data = {
+        "token": usertoken(username),
+        "page": "1", "count": "20"
+    }
     response = json.dumps(deamds(url, data))
-    print(response)
+    totalcount = ''.join(re.findall('"totalcount": "(.*?)",', response))
+    return totalcount
+
+
+# 分页查询所有平仓记录
+def flatgranary_record(username: str) -> str:
+    url = gain_url('分页查询所有平仓记录')
+    data = {
+        "token": usertoken(username),
+        "page": "1", "count": "20", "symbol": ""
+    }
+    response = json.dumps(deamds(url, data))
+    totalcount = ''.join(re.findall('"totalcount": "(.*?)",', response))
+    return totalcount
 
 # gain_url('交易员列表查询')
 # brokername = '389863294@qq.com'

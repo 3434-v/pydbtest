@@ -148,7 +148,7 @@ class DealStaff(object):
     def trader_remove_message(self, name):
         url = pymethod.gain_url('交易员修改信息')
         # 1: 确认跟单规则 2: 带单开关 3: 个人描述 4: 标签
-        types = '2'
+        types = '4'
         info = ''
         if types == '4':
             index = random.randint(801, 810)
@@ -161,7 +161,7 @@ class DealStaff(object):
             # 1:关闭 0:打开
             info = '1'
         elif types == '3':
-            info = 'AAABBBCCCDDDEEEFFFGGGHHHIIIJJJKKKVVVLLLMMM'
+            info = '一个没赚过的交易员'
         print(info)
         data = {
             "token": pymethod.usertoken(name),
@@ -230,6 +230,7 @@ class DealStaff(object):
 def traderuser():
     deal = DealStaff()
     username = pymethod.register('')
+    # username = '1663700630@test.com'
     if deal.apply(username)['code'] == '1851':
         pymethod.addmoney(username, 50)
         if deal.apply(username)['code'] == '1852':
@@ -303,9 +304,17 @@ def testcase3():
     trader = '1664001394@test.com'
     referrer = '389863294@qq.com'
     # deal.select_detail(username)
-    username1 = '1666537648@test.com'
-    username2 = '1662909762@test.com'
-    pymethod.register(username2)
+    username1 = '1661996720@test.com'
+    # pymethod.addmoney(username1, 10000)
+    # username2 = '1662909762@test.com'
+    # deal.user_detail(username1)
+    # pymethod.create_granary(username)
+    # pymethod.register(username)
+    levername = '1662558092@test.com'
+
+    # pymethod.addmoney(levername, 100000000)
+    # pymethod.create_granary(levername)
+    # pymethod.register('')
     # deal.user_trader(username, '11739860537', '11374499021')
     # deal.user_detail(username)
     # deal.deal_gain(username)
@@ -335,6 +344,18 @@ def testcase3():
     # deal.trader_remove_message(username)
 
 
+def testcase4():
+    deal = DealStaff()
+    deal_username = '166669752@test.com'
+    deal_userid = '13660864396'
+    new_username = '166415477@test.com'
+    # deal.user_trader(new_username, deal_userid, '')
+    # pymethod.addmoney(deal_username, 10000)
+    # pymethod.create_granary(deal_username)
+    tj_username = '1661863403@test.com'
+    username = '1665029587@test.com'
+    # pymethod.create_granary(deal_username)
+    
 
 if __name__ == "__main__":
     # traderuser()
@@ -342,5 +363,8 @@ if __name__ == "__main__":
     # testcase()
     # pymethod.addmoney('1662163795@test.com', 10000)
     # testcase2()
-    testcase3()
+    # testcase3()
+    testcase4()
     # pymethod.duserlogin('389863294@qq.com', 'yangxun19990728')
+    # pymethod.create_granary('389863294@qq.com')
+
