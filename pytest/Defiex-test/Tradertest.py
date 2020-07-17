@@ -8,6 +8,7 @@ import time
 
 # 交易员接口类
 class DealStaff(object):
+    """用于交易员接口"""
 
     def __init__(self) -> None:
         pass
@@ -422,10 +423,12 @@ def testcase7():
 def testcase8():
     import asyncio
 
-    async def display(num):
-        await asyncio.sleep(1)
-        print(num)
-    coroutines = [display(num) for num in range(10)]
+    async def display(username):
+        pymethod.flat_granary(username)
+    user_list = [
+        '389863294@qq.com'
+    ]
+    coroutines = [display(username) for username in user_list]
     loop = asyncio.get_event_loop()
     loop.run_until_complete(asyncio.wait(coroutines))
     loop.close()
@@ -474,6 +477,65 @@ def testcase10():
     main()
 
 
+def testcase11():
+    pymethod.register('')
+
+
+def logging(level):
+    def outwrapper(func):
+        def wrapper(*args, **kwargs):
+            print("[{0}]: enter {1}()".format(level, func.__name__))
+            return func(*args, **kwargs)
+        return wrapper
+    return outwrapper
+
+
+@logging(level="INFO")
+def hello(a, b, c):
+    print(a, b, c)
+
+
+class logging(object):
+    def __init__(self, level):
+        self.level = level
+
+    def __call__(self, func):
+        def wrapper(*args, **kwargs):
+            print("[{0}]: enter {1}()".format(self.level, func.__name__))
+            return func(*args, **kwargs)
+        return wrapper
+
+
+@logging(level="TEST")
+def hello(a, b, c):
+    print(a, b, c)
+
+
+"""
+def run_time(func):
+    print("正在运行方法:{}".format(func.__name__))
+    state = time.time()
+    func(1)
+    time.sleep(1)
+    end = time.time()
+    print("time:{}".format(end - state))
+    return func
+
+
+@run_time
+def contexts(type_select: int) -> str:
+    # type_select：1 环境 2：测试用例
+    with open('deploy.json', 'r', encoding='utf8') as depl:
+        depl_dict = json.load(depl)
+    depl.close()
+    message_dict = {
+        1: depl_dict["environment"],
+        2: depl_dict["test_msg"]
+    }
+    print(message_dict[type_select])
+    return message_dict[type_select]
+"""
+
 if __name__ == "__main__":
     # traderuser()
     # testcase()
@@ -482,7 +544,8 @@ if __name__ == "__main__":
     # testcase4()
     # testcase5()
     # testcase6()
-    testcase7()
+    # testcase7()
     # testcase8()
     # testcase9()
     # testcase10()
+    testcase11()

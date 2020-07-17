@@ -6,6 +6,18 @@ import pymysqlsave as mysave
 import hashlib
 import time
 import random
+"""
+静态方法：静态方法是访问不了类或实例中的任何属性，
+它已经脱离了类，一般会用在一些工具包中
+@staticmethod
+
+类方法：只能访问类变量，不能访问实例变量 使用场景：一般是需要去访问写死的变量，才会用到类方法装饰器
+@classmethod
+
+属性方法：将方法变成静态属性
+@property   #定义属性方法
+@eat.setter  #定义一个可以传参的方法
+"""
 
 
 # 公共reques请求函数
@@ -60,13 +72,17 @@ def currenttime():
 
 
 # 读取deploy.json文件中配置的环境
-def context() -> str:
+def context(type_select: int) -> str:
+    # type_select：1 环境 2：测试用例
     with open('deploy.json', 'r', encoding='utf8') as depl:
         depl_dict = json.load(depl)
     depl.close()
-    select = depl_dict["environment"]
-    print(select)
-    return select
+    message_dict = {
+        1: depl_dict["environment"],
+        2: depl_dict["test_msg"]
+    }
+    print(message_dict[type_select])
+    return message_dict[type_select]
 
 
 # 正则表达式提取函数
@@ -79,7 +95,7 @@ def extract(regular: str, msg: str) -> str:
 def gain_url(urlname: str) -> str:
     with mysave.MysqlSave() as execute:
         url_header_list = execute.select(
-            ['url'], 'domain', {'name': context()}
+            ['url'], 'domain', {'name': context(1)}
         )
         url_end_list = execute.select(
             ['url'], 'path', {'urlname': urlname}
@@ -115,7 +131,7 @@ def userlogin(username: str, passwords: str) -> None:
                 'userid': response['userid'], 'kyc': response['kyc'],
                 'invitecode': response['invitecode'], 'token': response['token'],
                 'nickname': response['nickname'], 'gettime': currenttime(),
-                'environment': context()
+                'environment': context(1)
             }
             condition = {
                 'username': username
@@ -139,7 +155,7 @@ def register(sharename: str) -> str:
         execute.insert(
             'user', {
                 'username': username, 'password': passwords,
-                'md5_password': md5pas, 'environment': context(),
+                'md5_password': md5pas, 'environment': context(1),
                 'time': currenttime()
             }
         )
@@ -166,7 +182,7 @@ def register(sharename: str) -> str:
                 'nickname': response['nickname'],
                 'gettime': currenttime(),
                 'createtime': response['createtime'],
-                'environment': context()
+                'environment': context(1)
             }
             execute.insert('registermsg', message)
             userlogin(username, passwords)
@@ -193,7 +209,7 @@ def admintoken() -> str:
     with mysave.MysqlSave() as execute:
         selectlist = ['username', 'password', 'code']
         condition = {
-            'environment': context()
+            'environment': context(1)
         }
         adminmsg = execute.select(selectlist, 'adminuser', condition)
         username = mysqldict(adminmsg, 'username')
@@ -275,7 +291,7 @@ def checkkyc(username: str) -> str:
 def testdata() -> dict:
     tablename = 'creategranary_test'
     with mysave.MysqlSave() as execute:
-        testmsg = execute.select(['*'], tablename, {'id': '2'})
+        testmsg = execute.select(['*'], tablename, {'id': context(2)})
         return testmsg[0]
 
 
@@ -440,6 +456,20 @@ def Withdraw_msg(username: str) -> None:
     }
     admin_response = deamds(admin_url, admin_data)
 
+
+# 归集
+def Collection(address_type, address: str):
+    url = gain_url('归集')
+    data = {
+        "chainCode": address_type,
+        "address": address,
+        "symbol": "USDT"
+    }
+    response = requests.post(url, data)
+    print(response.text)
+
+
+Collection('ETH', '0x2d328900fa5ee5304921b33040a432cee1f218ef')
 
 # # 获取提币纪录
 # def Withdraw_recode(self, name: str) -> None:
