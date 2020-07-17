@@ -275,7 +275,7 @@ def checkkyc(username: str) -> str:
 def testdata() -> dict:
     tablename = 'creategranary_test'
     with mysave.MysqlSave() as execute:
-        testmsg = execute.select(['*'], tablename, {'id': '1'})
+        testmsg = execute.select(['*'], tablename, {'id': '2'})
         return testmsg[0]
 
 
@@ -296,14 +296,14 @@ def formula(name: str):
     response = json.dumps(deamds(url, data))
     # 实际行情价格
     # realityprice
-    Cmoney = ''.join(re.findall('"LP": "(.*?)",', response))
+    c_money = ''.join(re.findall('"LP": "(.*?)",', response))
     # 交易系数
-    Deal_coefficient = create_money * pry
-    if Deal_coefficient > 2000:
+    deal_coefficient = create_money * pry
+    if deal_coefficient > 2000:
         coefficient = 0.5
-    elif 1000 <= Deal_coefficient <= 2000:
+    elif 1000 <= deal_coefficient <= 2000:
         coefficient = random.randint(1, 4) / 10
-    elif Deal_coefficient < 1000:
+    elif deal_coefficient < 1000:
         coefficient = 0.1
     if granary == 'btc':
         basics = 0.0005
@@ -314,9 +314,9 @@ def formula(name: str):
     print(spread)
     if direction == '1':
         if granary == 'btc':
-            count_monry = round(float(Cmoney) * (1.0 - spread), 4)
+            count_monry = round(float(c_money) * (1.0 - spread), 4)
         else:
-            count_monry = round(float(Cmoney) * (1.0 - spread), 4)
+            count_monry = round(float(c_money) * (1.0 - spread), 4)
         spot = count_monry - (spratio_ratio * create_money + 0.0 + formalities_ratio * pry * create_money) * (
                 count_monry / (pry * create_money))
         spot1 = count_monry + (slratio_ratio * create_money - 0.0 - formalities_ratio * pry * create_money) * (
@@ -324,9 +324,9 @@ def formula(name: str):
         return round(spot, 4), round(spot1, 4), str(count_monry)
     else:
         if granary == 'btc':
-            count_monry = round(float(Cmoney) * (1.0 + spread), 4)
+            count_monry = round(float(c_money) * (1.0 + spread), 4)
         else:
-            count_monry = round(float(Cmoney) * (1.0 + spread), 4)
+            count_monry = round(float(c_money) * (1.0 + spread), 4)
         spot = count_monry + (spratio_ratio * create_money + 0.0 + formalities_ratio * pry * create_money) * (
                 count_monry / (pry * create_money))
         spot1 = count_monry - (slratio_ratio * create_money - 0.0 - formalities_ratio * pry * create_money) * (
@@ -338,8 +338,8 @@ def formula(name: str):
 def create_granary(username: str) -> None:
     testmsg = testdata()
     url = gain_url('建仓')
-    money, money2, cmoney = formula(username)
-    print(cmoney)
+    money, money2, c_money = formula(username)
+    print(c_money)
     top_money = str(float(money))
     bot_money = str(float(money2))
 
@@ -352,14 +352,6 @@ def create_granary(username: str) -> None:
     response = deamds(url, data)['info']
     response['username'] = username
     response['testcase'] = testmsg['id']
-    # 建表
-    # with mysave.MysqlSave() as execute:
-    #     message = []
-    #     response['username'] = username
-    #     response['testcase'] = testmsg['id']
-    #     for key in response.keys():
-    #         message.append(key + ' varchar(20)')
-    #     execute.create('granary_message', message)
     with mysave.MysqlSave() as execute:
         execute.insert('granary_message', response)
 
@@ -378,10 +370,13 @@ def flat_granary(username: str) -> None:
                 "orderid": orderid
             }
             resoonse = deamds(url, data)
-            if resoonse['msg'] == 'OK':
-                pass
-
-
+            condition = {
+                "orderid": orderid
+            }
+            if resoonse['msg'] in 'OK':
+                execute.delete('granary_message', condition)
+            elif resoonse['msg'] in "参数错误":
+                execute.delete('granary_message', condition)
 
 
 # 分页查询所有持仓记录
@@ -406,6 +401,60 @@ def flatgranary_record(username: str) -> str:
     response = json.dumps(deamds(url, data))
     totalcount = ''.join(re.findall('"totalcount": "(.*?)",', response))
     return totalcount
+
+
+# 插点
+def vertex():
+    orderid = '825'
+    userid = '10003277638'
+    symbol = 'eth'
+    price = '25011'
+    url = gain_url('插点')
+    data = {
+        "type": 10359, "id": orderid, "userid": userid,
+        "symbol": symbol, "price": price, "token": admintoken(),
+    }
+    response = deamds(url, data)
+
+
+# 提币以及信息获取
+def Withdraw_msg(username: str) -> None:
+    # ERC-20
+    addr = '0x777D76e24da310D91B0C3b48767E898772F198F7'
+    money_type = '3'
+    # OMNI
+    # addr = '3EkaqUNdowvetHDzkYgA6woXcBRkPuULRT'
+    # money_type = '1'
+    url = gain_url('提币')
+    amount = '2'
+    data = {
+        "token": usertoken(username), "type": money_type,
+        "amount": amount, "addr": addr, "code": "xwwwwx"
+    }
+    response = deamds(url, data)['info']
+    bank_order_id = response['bank_order_id']
+    admin_url = gain_url('管理端审核提币')
+    admin_data = {
+        "type": 10204, "orderid": bank_order_id,
+        "verify": 1, "token": admintoken()
+    }
+    admin_response = deamds(admin_url, admin_data)
+
+
+# # 获取提币纪录
+# def Withdraw_recode(self, name: str) -> None:
+#     self.Login(name)
+#     url = self.Get_url('获取提币纪录')
+#     # http://47.90.62.21:9003/api/trade/queryoutorderall.do?p={"page":"1","count":"20"}
+#     data = {
+#         "token": self.Get_token(name),
+#         "page": "1", "count": "20"
+#     }
+#     response = json.dumps(deamds(url, data))
+#     txid = extract('txid', response)
+#     with save.SqlSave() as execute:
+#         execute.Withdraw_recod(name, txid)
+
 
 # gain_url('交易员列表查询')
 # brokername = '389863294@qq.com'

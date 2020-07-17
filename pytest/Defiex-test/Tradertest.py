@@ -86,15 +86,15 @@ class DealStaff(object):
         return planerid_list
 
     # 用户跟单某个交易员
-    def user_trader(self, name: str, planerid: str, referrerid: str):
-        opentype = '1'
+    def user_trader(self, username: str, planerid: str, referrerid: str):
+        opentype = '2'
         openamount = '50'
         openamountdaymax = '500'
         openamountholdmax = '1000'
-        openamountslrate = '0.5'
+        openamountslrate = '0'
         url = pymethod.gain_url('用户跟单某个交易员')
         data = {
-            "token": pymethod.usertoken(name), "planerid": planerid, "referrerid": referrerid,
+            "token": pymethod.usertoken(username), "planerid": planerid, "referrerid": referrerid,
             "opentype": opentype, "openamount": openamount, "openamountdaymax": openamountdaymax,
             "openamountholdmax": openamountholdmax, "openamountslrate": openamountslrate
         }
@@ -232,7 +232,7 @@ def traderuser():
     username = pymethod.register('')
     # username = '1663700630@test.com'
     if deal.apply(username)['code'] == '1851':
-        pymethod.addmoney(username, 50)
+        pymethod.addmoney(username, 10000)
         if deal.apply(username)['code'] == '1852':
             pymethod.kyc(username)
             pymethod.checkkyc(username)
@@ -343,28 +343,146 @@ def testcase3():
     # deal.user_deal_history(username, '14186191497')
     # deal.trader_remove_message(username)
 
-
+# 误删
 def testcase4():
     deal = DealStaff()
-    deal_username = '166669752@test.com'
-    deal_userid = '13660864396'
-    new_username = '166415477@test.com'
-    # deal.user_trader(new_username, deal_userid, '')
-    # pymethod.addmoney(deal_username, 10000)
-    # pymethod.create_granary(deal_username)
-    tj_username = '1661863403@test.com'
-    username = '1665029587@test.com'
-    # pymethod.create_granary(deal_username)
-    
+    username_1 = '1664989478@test.com'
+    username_2 = '1666935223@test.com'
+    recommend_username_1 = '1662635580@test.com'
+    recommend_id = '12371813944'
+    trader_username = '1666873112@test.com'
+    trader_id = '11911215051'
+    # username = pymethod.register('')
+    # pymethod.addmoney(username_2, 10000)
+    # deal.user_trader(username_2, trader_id, '')
+    # pymethod.create_granary(trader_username)
+    # deal.referrer_everyday_collect(recommend_username_1)
+    # deal.referrer_everyday_deduct(recommend_username_1, '20200713')
+    # deal.trader_everyday_royalties(trader_username)
+    # deal.everyday_detail(trader_username, '20200713')
+
+
+# 交易员、推荐人、用户三级关系返佣情况
+def testcase5():
+    # traderuser()
+    deal = DealStaff()
+    trade_username = '1664356591@test.com'
+    trade_id = '12249017041'
+    recommend_username = '1669220738@test.com'
+    recommend_id = '10018171820'
+    username = '1669803935@test.com'
+    user_id = '10644991607'
+    username_2 = '1664198692@test.com'
+    username_3 = '1663651527@test.com'
+    # pymethod.register('')
+    # 查询实时资产
+    # deal.select_money(trade_username)
+    # pymethod.addmoney(recommend_username, 1000)
+    # deal.select_money(recommend_username)
+    # pymethod.addmoney(username, 1000)
+    # deal.select_money(username)
+    # deal.user_trader(username_3, trade_id, '')
+    # pymethod.addmoney(username_3, 1000)
+    # pymethod.create_granary(trade_username)
+    # pymethod.addmoney(username_2, 1000)
+
+
+def testcase6():
+    deal = DealStaff()
+    trader_user = '1666230669@test.com'
+    trader_id = pymethod.selectnamemsg(trader_user)
+    tjr_user = '1663784103@test.com'
+    tjr_id = pymethod.selectnamemsg(tjr_user)
+    xj_user = '1663894119@test.com'
+    # for index in range(1):
+    #     username = pymethod.register('')
+    #     pymethod.addmoney(username, 1000)
+    #     deal.user_trader(username, trader_id, tjr_id)
+
+    # pymethod.create_granary(trader_user)
+
+
+def testcase7():
+    deal = DealStaff()
+    trader_username = '1665147@test.com'
+    username = '389863294@qq.com'
+    trader_id = pymethod.selectnamemsg(trader_username)
+    # username = pymethod.register('')
+    # pymethod.addmoney(username, 1000)
+    # deal.user_trader(username, trader_id, '')
+    # deal.user_remove_parameter('1664846527@test.com', trader_id)
+    # deal.cancel_deal('1668737377@test.com', trader_id)
+    # deal.user_trader('1668737377@test.com', trader_id, '')
+    # pymethod.register('')
+    # pymethod.create_granary(username)
+    pymethod.flat_granary(username)
+
+
+# 协程
+def testcase8():
+    import asyncio
+
+    async def display(num):
+        await asyncio.sleep(1)
+        print(num)
+    coroutines = [display(num) for num in range(10)]
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(asyncio.wait(coroutines))
+    loop.close()
+
+
+# 单进程
+def testcase9():
+    def download_task(filename):
+        print("开始下载{}...".format(filename))
+        time_to_download = random.randint(5, 10)
+        time.sleep(time_to_download)
+        print("{}下载完成！耗费{}秒".format(filename, time_to_download))
+
+    def main():
+        start = time.time()
+        download_task("test1")
+        download_task("test2")
+        end = time.time()
+        print("总耗时:{}".format(end - start))
+
+    main()
+
+
+# 多进程
+def testcase10():
+    from multiprocessing import Process
+    from os import getpid
+
+    def download_task(filename):
+        print("启动下载进程, 编号[{}]".format(getpid()))
+        print("开始下载{}...".format(filename))
+        time_to_download = random.randint(5, 10)
+        time.sleep(time_to_download)
+        print("{}下载完成！耗费{}秒".format(filename, time_to_download))
+
+    def main():
+        start = time.time()
+        task1 = Process(target=download_task, args=('test1', ))
+        task1.start()
+        task2 = Process(target=download_task, args=('test2', ))
+        task2.start()
+        task1.join()
+        task2.join()
+        end = time.time()
+        print("总耗时:{}".format(end - start))
+    main()
+
 
 if __name__ == "__main__":
     # traderuser()
-    # pymethod.userlogin('18770185021', 'yangxun19990728')
     # testcase()
-    # pymethod.addmoney('1662163795@test.com', 10000)
     # testcase2()
     # testcase3()
-    testcase4()
-    # pymethod.duserlogin('389863294@qq.com', 'yangxun19990728')
-    # pymethod.create_granary('389863294@qq.com')
-
+    # testcase4()
+    # testcase5()
+    # testcase6()
+    testcase7()
+    # testcase8()
+    # testcase9()
+    # testcase10()

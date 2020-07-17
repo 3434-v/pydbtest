@@ -1254,85 +1254,9 @@ def broker():
     bro = Broker()
     # brokername = '166437696110@qq.com'
     # run.Register(brokername)
-    levername = '389863294@qq.com'
-    # run.add_money(levername, 10000)
-    run.create_granary(levername)
-    # brokername 下级 lever_name1
-    brokername_lever_name1 = '166437696110@qq.com'
-    # lever_name1 下级 lever_name1_lever1
-    lever_name1_lever1 = '166548174922@qq.com'
-    lever_name1_lever2 = '166104864389@qq.com'
-    lever_name1_lever3 = '166569425729@qq.com'
-    lever_name1_lever4 = '166412381797@qq.com'
-    lever_name1_lever5 = '166403847067@qq.com'
-    lever_name1_lever6 = '166704846808@qq.com'
-    # newname = run.Register('')
-    # bro.select_broker_allmessage(newname)
-    # run.add_money(lever_name1_lever6, 10)
-    # deal.select_money(lever_name1_lever5)
-    # newname = '1663064@test.com'
+    # run.Withdraw_msg()
+    run.SuperNode()
 
-    brokername = '166704969518@qq.com'
-    brockn2 = '1663480@test.com'
-    brockn3 = '1661836@test.com'
-    brockn4 = '1667021@test.com'
-    brockn5 = '166410@test.com'
-
-
-    # for index in range(1):
-    #     newname = run.Register(brockn4)
-    #     run.add_money(newname, 1000)
-    #     run.create_granary(newname)
-    #     time.sleep(3)
-
-    # run.kyc(brockn5)
-    # run.check_kyc(brockn5)
-    # run.create_granary(lever_name1_lever4)
-    # run.add_money(lever_name1_lever4, 1000)
-    # deal.select_money(lever_name1_lever5)
-
-    # bro.select_broker_allmessage(brokername)
-    # bro.select_broker_allmessage(brokername_lever_name1)
-    # bro.select_broker_allmessage(lever_name1_lever1)
-    # bro.select_broker_allmessage(lever_name1_lever2)
-    # bro.select_broker_allmessage(lever_name1_lever3)
-    # bro.select_broker_allmessage(lever_name1_lever4)
-
-    # bro.broker_bull(brokername)
-
-    # bro.select_broker_everydaymsg(brokername_lever_name1)
-
-    # run.add_money(lever_name1_lever2, 1000)
-    # deal.select_money(lever_name1_lever2)
-    # run.create_granary(lever_name1_lever2)
-    # deal.select_money(lever_name1_lever2)
-    # deal.select_money(lever_name1_lever1)
-
-    # run.Register(lever_name1)
-    # run.keep_granary(name)
-
-    # bro.brokerage_water(brokername)
-    # run.Register('12284041406')
-    # 查询经纪人总信息
-    # bro.select_broker_allmessage(name)
-    # run.add_money(name, 1000)
-
-    # run.create_granary(name)
-    # deal.select_money(name)
-    # run.add_money(name, 100000)
-    # deal.select_money(name)
-    # run.add_money(name, 10000)
-    # deal.select_money(name)
-    # run.get_frostmoney(name)
-    # run.create_granary(name)
-    # deal.select_money(name)
-    # bro.select_broker_allmessage(name)
-    # bro.select_broker_everydaymsg(name)
-    # bro.select_broker_canmoney(name)
-    # run.create_granary(name)
-    # bro.select_broker_timemsg(name)
-    # time.sleep(2)
-    # run.flat_granary(name)
 
 
 # 限价单转市价单--->平仓

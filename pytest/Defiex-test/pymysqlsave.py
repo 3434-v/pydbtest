@@ -91,13 +91,20 @@ class MysqlSave(object):
         # print(messagelist)
         messagestr = str(','.join(messagelist)).replace('\'', "")
         # print(messagestr)
-        updatesql = """UPDATE {} SET {} WHERE {}
-            """.format(tablename, messagestr, conditionstr).replace('\n', "")
+        updatesql = """UPDATE {} SET {} WHERE {}""".format(
+            tablename, messagestr, conditionstr
+        ).replace('\n', "")
         print(updatesql)
         self.cursor.execute(updatesql)
 
     def delete(self, tablename: str, condition: dict) -> None:
-        pass
+        conditionlsit = []
+        for key, value in condition.items():
+            conditionlsit.append(key + '="' + value + '"')
+        conditionstr = str(' or '.join(conditionlsit)).replace('\'', "")
+        delete_sql = """DELETE FROM {} WHERE {}""".format(tablename, conditionstr)
+        print(delete_sql)
+        self.cursor.execute(delete_sql)
 
 
 with MysqlSave() as db:
@@ -109,6 +116,10 @@ with MysqlSave() as db:
         'createtime varchar(30)',
         'environment varchar(30)'
     ]
+    message = {
+        "orderid": "7087"
+    }
+    # db.delete('granary_message', message)
     # db.create('traderuser', create_message)
     # db.insert('user', insert_message)
     # db.update('xxx',message_update,update_condition)
