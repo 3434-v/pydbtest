@@ -458,33 +458,78 @@ def Withdraw_msg(username: str) -> None:
 
 
 # 归集
-def Collection(address_type, address: str):
+def Collection(index: int, address: str):
+    address_type_list = ['ETH', 'TRX', 'BTC']
     url = gain_url('归集')
     data = {
-        "chainCode": address_type,
+        "chainCode": address_type_list[index],
         "address": address,
         "symbol": "USDT"
     }
-    response = requests.post(url, data)
+    data = json.dumps(data)
+    response = requests.post(url, data=data)
     print(response.text)
 
 
-Collection('ETH', '0x2d328900fa5ee5304921b33040a432cee1f218ef')
+Collection(0, '0x1ff18791921b6b7c294b7b3d6855b368f0415722')
 
-# # 获取提币纪录
-# def Withdraw_recode(self, name: str) -> None:
-#     self.Login(name)
-#     url = self.Get_url('获取提币纪录')
-#     # http://47.90.62.21:9003/api/trade/queryoutorderall.do?p={"page":"1","count":"20"}
-#     data = {
-#         "token": self.Get_token(name),
-#         "page": "1", "count": "20"
-#     }
-#     response = json.dumps(deamds(url, data))
-#     txid = extract('txid', response)
-#     with save.SqlSave() as execute:
-#         execute.Withdraw_recod(name, txid)
 
+# 提币
+def Withdraw(username: str, index: int):
+    url = gain_url('提币')
+    erc20_address = ''
+    trc20_address = ''
+    omni_address = ''
+    if context(1) in "测试环境":
+        erc20_address = '0x0e50f970F169A43a93D9c3c4697B3cb91128F993'
+        trc20_address = 'TGbNUPe5fFUda32cz8GXQDsbTugiAEdp7n'
+        omni_address = '1c9qJ6bxKZHtdnyHzxtUbik9zemfjGUfJ'
+    elif context(1) in "预发布环境":
+        erc20_address = '0x777D76e24da310D91B0C3b48767E898772F198F7'
+        trc20_address = 'TGbNUPe5fFUda32cz8GXQDsbTugiAEdp7n'
+        omni_address = '1c9qJ6bxKZHtdnyHzxtUbik9zemfjGUfJ'
+    # [地址， 提币金额， 类型]
+    message_dict = {
+        1: [erc20_address, '2', '3'],
+        2: [trc20_address, '1', '4'],
+        3: [omni_address, '5', '1']
+    }
+    data = {
+        "token": usertoken(username), "type": message_dict[index][2],
+        "amount": message_dict[index][1], "addr": message_dict[index][0],
+        "code": "xwwwwx"
+    }
+    msg = deamds(url, data)['info']
+    with mysave.MysqlSave() as execute:
+        message = {
+            'username': username,
+            'orderid': msg['orderid'],
+            'bank_order_id': msg['bank_order_id'],
+            'time': currenttime(),
+            'environment': context(1)
+        }
+        execute.insert('Withdraw', message)
+    admin_url = gain_url('管理端审核提币')
+    admin_data = {
+        "type": 10204, "orderid": msg['bank_order_id'],
+        "verify": 1, "token": admintoken()
+    }
+    deamds(admin_url, admin_data)
+
+# Withdraw('389863294@qq.com', 2)
+
+
+# 获取提币纪录
+def Withdraw_recode(username: str) -> None:
+    url = gain_url('获取提币纪录')
+    data = {
+        "token": usertoken(username),
+        "page": "1", "count": "20"
+    }
+    deamds(url, data)
+
+
+# Withdraw_recode('389863294@qq.com')
 
 # gain_url('交易员列表查询')
 # brokername = '389863294@qq.com'

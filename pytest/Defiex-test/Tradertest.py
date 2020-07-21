@@ -275,6 +275,10 @@ def traderuser():
                     # execute.insert('traderuser2', tradermsg2)
 
 
+# 券接口
+
+
+
 def testcase():
     deal = DealStaff()
     for index in range(1):
@@ -416,7 +420,8 @@ def testcase7():
     # deal.user_trader('1668737377@test.com', trader_id, '')
     # pymethod.register('')
     # pymethod.create_granary(username)
-    pymethod.flat_granary(username)
+    # pymethod.flat_granary(username
+    # deal.check_trader('12', '1')
 
 
 # 协程
@@ -544,8 +549,8 @@ if __name__ == "__main__":
     # testcase4()
     # testcase5()
     # testcase6()
-    # testcase7()
+    testcase7()
     # testcase8()
     # testcase9()
     # testcase10()
-    testcase11()
+    # testcase11()

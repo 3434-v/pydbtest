@@ -107,20 +107,17 @@ class MysqlSave(object):
         self.cursor.execute(delete_sql)
 
 
-with MysqlSave() as db:
-    create_message = [
-        'traderuser varchar(50) not null',
-        'channel varchar(200) not null',
-        'nickname varchar(200) not null',
-        'gettime varchar(30)',
-        'createtime varchar(30)',
-        'environment varchar(30)'
-    ]
-    message = {
-        "orderid": "7087"
-    }
+# with MysqlSave() as db:
+#     create_message = [
+#         'username varchar(50) not null',
+#         'orderid varchar(200) not null',
+#         'bank_order_id varchar(200) not null',
+#         'time varchar(30)',
+#         'environment varchar(30)'
+#     ]
+
     # db.delete('granary_message', message)
-    # db.create('traderuser', create_message)
+    # db.create('Withdraw', create_message)
     # db.insert('user', insert_message)
     # db.update('xxx',message_update,update_condition)
     # db.select(select_message, 'domain', select_dict)
