@@ -7,10 +7,14 @@ class MysqlSave(object):
         """
         数据库参数配置区域
         """
-        self.path = 'localhost'
+        # self.path = 'localhost'
+        # self.port = 3306
+        # self.username = 'root'
+        # self.password = '19990728'
+        self.path = 'rm-uf6649g51fy20qmpyno.mysql.rds.aliyuncs.com'
         self.port = 3306
-        self.username = 'root'
-        self.password = '19990728'
+        self.username = 'pl'
+        self.password = 'wjrzm19990728'
         self.dbname = 'pymysql_defiex'
         self.db = pymysql.connect(
             host=self.path, port=self.port, db=self.dbname,

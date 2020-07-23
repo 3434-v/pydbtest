@@ -411,7 +411,7 @@ def testcase7():
     deal = DealStaff()
     trader_username = '1665147@test.com'
     username = '389863294@qq.com'
-    trader_id = pymethod.selectnamemsg(trader_username)
+    pymethod.create_granary(username)
     # username = pymethod.register('')
     # pymethod.addmoney(username, 1000)
     # deal.user_trader(username, trader_id, '')
@@ -422,6 +422,12 @@ def testcase7():
     # pymethod.create_granary(username)
     # pymethod.flat_granary(username
     # deal.check_trader('12', '1')
+
+# os.path.realpath(_file_)——返回真实路径
+#
+# os.path.split()——返回路径的目录和文件名
+#
+# os.getcwd()——得到当前工作的目录
 
 
 # 协程
