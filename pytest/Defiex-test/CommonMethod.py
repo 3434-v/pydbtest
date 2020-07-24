@@ -191,6 +191,7 @@ def register(sharename: str) -> str:
 
 # 用户token获取函数
 def usertoken(username: str) -> str:
+    print(username)
     passwords = '12345678'
     userlogin(username, passwords)
     tablename = 'usermessage'
@@ -421,10 +422,10 @@ def flatgranary_record(username: str) -> str:
 
 # 插点
 def vertex():
-    orderid = '825'
-    userid = '10003277638'
+    orderid = '8150'
+    userid = '13658156699'
     symbol = 'eth'
-    price = '25011'
+    price = '30076'
     url = gain_url('插点')
     data = {
         "type": 10359, "id": orderid, "userid": userid,
@@ -469,9 +470,6 @@ def Collection(index: int, address: str):
     data = json.dumps(data)
     response = requests.post(url, data=data)
     print(response.text)
-
-
-Collection(0, '0x1ff18791921b6b7c294b7b3d6855b368f0415722')
 
 
 # 提币
@@ -529,7 +527,37 @@ def Withdraw_recode(username: str) -> None:
     deamds(url, data)
 
 
-# Withdraw_recode('389863294@qq.com')
+# 发券
+def send_ticket(userid: str, ticket_type: int) -> None:
+    # tx:0赠金 1：现金
+    url = gain_url('发券')
+    data = {
+        "type": 10362,
+        "userid": userid,
+        "coupon": {
+            "amount": "100.00", "lever": "10",
+            "tx": str(ticket_type), "count": "1",
+            "timeoutuse": "1"
+        },
+        "token": admintoken()
+    }
+    deamds(url, data)
+
+
+# send_ticket('11881239032')
+
+# 市价券建仓
+def create_ticket(username: str, couponid: str):
+    url = gain_url('市价券建仓')
+    data = {
+        "token": usertoken(username),
+        "symbol": "btc", "type": "2",
+        "couponid": couponid, "topprice": "0"
+    }
+    deamds(url, data)
+
+
+# Withdraw_recodse('389863294@qq.com')
 
 # gain_url('交易员列表查询')
 # brokername = '389863294@qq.com'

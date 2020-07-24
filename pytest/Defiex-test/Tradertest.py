@@ -275,8 +275,97 @@ def traderuser():
                     # execute.insert('traderuser2', tradermsg2)
 
 
-# 券接口
+# 券服务
+class Ticket(object):
 
+    # 领取券
+    def get_ticket(self, username: str):
+        url = pymethod.gain_url('领取券')
+        data = {
+            "token": pymethod.usertoken(username),
+            "channeltype": "1", "channelid": "1",
+            "couponid": "1"
+        }
+        pymethod.deamds(url, data)
+
+    # 查询可用券数量
+    def select_ticket_count(self, username: str):
+        url = pymethod.gain_url('查询可用券数量')
+        data = {
+            "token": pymethod.usertoken(username)
+        }
+        pymethod.deamds(url, data)
+
+    # 查询可用券明细
+    def ticket_detail(self, username: str) -> str:
+        url = pymethod.gain_url('查询可用券明细')
+        data = {
+            "token": pymethod.usertoken(username)
+        }
+        couponid = pymethod.deamds(url, data)['info']['datas'][0]['couponid']
+        return couponid
+
+
+
+def New_Task():
+    run = Ticket()
+    # 1
+    username = pymethod.register('')
+    run.select_ticket_count(username)
+    run.get_ticket(username)
+    couponid = run.ticket_detail(username)
+    # 2
+    pymethod.create_ticket(username, couponid)
+    # 3
+
+
+
+
+def ticket_test():
+    run = Ticket()
+    # username = pymethod.register('')
+    username = pymethod.register('')
+    username_id = pymethod.selectnamemsg(username)
+    pymethod.send_ticket(username_id, 0)
+    time.sleep(5)
+    couponid = run.ticket_detail(username)
+    pymethod.create_ticket(username, couponid)
+    pymethod.kyc(username)
+    pymethod.checkkyc(username)
+    pymethod.addmoney(username, 100000)
+    pymethod.create_granary(username)
+    pymethod.register(username)
+    time.sleep(3)
+    pymethod.create_granary(username)
+
+
+def ticket_test2():
+    run = Ticket()
+    # username = pymethod.register('')
+    username = '1667811120@test.com'
+    username_id = pymethod.selectnamemsg(username)
+    # pymethod.send_ticket(username_id, 0)
+    # pymethod.vertex()
+    # lever_name = pymethod.register(username)
+    lever_name = '1668156046@test.com'
+    # pymethod.addmoney(lever_name, 1000)
+    # pymethod.create_granary(lever_name)
+    pymethod.kyc(lever_name)
+    pymethod.checkkyc(lever_name)
+
+
+def ticket_test3():
+
+    username = '1667695074@test.com'
+    username_id = pymethod.selectnamemsg(username)
+    pymethod.send_ticket(username_id, 1)
+
+
+def ticket_test4():
+    # pymethod.register('')
+    username = '166256053@test.com'
+    username_id = pymethod.selectnamemsg(username)
+    pymethod.send_ticket(username_id, 1)
 
 
 def testcase():
@@ -548,15 +637,6 @@ def contexts(type_select: int) -> str:
 """
 
 if __name__ == "__main__":
-    # traderuser()
-    # testcase()
-    # testcase2()
-    # testcase3()
-    # testcase4()
-    # testcase5()
-    # testcase6()
-    testcase7()
-    # testcase8()
-    # testcase9()
-    # testcase10()
-    # testcase11()
+    # ticket_test4()
+    ticket_test()
+
