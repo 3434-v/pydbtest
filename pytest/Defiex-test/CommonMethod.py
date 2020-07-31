@@ -32,8 +32,8 @@ def deamds(url: str, data: dict) -> dict:
     data_json["language"] = 'zh_CN'
     data_str = json.dumps(data_json)
     response = requests.get(url + data_str)
-    print(url + data_str)
-    print(response.text)
+    # print(url + data_str)
+    # print(response.text)
     return json.loads(str(response.text))
 
 
@@ -81,7 +81,7 @@ def context(type_select: int) -> str:
         1: depl_dict["environment"],
         2: depl_dict["test_msg"]
     }
-    print(message_dict[type_select])
+    # print(message_dict[type_select])
     return message_dict[type_select]
 
 
@@ -174,11 +174,14 @@ def register(sharename: str) -> str:
             }
         }
         response = deamds(url, data)
+
         if response['msg'] == 'OK':
             response = response['info']
+            share_id = ''.join(re.findall('"share_id": "(.*?)",', response['channel']))
             message = {
                 'username': username,
-                'channel': str(response['channel']),
+                # 'channel': str(response['channel']),
+                'channel': share_id,
                 'nickname': response['nickname'],
                 'gettime': currenttime(),
                 'createtime': response['createtime'],
@@ -191,7 +194,7 @@ def register(sharename: str) -> str:
 
 # 用户token获取函数
 def usertoken(username: str) -> str:
-    print(username)
+    # print(username)
     passwords = '12345678'
     userlogin(username, passwords)
     tablename = 'usermessage'
@@ -296,6 +299,7 @@ def testdata() -> dict:
         return testmsg[0]
 
 
+# 建仓价算法
 def formula(name: str):
     testmsg = testdata()
     coefficient = '0.0'
@@ -328,7 +332,7 @@ def formula(name: str):
         basics = 0.0008
     # 点差
     spread = basics * coefficient
-    print(spread)
+    # print(spread)
     if direction == '1':
         if granary == 'btc':
             count_monry = round(float(c_money) * (1.0 - spread), 4)
@@ -351,15 +355,49 @@ def formula(name: str):
         return round(spot, 4), round(spot1, 4), str(count_monry)
 
 
+# 预计盈亏计算
+def fun_predict_money() -> None:
+
+    spot = 10966.68
+    spot1 = 10972.16
+    count_monry = '10972.16'
+    # 盈利
+    test_dict = testdata()
+    create_money = float(test_dict['create_money'])
+    pry = float(test_dict['pry'])
+    direction = str(test_dict['direction'])
+    # print(test_dict)
+    if direction == '2':
+        # print((float(count_monry) * create_money * pry))
+        sort_monry = ((spot - float(count_monry)) / float(count_monry)) * create_money * pry - 0.0
+        desc_money = ((float(count_monry) - spot1) / float(count_monry)) * create_money * pry + 0.0
+        # print((float(count_monry) - spot1))
+        print(sort_monry, desc_money)
+    else:
+        # print((float(count_monry) * create_money * pry))
+        sort_monry = ((float(count_monry) - spot) / float(count_monry)) * create_money * pry - 0.0
+        desc_money = ((spot1 - float(count_monry)) / float(count_monry)) * create_money * pry + 0.0
+        print(sort_monry, desc_money)
+
+    # sort_money = create_money + ()
+
+# fun_predict_money()
+
+
 # 现金建仓
 def create_granary(username: str) -> None:
     testmsg = testdata()
     url = gain_url('建仓')
     money, money2, c_money = formula(username)
-    print(c_money)
+    # print(money, money2, c_money)
     top_money = str(float(money))
     bot_money = str(float(money2))
-
+    spratio_ratio = float(testmsg['spratio_ratio'])
+    slratio_ratio = float(testmsg['slratio_ratio'])
+    print("币种:{}---止盈:{}-止损:{},止盈比例:{}-止损比例:{},建仓价格:{}".format(
+        testmsg['granary'], money, money2, spratio_ratio, slratio_ratio, c_money
+    )
+    )
     data = {
         "token": usertoken(username), "symbol": testmsg['granary'],
         "type": testmsg['direction'], "amount": testmsg['create_money'],
@@ -367,10 +405,17 @@ def create_granary(username: str) -> None:
         "botprice": bot_money
     }
     response = deamds(url, data)['info']
+    print("币种:{}---止盈:{}-止损:{},止盈比例:{}-止损比例:{},建仓价格:{}".format(
+        testmsg['granary'],
+        response['spprice'], response['slprice'],
+        response['spratio'], response['slratio'], response['openprice']
+        )
+    )
     response['username'] = username
     response['testcase'] = testmsg['id']
-    with mysave.MysqlSave() as execute:
-        execute.insert('granary_message', response)
+    # 问题待修改，没有正确存值
+    # with mysave.MysqlSave() as execute:
+    #     execute.insert('granary_message', response)
 
 
 # 平仓
@@ -408,6 +453,10 @@ def keep_granary(username: str) -> str:
     return totalcount
 
 
+# username = '389863294@qq.com'
+# keep_granary(username)
+
+
 # 分页查询所有平仓记录
 def flatgranary_record(username: str) -> str:
     url = gain_url('分页查询所有平仓记录')
@@ -422,16 +471,25 @@ def flatgranary_record(username: str) -> str:
 
 # 插点
 def vertex():
-    orderid = '8150'
-    userid = '13658156699'
-    symbol = 'eth'
-    price = '30076'
+    orderid = '8269'
+    userid = '11374499021'
+    symbol = 'btc'
+    price = '1110551'
     url = gain_url('插点')
     data = {
         "type": 10359, "id": orderid, "userid": userid,
         "symbol": symbol, "price": price, "token": admintoken(),
     }
     response = deamds(url, data)
+
+
+# username = '389863294@qq.com'
+# for index in range(5):
+#     create_granary(username)
+#     time.sleep(5)
+# time.sleep(3)
+# keep_granary(username)
+# vertex()
 
 
 # 提币以及信息获取
@@ -536,7 +594,7 @@ def send_ticket(userid: str, ticket_type: int) -> None:
         "userid": userid,
         "coupon": {
             "amount": "100.00", "lever": "10",
-            "tx": str(ticket_type), "count": "1",
+            "tx": str(ticket_type), "count": "10",
             "timeoutuse": "1"
         },
         "token": admintoken()
@@ -544,7 +602,8 @@ def send_ticket(userid: str, ticket_type: int) -> None:
     deamds(url, data)
 
 
-# send_ticket('11881239032')
+# send_ticket('11374499021', 1)
+
 
 # 市价券建仓
 def create_ticket(username: str, couponid: str):
@@ -555,6 +614,66 @@ def create_ticket(username: str, couponid: str):
         "couponid": couponid, "topprice": "0"
     }
     deamds(url, data)
+
+
+# 查询任务信息
+def select_task_msg(username: str):
+    url = gain_url('查询任务信息')
+    data = {
+        "token": usertoken(username)
+    }
+    deamds(url, data)
+
+
+# select_task_msg('389863294@qq.com')
+
+
+# 1016
+def select_userid(email: str):
+    url = gain_url('发券')
+    data = {
+        "type": 1016,
+        "email": email,
+        "token": admintoken()
+    }
+    deamds(url, data)
+"""
+x1_count + 4 = y_count
+3 + 5 = y_count
+x2_coun = 3
+
+"""
+
+
+# 510
+def select_tasks():
+    url = gain_url('发券')
+    data = {
+        "type": 510,
+        "tasktype": "2",
+        "token": admintoken()
+    }
+    deamds(url, data)
+
+
+# 1017
+def select_email(userid: str):
+    url = gain_url('发券')
+    data = {
+        "type": 1017,
+        "userid": userid,
+        "token": admintoken()
+    }
+    deamds(url, data)
+
+
+# select_tasks()
+# def select_taskss():
+
+
+# select_userid('389863294@qq.com')
+
+# 10303
 
 
 # Withdraw_recodse('389863294@qq.com')

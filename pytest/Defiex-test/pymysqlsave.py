@@ -98,7 +98,7 @@ class MysqlSave(object):
         updatesql = """UPDATE {} SET {} WHERE {}""".format(
             tablename, messagestr, conditionstr
         ).replace('\n', "")
-        print(updatesql)
+        # print(updatesql)
         self.cursor.execute(updatesql)
 
     def delete(self, tablename: str, condition: dict) -> None:

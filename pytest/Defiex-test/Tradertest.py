@@ -393,49 +393,8 @@ def testcase2():
 
 
 def testcase3():
-    deal = DealStaff()
-    username = '389863294@qq.com'
-    trader = '1664001394@test.com'
-    referrer = '389863294@qq.com'
-    # deal.select_detail(username)
-    username1 = '1661996720@test.com'
-    # pymethod.addmoney(username1, 10000)
-    # username2 = '1662909762@test.com'
-    # deal.user_detail(username1)
-    # pymethod.create_granary(username)
-    # pymethod.register(username)
-    levername = '1662558092@test.com'
+   pass
 
-    # pymethod.addmoney(levername, 100000000)
-    # pymethod.create_granary(levername)
-    # pymethod.register('')
-    # deal.user_trader(username, '11739860537', '11374499021')
-    # deal.user_detail(username)
-    # deal.deal_gain(username)
-
-    # deal.everyday_detail(username, '20200709')
-    # deal.trader_everyday_royalties(username)
-    # print(pymethod.register(''))
-    # username = pymethod.register('')
-    # pymethod.userlogin(username, 'a12345678')
-    # pymethod.addmoney(username, 100000)
-    # pymethod.kyc(username)
-    # pymethod.checkkyc(username)
-    # deal.deal_record(username)
-    # deal.trader_remove_message(username)
-    # deal.select_detail(username)
-    # pymethod.create_granary(username)
-
-
-
-    # deal.apply(username)
-    # deal.check_trader(username, '1')
-    # deal.select_detail(username)
-    # deal.trader_label()
-    # pymethod.kyc(username)
-    # pymethod.checkkyc(username)
-    # deal.user_deal_history(username, '14186191497')
-    # deal.trader_remove_message(username)
 
 # 误删
 def testcase4():
@@ -636,7 +595,32 @@ def contexts(type_select: int) -> str:
     return message_dict[type_select]
 """
 
+
+def test_store1():
+    pymethod.register('389863294@qq.com')
+
+
+def rebate():
+    """ 级别建立:
+    A-->B-->C-->D
+    1665005423@test.com -> 1663052454@test.com -> 1661093269@test.com
+    """
+
+    testA = '1665005423@test.com'
+    testB = '1663052454@test.com'
+    testC = '1661093269@test.com'
+    testD = ''
+    # pymethod.register(testB)
+    pymethod.kyc(testB)
+    pymethod.checkkyc(testB)
+    pymethod.addmoney(testB, 10000)
+    pymethod.create_granary(testB)
+    # pymethod.register(testB)
+
+
 if __name__ == "__main__":
     # ticket_test4()
-    ticket_test()
+    # ticket_test()
+    # test_store1()
+    rebate()
 
