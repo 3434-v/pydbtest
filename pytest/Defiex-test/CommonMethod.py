@@ -6,6 +6,7 @@ import pymysqlsave as mysave
 import hashlib
 import time
 import random
+from tqdm import tqdm
 """
 静态方法：静态方法是访问不了类或实例中的任何属性，
 它已经脱离了类，一般会用在一些工具包中
@@ -33,7 +34,7 @@ def deamds(url: str, data: dict) -> dict:
     data_str = json.dumps(data_json)
     response = requests.get(url + data_str)
     # print(url + data_str)
-    print(response.text)
+    # print(response.text)
     return json.loads(str(response.text))
 
 
@@ -48,7 +49,7 @@ def mysqldict(message: list, parameter: str) -> str:
     if len(message) == 0:
         print('未查询到数据')
     else:
-        print(message[0][parameter])
+        # print(message[0][parameter])
 
         return message[0][parameter]
 
@@ -195,8 +196,9 @@ def register(sharename: str) -> str:
 # 用户token获取函数
 def usertoken(username: str) -> str:
     # print(username)
-    passwords = '12345678'
-    userlogin(username, passwords)
+    # 每次从新获取token
+    # passwords = '12345678'
+    # userlogin(username, passwords)
     tablename = 'usermessage'
     with mysave.MysqlSave() as execute:
         selectfield = ['token']
@@ -661,11 +663,41 @@ def exchange_usdt():
     deamds(url, data)
 
 
+# 产品配置(游客)
+def configmsg_visitor():
+    url = gain_url('产品配置(游客)')
+    data = {
+
+    }
+    deamds(url, data)
+
+
+# 行情
+def market(chain: str) -> float:
+    url = gain_url('行情')
+    data = {
+        # 默认全部转换成小写
+        "symbol": chain.lower()
+    }
+    response_dict = deamds(url, data)['info']
+    newest = float(response_dict['LP'])
+    return newest
+
+
 # 充值提现
 class Topup_withdrawal(object):
     def __init__(self, username):
         self.username = username
         self.token = usertoken(username)
+        # self.token = ''
+
+    # 产品配置
+    def configmsg(self):
+        url = gain_url('产品配置')
+        data = {
+            "token": self.token
+        }
+        deamds(url, data)
 
     # 获取充币地址
     def get_recharge_site(self):
@@ -693,13 +725,21 @@ class Topup_withdrawal(object):
             execute.insert('recharge_site', message)
 
     # 提币
-    def withdrawal(self):
+    def withdrawal(self, index: int):
         url = gain_url('提币')
+        # 充值类型
+        withdrawal_dict = {
+            1: ['ETH', 'USDT', '100', '0x0e50f970F169A43a93D9c3c4697B3cb91128F993'],
+            2: ['BTC', 'USDT', '1', '3EkaqUNdowvetHDzkYgA6woXcBRkPuULRT'],
+            3: ['TRX', 'USDT', '1', 'TGbNUPe5fFUda32cz8GXQDsbTugiAEdp7n'],
+            4: ['ETH', 'ETH', '1', '0x0e50f970F169A43a93D9c3c4697B3cb91128F993'],
+            5: ['BTC', 'BTC', '0.001', '3EkaqUNdowvetHDzkYgA6woXcBRkPuULRT']
+        }
         data = {
             "token": self.token,
-            "chaincode": "BTC", "coincode": "BTC",
-            "amount": "0.001", "addr": "1c9qJ6bxKZHtdnyHzxtUbik9zemfjGUfJ",
-            "code": "xww"
+            "chaincode": withdrawal_dict[index][0], "coincode": withdrawal_dict[index][1],
+            "amount": withdrawal_dict[index][2], "addr": withdrawal_dict[index][3],
+            "code": "xwwwwx"
         }
         deamds(url, data)
 
@@ -718,6 +758,105 @@ class Topup_withdrawal(object):
         data = {
             "token": self.token,
             "page": "1", "count": "20"
+        }
+        deamds(url, data)
+
+    # 预期计算汇率
+    def expect_exchaneg(self, msg_list: list) -> float:
+        market_index = ''
+        if msg_list[0] in 'USDT':
+            market_index = msg_list[1]
+        elif msg_list[0] in "BTC" or "ETH":
+            market_index = msg_list[0]
+        newset = market(market_index)
+        if msg_list[0] in "USDT":
+            exchange_rate = round((1.0 / newset), 8) * (1 - 0.002)
+            exchange_money = exchange_rate * float(msg_list[2])
+            print(exchange_money)
+            return exchange_rate
+        else:
+            exchange_rate = round((newset / 1.0), 8) * (1 - 0.002)
+            exchange_btc = exchange_rate * float(msg_list[2])
+            print(exchange_btc)
+            return exchange_rate
+
+    # 兑币
+    def exchange(self, index: int):
+        # detail参数解析  0,coinfrom  1:cointo  2:amount
+        detail_dict = {
+            1: ['USDT', 'BTC', '10000'],
+            2: ['USDT', 'ETH', '10000'],
+            3: ['BTC', 'USDT', '1'],
+            4: ['ETH', 'USDT', '1'],
+        }
+        url = gain_url('兑币')
+        data = {
+            "token": self.token,
+            "coinfrom": detail_dict[index][0], "cointo": detail_dict[index][1],
+            "amount": detail_dict[index][2]
+        }
+        old_usdt_balance, old_btc_balance, old_eth_balance = self.select_allmoney()
+        response_dict = deamds(url, data)['info']
+        exchange_rate = self.expect_exchaneg(detail_dict[index])
+        time.sleep(3)
+        new_usdt_balance, new_btc_balance, new_eth_balance = self.select_allmoney()
+        # USDT兑换BTC 计算
+        if index == 1:
+            btc_balance = float(detail_dict[index][2]) * exchange_rate + old_btc_balance
+            if new_btc_balance == round(btc_balance, 6):
+                usdt_balance = float(old_usdt_balance) - float(detail_dict[index][2]) * 1
+                print("提现前BTC:{}、USDT:{} \n提现金额:{} 提现后BTC:{}、USDT:{}".format(
+                    old_btc_balance, old_usdt_balance, detail_dict[index][2], btc_balance, usdt_balance
+                ))
+        # USDT兑换ETH 计算
+        elif index == 2:
+            eth_balance = float(detail_dict[index][2]) * exchange_rate + old_eth_balance
+            if new_eth_balance == round(eth_balance, 4):
+                usdt_balance = float(old_usdt_balance) - float(detail_dict[index][2]) * 1
+                print("提现前ETH:{}、USDT:{} \n提现金额:{} 提现后ETH:{}、USDT:{}".format(
+                    old_eth_balance, old_usdt_balance, detail_dict[index][2], eth_balance, usdt_balance
+                ))
+        # BTC兑换USDT 计算
+        elif index == 3:
+            usdts_balance = (float(detail_dict[index][2]) * exchange_rate) + old_usdt_balance
+            btcs_balance = (float(old_btc_balance) - float(detail_dict[index][2]))
+            print("USDT:实际值:{}-计算值:{}".format(new_usdt_balance, usdts_balance))
+            print("BTC:实际值:{}-计算值:{}".format(new_btc_balance, btcs_balance))
+        # ETH兑换USDT 计算
+        elif index == 4:
+            usdts_balance = (float(detail_dict[index][2]) * exchange_rate) + old_usdt_balance
+            eths_balance = (float(old_eth_balance) - float(detail_dict[index][2]))
+            print("USDT:实际值:{}-计算值:{}".format(new_usdt_balance, usdts_balance))
+            print("ETH:实际值:{}-计算值:{}".format(new_eth_balance, eths_balance))
+
+    # 查询币的兑换记录
+    def select_exchange_detail(self):
+        url = gain_url('查询币的兑换记录')
+        data = {
+            "token": self.token,
+            "page": "1", "count": "20"
+        }
+        response_dict = deamds(url, data)
+
+    # 获取所有余额
+    def select_allmoney(self) -> list:
+        url = gain_url('获取冻结赠金')
+        data = {
+            "token": self.token
+        }
+        data_list = deamds(url, data)['info']['datas']
+        usdt_balance = float(data_list[0]['balance'])
+        btc_balance = float(data_list[1]['balance'])
+        eth_balance = float(data_list[2]['balance'])
+        balance_list = [usdt_balance, btc_balance, eth_balance]
+        # print("USDT:{}--BTC:{}--ETH:{}".format(balance_list[0], balance_list[1], balance_list[2]))
+        return balance_list
+
+    # USDT汇率
+    def exchange_rate(self):
+        url = gain_url('USDT汇率')
+        data = {
+
         }
         deamds(url, data)
 
@@ -761,8 +900,17 @@ class Binary_options(object):
 
 if __name__ == "__main__":
     user = '389863294@qq.com'
-    # execute = Binary_options(user)
+    execute = Binary_options(user)
+    for index in tqdm(range(600)):
+        # time.sleep(0.3)
+        execute.create_granary()
+
     # run = Topup_withdrawal(user)
+    # run.exchange(1)
+    # run.exchange(3)
+    # run.configmsg()
+    # run.select_allmoney()
+    # run.exchange_rate()
     # run.withdrawal()
     # run.get_recharge_site()
     # run.withdrawal()

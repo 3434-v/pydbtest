@@ -111,6 +111,15 @@ class MysqlSave(object):
         self.cursor.execute(delete_sql)
 
     # REPLACE INTO
+    def replace(self, tablename: str, message: dict) -> None:
+        message_list = []
+        for key, value in message.items():
+            message_list.append(key + '="' + value + '"')
+        message_str = str(','.join(message_list)).replace('\'', "")
+        replace_sql = """REPLACE INTO {}{}""".format(
+            tablename, message_str
+        ).replace('\n', "")
+        self.cursor.execute(replace_sql)
 
 
 with MysqlSave() as db:
