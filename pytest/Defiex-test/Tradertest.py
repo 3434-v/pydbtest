@@ -319,9 +319,9 @@ def New_Task():
     # 3
 
 
-
-
+# 9个任务一键完成
 def ticket_test():
+    # 前置条件，数据库中建仓价为10000
     run = Ticket()
     # username = pymethod.register('')
     username = pymethod.register('')
@@ -603,19 +603,27 @@ def test_store1():
 def rebate():
     """ 级别建立:
     A-->B-->C-->D
-    1665005423@test.com -> 1663052454@test.com -> 1661093269@test.com
+     -->B2
     """
 
-    testA = '1665005423@test.com'
-    testB = '1663052454@test.com'
-    testC = '1661093269@test.com'
-    testD = ''
-    # pymethod.register(testB)
-    pymethod.kyc(testB)
-    pymethod.checkkyc(testB)
-    pymethod.addmoney(testB, 10000)
-    pymethod.create_granary(testB)
-    # pymethod.register(testB)
+    testA = '1669755373@test.com'
+    testB = '1661678283@test.com'
+    testB2 = ''
+    testB3 = ''
+    testC = '1668259830@test.com'
+    testC2 = ''
+    testD = '1662355850@test.com'
+    testE = '1663432292@test.com'
+    testE = pymethod.register(testD)
+    pymethod.addmoney(testE, 10000)
+    pymethod.kyc(testE)
+    pymethod.checkkyc(testE)
+    pymethod.create_granary(testE)
+
+
+def cost():
+    username = pymethod.register('')
+    pymethod.kyc(username)
 
 
 if __name__ == "__main__":
@@ -623,4 +631,5 @@ if __name__ == "__main__":
     # ticket_test()
     # test_store1()
     rebate()
-
+    # cost()
+    # ticket_test()

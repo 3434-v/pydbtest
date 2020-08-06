@@ -33,7 +33,7 @@ def deamds(url: str, data: dict) -> dict:
     data_str = json.dumps(data_json)
     response = requests.get(url + data_str)
     # print(url + data_str)
-    # print(response.text)
+    print(response.text)
     return json.loads(str(response.text))
 
 
@@ -167,7 +167,7 @@ def register(sharename: str) -> str:
         invitecode = {True: mysqldict(sharemsg, 'invitecode'), False: ' '}[len(sharemsg) != 0]
         data = {
             "username": username, "type": registertype, "countryid": "191",
-            "pwd": hashlib.md5(passwords.encode('utf-8')).hexdigest(), "code": 'xww',
+            "pwd": hashlib.md5(passwords.encode('utf-8')).hexdigest(), "code": 'xwwwwx',
             "channel": {
                 "plat": "h5", "share_id": shareid, "activityid": "1",
                 "invitecode": invitecode
@@ -294,8 +294,8 @@ def checkkyc(username: str) -> str:
 # 建仓数据测试用例
 def testdata() -> dict:
     tablename = 'creategranary_test'
-    with mysave.MysqlSave() as execute:
-        testmsg = execute.select(['*'], tablename, {'id': context(2)})
+    with mysave.MysqlSave() as executes:
+        testmsg = executes.select(['*'], tablename, {'id': context(2)})
         return testmsg[0]
 
 
@@ -471,25 +471,16 @@ def flatgranary_record(username: str) -> str:
 
 # 插点
 def vertex():
-    orderid = '8269'
+    orderid = '8476'
     userid = '11374499021'
     symbol = 'btc'
-    price = '1110551'
+    price = '1228604'
     url = gain_url('插点')
     data = {
         "type": 10359, "id": orderid, "userid": userid,
         "symbol": symbol, "price": price, "token": admintoken(),
     }
     response = deamds(url, data)
-
-
-# username = '389863294@qq.com'
-# for index in range(5):
-#     create_granary(username)
-#     time.sleep(5)
-# time.sleep(3)
-# keep_granary(username)
-# vertex()
 
 
 # 提币以及信息获取
@@ -594,13 +585,15 @@ def send_ticket(userid: str, ticket_type: int) -> None:
         "userid": userid,
         "coupon": {
             "amount": "100.00", "lever": "10",
-            "tx": str(ticket_type), "count": "10",
+            "tx": str(ticket_type), "count": "1",
             "timeoutuse": "1"
         },
         "token": admintoken()
     }
     deamds(url, data)
 
+
+# send_ticket('11374499021', 0)
 
 # send_ticket('11374499021', 1)
 
@@ -637,12 +630,6 @@ def select_userid(email: str):
         "token": admintoken()
     }
     deamds(url, data)
-"""
-x1_count + 4 = y_count
-3 + 5 = y_count
-x2_coun = 3
-
-"""
 
 
 # 510
@@ -667,25 +654,122 @@ def select_email(userid: str):
     deamds(url, data)
 
 
-# select_tasks()
-# def select_taskss():
+# USDT汇率
+def exchange_usdt():
+    url = gain_url('USDT汇率')
+    data = {}
+    deamds(url, data)
 
 
-# select_userid('389863294@qq.com')
+# 充值提现
+class Topup_withdrawal(object):
+    def __init__(self, username):
+        self.username = username
+        self.token = usertoken(username)
 
-# 10303
+    # 获取充币地址
+    def get_recharge_site(self):
+        url = gain_url('获取充币地址')
+        chaincode_list = ['BTC', 'ETH', 'TRX']
+        site_list = []
+        for chain_index in chaincode_list:
+            data = {
+                "token": self.token,
+                "chaincode": chain_index,     # 链名称 BTC/ETH/TRX
+                "coincode": chain_index      # 币名称 USDT/BTC/ETH
+            }
+            response_dict = deamds(url, data)
+            site_list.append(response_dict['info']['addr'])
+        with mysave.MysqlSave() as execute:
+            message = {
+                "username": self.username,
+                "orderid": selectnamemsg(self.username),
+                "BTC": site_list[0],
+                "ETH": site_list[1],
+                "TRX": site_list[2],
+                "environment": context(1),
+                "get_time": currenttime()
+                }
+            execute.insert('recharge_site', message)
+
+    # 提币
+    def withdrawal(self):
+        url = gain_url('提币')
+        data = {
+            "token": self.token,
+            "chaincode": "BTC", "coincode": "BTC",
+            "amount": "0.001", "addr": "1c9qJ6bxKZHtdnyHzxtUbik9zemfjGUfJ",
+            "code": "xww"
+        }
+        deamds(url, data)
+
+    # 获取充值纪录
+    def get_topup_record(self):
+        url = gain_url('获取充值纪录')
+        data = {
+            "token": self.token,
+            "page": "1", "count": "20"
+        }
+        deamds(url, data)
+
+    # 获取提币纪录
+    def get_withdrawal_record(self):
+        url = gain_url('获取提币纪录')
+        data = {
+            "token": self.token,
+            "page": "1", "count": "20"
+        }
+        deamds(url, data)
 
 
-# Withdraw_recodse('389863294@qq.com')
+# 二元期权
+class Binary_options(object):
+    def __init__(self, username):
+        self.testdict = testdata()
+        self.token = usertoken(username)
+        self.symbol = self.testdict['granary']
+        self.type = self.testdict['direction']
+        self.amount = self.testdict['create_money']
+        self.endtime = int(time.time()) + 60
 
-# gain_url('交易员列表查询')
-# brokername = '389863294@qq.com'
-# password = 'yangxun19990728'
-# userlogin(brokername, password)
-# usertoken(brokername)
-# register(brokername)
-# exist('Name_ResponseMsg')
-# admintoken()
+    # 二元期权市价现金建仓
+    def create_granary(self):
+        url = gain_url('二元期权市价现金建仓')
+        data = {
+            "token": self.token, "symbol": self.symbol,
+            "type": self.type, "amount": self.amount,
+            "endtime": self.endtime
+        }
+        deamds(url, data)
 
-# class UnifyWays(object):
-#     pass
+    # 二元期权持仓单查询
+    def keep_granary(self):
+        url = gain_url('二元期权持仓单查询')
+        data = {
+            "token": self.token
+        }
+        deamds(url, data)
+
+    def flat_granary(self):
+        url = gain_url('二元期权平仓单查询')
+        data = {
+            "token": self.token,
+            "page": "1", "count": "20"
+        }
+        deamds(url, data)
+
+
+if __name__ == "__main__":
+    user = '389863294@qq.com'
+    # execute = Binary_options(user)
+    # run = Topup_withdrawal(user)
+    # run.withdrawal()
+    # run.get_recharge_site()
+    # run.withdrawal()
+    # run.get_topup_record()
+    # run.get_record()
+    # execute.create_granary()
+    # time.sleep(2)
+    # execute.keep_granary()
+    # execute.flat_granary()
+

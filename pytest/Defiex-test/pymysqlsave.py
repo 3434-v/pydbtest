@@ -110,18 +110,22 @@ class MysqlSave(object):
         print(delete_sql)
         self.cursor.execute(delete_sql)
 
+    # REPLACE INTO
 
-# with MysqlSave() as db:
-#     create_message = [
-#         'username varchar(50) not null',
-#         'orderid varchar(200) not null',
-#         'bank_order_id varchar(200) not null',
-#         'time varchar(30)',
-#         'environment varchar(30)'
-#     ]
+
+with MysqlSave() as db:
+    create_message = [
+        'username varchar(50) not null',
+        'orderid varchar(50) not null',
+        'BTC varchar(200) not null',
+        'ETH varchar(100) not null',
+        'TRX varchar(100) not null',
+        'environment varchar(30) not null',
+        'get_time varchar(30)'
+    ]
 
     # db.delete('granary_message', message)
-    # db.create('Withdraw', create_message)
+    # db.create('recharge_site', create_message)
     # db.insert('user', insert_message)
     # db.update('xxx',message_update,update_condition)
     # db.select(select_message, 'domain', select_dict)
