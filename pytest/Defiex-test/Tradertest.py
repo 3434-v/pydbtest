@@ -606,19 +606,18 @@ def rebate():
      -->B2
     """
 
-    testA = '1669755373@test.com'
-    testB = '1661678283@test.com'
+    testA = '1669130247@test.com'
+    testB = '1663239847@test.com'
     testB2 = ''
     testB3 = ''
-    testC = '1668259830@test.com'
+    testC = '16637726@test.com'
     testC2 = ''
-    testD = '1662355850@test.com'
-    testE = '1663432292@test.com'
+    testD = '1665713293@test.com'
+    testE = '1668026284@test.com'
     testE = pymethod.register(testD)
-    pymethod.addmoney(testE, 10000)
-    pymethod.kyc(testE)
-    pymethod.checkkyc(testE)
-    pymethod.create_granary(testE)
+
+
+
 
 
 def cost():

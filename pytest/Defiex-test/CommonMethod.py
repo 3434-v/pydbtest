@@ -34,7 +34,7 @@ def deamds(url: str, data: dict) -> dict:
     data_str = json.dumps(data_json)
     response = requests.get(url + data_str)
     # print(url + data_str)
-    # print(response.text)
+    print(response.text)
     return json.loads(str(response.text))
 
 
@@ -190,6 +190,8 @@ def register(sharename: str) -> str:
             }
             execute.insert('registermsg', message)
             userlogin(username, passwords)
+            # 新用户默认获取充币地址
+            Topup_withdrawal(username).get_recharge_site()
             return username
 
 
@@ -197,8 +199,8 @@ def register(sharename: str) -> str:
 def usertoken(username: str) -> str:
     # print(username)
     # 每次从新获取token
-    # passwords = '12345678'
-    # userlogin(username, passwords)
+    passwords = '12345678'
+    userlogin(username, passwords)
     tablename = 'usermessage'
     with mysave.MysqlSave() as execute:
         selectfield = ['token']
@@ -732,7 +734,7 @@ class Topup_withdrawal(object):
             1: ['ETH', 'USDT', '100', '0x0e50f970F169A43a93D9c3c4697B3cb91128F993'],
             2: ['BTC', 'USDT', '1', '3EkaqUNdowvetHDzkYgA6woXcBRkPuULRT'],
             3: ['TRX', 'USDT', '1', 'TGbNUPe5fFUda32cz8GXQDsbTugiAEdp7n'],
-            4: ['ETH', 'ETH', '1', '0x0e50f970F169A43a93D9c3c4697B3cb91128F993'],
+            4: ['ETH', 'ETH', '0.05123212', '0x0e50f970F169A43a93D9c3c4697B3cb91128F993'],
             5: ['BTC', 'BTC', '0.001', '3EkaqUNdowvetHDzkYgA6woXcBRkPuULRT']
         }
         data = {
@@ -784,8 +786,8 @@ class Topup_withdrawal(object):
     def exchange(self, index: int):
         # detail参数解析  0,coinfrom  1:cointo  2:amount
         detail_dict = {
-            1: ['USDT', 'BTC', '10000'],
-            2: ['USDT', 'ETH', '10000'],
+            1: ['USDT', 'BTC', '1000'],
+            2: ['USDT', 'ETH', '1000'],
             3: ['BTC', 'USDT', '1'],
             4: ['ETH', 'USDT', '1'],
         }
@@ -898,26 +900,27 @@ class Binary_options(object):
         deamds(url, data)
 
 
+# 1U夺宝
+class snatch_treasure(object):
+    def __init__(self, username):
+        self.token = usertoken(username)
+
+    # 用户购买历史记录
+    def purchase_history(self):
+        url = 'http://192.168.31.24:7071/treasure/user/purchased/list'
+        header = {
+            'token': self.token
+        }
+        response = requests.get(url, headers=header)
+        print(response.text)
+
+
 if __name__ == "__main__":
     user = '389863294@qq.com'
-    execute = Binary_options(user)
-    for index in tqdm(range(600)):
-        # time.sleep(0.3)
-        execute.create_granary()
-
+    test = snatch_treasure(user)
+    test.purchase_history()
+    # execute = Binary_options(user)
     # run = Topup_withdrawal(user)
-    # run.exchange(1)
-    # run.exchange(3)
-    # run.configmsg()
-    # run.select_allmoney()
-    # run.exchange_rate()
-    # run.withdrawal()
+    # run.withdrawal(4)
     # run.get_recharge_site()
-    # run.withdrawal()
-    # run.get_topup_record()
-    # run.get_record()
-    # execute.create_granary()
-    # time.sleep(2)
-    # execute.keep_granary()
-    # execute.flat_granary()
 
