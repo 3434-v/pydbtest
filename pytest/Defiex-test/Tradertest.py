@@ -4,6 +4,10 @@ import random
 import re
 import pymysqlsave as mysave
 import time
+import sys
+from graphviz import Digraph
+import uuid
+from random import sample
 
 
 # 交易员接口类
@@ -596,10 +600,6 @@ def contexts(type_select: int) -> str:
 """
 
 
-def test_store1():
-    pymethod.register('389863294@qq.com')
-
-
 def rebate():
     """ 级别建立:
     A-->B-->C-->D
@@ -617,18 +617,19 @@ def rebate():
     testE = pymethod.register(testD)
 
 
-
-
-
-def cost():
-    username = pymethod.register('')
-    pymethod.kyc(username)
+# 多级关系生成
+def arithmetic(counter):
+    username = ''
+    username = pymethod.register(username)
+    username_lsit = []
+    for index in range(counter):
+        for index_lever in range(index * 2):
+            username_lsit.append(pymethod.register(username))
+            for user in username_lsit:
+                pymethod.register(user)
 
 
 if __name__ == "__main__":
-    # ticket_test4()
-    # ticket_test()
-    # test_store1()
-    rebate()
-    # cost()
-    # ticket_test()
+    # pass
+    arithmetic(4)
+

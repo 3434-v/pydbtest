@@ -29,10 +29,9 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Defiex-test/CommonMethod.py" beforeDir="false" afterPath="$PROJECT_DIR$/Defiex-test/CommonMethod.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Defiex-test/Tradertest.py" beforeDir="false" afterPath="$PROJECT_DIR$/Defiex-test/Tradertest.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Defiex-test/deploy.json" beforeDir="false" afterPath="$PROJECT_DIR$/Defiex-test/deploy.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Defiex-test/pymysqldb/id_cache.db-shm" beforeDir="false" afterPath="$PROJECT_DIR$/Defiex-test/pymysqldb/id_cache.db-shm" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Defiex-test/pymysqldb/id_cache.db-wal" beforeDir="false" afterPath="$PROJECT_DIR$/Defiex-test/pymysqldb/id_cache.db-wal" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Defiex-test/pymysqlsave.py" beforeDir="false" afterPath="$PROJECT_DIR$/Defiex-test/pymysqlsave.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Defiex-test/threading_pond/pond.py" beforeDir="false" afterPath="$PROJECT_DIR$/Defiex-test/threading_pond/pond.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,7 +66,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/readmin" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -259,6 +258,7 @@
       <workItem from="1596508028796" duration="24225000" />
       <workItem from="1596543972688" duration="11000" />
       <workItem from="1596544387079" duration="62000" />
+      <workItem from="1597024304404" duration="753000" />
     </task>
     <servers />
   </component>

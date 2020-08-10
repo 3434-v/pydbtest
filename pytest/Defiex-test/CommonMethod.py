@@ -34,7 +34,7 @@ def deamds(url: str, data: dict) -> dict:
     data_str = json.dumps(data_json)
     response = requests.get(url + data_str)
     # print(url + data_str)
-    print(response.text)
+    # print(response.text)
     return json.loads(str(response.text))
 
 
@@ -822,8 +822,14 @@ class Topup_withdrawal(object):
         elif index == 3:
             usdts_balance = (float(detail_dict[index][2]) * exchange_rate) + old_usdt_balance
             btcs_balance = (float(old_btc_balance) - float(detail_dict[index][2]))
-            print("USDT:实际值:{}-计算值:{}".format(new_usdt_balance, usdts_balance))
-            print("BTC:实际值:{}-计算值:{}".format(new_btc_balance, btcs_balance))
+            print(
+                "兑换前BTC：{}-USDT：{} {}兑换{}-计算汇率{}\n兑换后BTC：{}-USDT：{}".format(
+                    old_btc_balance, old_usdt_balance, detail_dict[index][0], detail_dict[index][1],
+                    exchange_rate, btcs_balance, usdts_balance
+                )
+            )
+            # print("USDT:实际值:{}-计算值:{}".format(new_usdt_balance, usdts_balance))
+            # print("BTC:实际值:{}-计算值:{}".format(new_btc_balance, btcs_balance))
         # ETH兑换USDT 计算
         elif index == 4:
             usdts_balance = (float(detail_dict[index][2]) * exchange_rate) + old_usdt_balance
@@ -853,14 +859,6 @@ class Topup_withdrawal(object):
         balance_list = [usdt_balance, btc_balance, eth_balance]
         # print("USDT:{}--BTC:{}--ETH:{}".format(balance_list[0], balance_list[1], balance_list[2]))
         return balance_list
-
-    # USDT汇率
-    def exchange_rate(self):
-        url = gain_url('USDT汇率')
-        data = {
-
-        }
-        deamds(url, data)
 
 
 # 二元期权
@@ -916,11 +914,12 @@ class snatch_treasure(object):
 
 
 if __name__ == "__main__":
-    user = '389863294@qq.com'
-    test = snatch_treasure(user)
-    test.purchase_history()
+    user = '18770185021'
+    # test = snatch_treasure(user)
+    # test.purchase_history()
     # execute = Binary_options(user)
     # run = Topup_withdrawal(user)
-    # run.withdrawal(4)
+    # run.exchange(3)
+    # run.withdrawal(3)
     # run.get_recharge_site()
 
