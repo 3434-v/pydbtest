@@ -25,21 +25,21 @@ import requests
 
 
 def test():
-    url = 'http://127.0.0.1:5000/login/'
+    url = 'http://127.0.0.1:5000/login'
     data = {
-        "username": "389863294",
+        "username": "38986324",
         "password": "yangxun19990728",
     }
     response = requests.post(url, data=data)
     print(response.text)
 
 def test1():
-    url = 'http://127.0.0.1:5000/register/'
+    url = 'http://106.15.224.70:3435/register'
     data = {
-        "username": "3898632",
+        "username": "389329",
         "password": "yangxun1999072",
-        "email": "38986394@qq.com",
-        "phone": "1877018502"
+        "email": "389634@qq.com",
+        "phone": "18771802"
     }
     response = requests.post(url, data=data)
     print(response.text)

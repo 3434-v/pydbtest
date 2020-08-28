@@ -6,6 +6,7 @@ import pymysqlsave as mysave
 import hashlib
 import time
 import random
+import datetime
 from tqdm import tqdm
 """
 静态方法：静态方法是访问不了类或实例中的任何属性，
@@ -19,6 +20,7 @@ from tqdm import tqdm
 @property   #定义属性方法
 @eat.setter  #定义一个可以传参的方法
 """
+goolecode = '478549'
 
 
 # 公共reques请求函数
@@ -33,8 +35,8 @@ def deamds(url: str, data: dict) -> dict:
     data_json["language"] = 'zh_CN'
     data_str = json.dumps(data_json)
     response = requests.get(url + data_str)
-    # print(url + data_str)
-    # print(response.text)
+    print(url + data_str)
+    print(response.text)
     return json.loads(str(response.text))
 
 
@@ -120,7 +122,8 @@ def userlogin(username: str, passwords: str) -> None:
     url = gain_url('登录')
     data = {
         "username": username,
-        "pwd": md5pas
+        "pwd": md5pas,
+        "googlecode": goolecode
     }
     response = deamds(url, data)
     if response['msg'] == 'OK':
@@ -201,6 +204,7 @@ def usertoken(username: str) -> str:
     # 每次从新获取token
     passwords = '12345678'
     userlogin(username, passwords)
+
     tablename = 'usermessage'
     with mysave.MysqlSave() as execute:
         selectfield = ['token']
@@ -290,6 +294,7 @@ def checkkyc(username: str) -> str:
         "state": 0, "token": login_token
     }
     urls = gain_url('管理端kyc审核')
+    print(urls)
     response = json.dumps(deamds(urls, data))
     msg = ' '.join(re.findall('"msg": "(.*?)"', response))
     return msg
@@ -686,6 +691,18 @@ def market(chain: str) -> float:
     return newest
 
 
+# 行情
+def markets(chain: str) -> float:
+    url = 'https://trade.idefiex.com' + '/api/hq/getsnapshot.do?p='
+    data = {
+        # 默认全部转换成小写
+        "symbol": chain.lower()
+    }
+    response_dict = deamds(url, data)['info']
+    newest = float(response_dict['LP'])
+    return newest
+
+
 # 充值提现
 class Topup_withdrawal(object):
     def __init__(self, username):
@@ -731,8 +748,8 @@ class Topup_withdrawal(object):
         url = gain_url('提币')
         # 充值类型
         withdrawal_dict = {
-            1: ['ETH', 'USDT', '100', '0x0e50f970F169A43a93D9c3c4697B3cb91128F993'],
-            2: ['BTC', 'USDT', '1', '3EkaqUNdowvetHDzkYgA6woXcBRkPuULRT'],
+            1: ['ETH', 'USDT', '2', '0x0e874d82a7839bcefdbdd01239c7431cd1e2ad4b'],
+            2: ['BTC', 'USDT', '4', '3EkaqUNdowvetHDzkYgA6woXcBRkPuULRT'],
             3: ['TRX', 'USDT', '1', 'TGbNUPe5fFUda32cz8GXQDsbTugiAEdp7n'],
             4: ['ETH', 'ETH', '0.05123212', '0x0e50f970F169A43a93D9c3c4697B3cb91128F993'],
             5: ['BTC', 'BTC', '0.001', '3EkaqUNdowvetHDzkYgA6woXcBRkPuULRT']
@@ -741,7 +758,8 @@ class Topup_withdrawal(object):
             "token": self.token,
             "chaincode": withdrawal_dict[index][0], "coincode": withdrawal_dict[index][1],
             "amount": withdrawal_dict[index][2], "addr": withdrawal_dict[index][3],
-            "code": "xwwwwx"
+            "code": "xwwwwx",
+            "googlecode": goolecode
         }
         deamds(url, data)
 
@@ -879,7 +897,12 @@ class Binary_options(object):
             "type": self.type, "amount": self.amount,
             "endtime": self.endtime
         }
-        deamds(url, data)
+        response_dict = deamds(url, data)
+        for openprice in response_dict['info']['datas']:
+            marker = float(markets('btc')) * (1 - 0)
+            print("测试环境行情:{}-线上实际:{}".format(
+                openprice['openprice'], marker
+            ))
 
     # 二元期权持仓单查询
     def keep_granary(self):
@@ -902,24 +925,155 @@ class Binary_options(object):
 class snatch_treasure(object):
     def __init__(self, username):
         self.token = usertoken(username)
+        self.url = 'https://test.trade.idefiex.com/jzuul/'
+        self.header = {
+            "token": self.token
+        }
+        self.comm_list = self.commodity_list()  # 商品列表
+        self.copies_list = self.commodity_detalis()  # 商品份数列表
+
+    # 商品详情
+    def commodity_detalis(self) -> list:
+        copies_list = []
+        # for detalis_id in self.comm_list:
+        url = self.url + '/treasure/details?exhibitTreasureId='+str(59)+''
+        response = json.loads(str(requests.get(url, headers=self.header).text))
+        print(response)
+        copies = response['data']['amount']
+        copies_list.append(copies)
+        print("商品详情:{}".format(
+            copies_list
+        ))
+        return copies_list
 
     # 用户购买历史记录
     def purchase_history(self):
-        url = 'http://192.168.31.24:7071/treasure/user/purchased/list'
-        header = {
-            'token': self.token
+        url = self.url + 'treasure/user/purchased/list'
+        response = json.loads(str(requests.get(url, headers=self.header).text))
+        print("用户购买历史记录:{}".format(response))
+        status_list = []
+        lottery = []  # 中奖信息字典
+        for status_index in response['data']['purchasedList']:
+            status_list.append(status_index['status'])
+            if status_index['status'] == 12:
+                lottery.append(status_index['exhibitTreasureId'])
+        print(lottery)
+        # print(status_list)
+        return lottery
+
+    # 查询往期中奖列表
+    def prize(self):
+        url = self.url + 'treasure/prizeCode/history/list?treasureId=2&pageNum=1&pageSize=10'
+        response = json.loads(str(requests.get(url).text))
+        print(response)
+
+    # 购买商品
+    def purchase(self) -> None:
+        time_list = []
+        # 默认购买所有商品
+        urls = self.url + 'treasure/purchase'
+        comm_list = self.comm_list
+        copies_list = self.copies_list
+        for index in range(len(comm_list)):
+            data = {
+                "amount": int(copies_list[index] * 0.8),
+                "exhibitTreasureId": comm_list[index],
+                "channel": 1
+            }
+            response = json.loads(str(requests.post(urls, json=data, headers=self.header).text))
+            time_list.append(int(datetime.datetime.now().strftime('%H%M%S%f')[:-3]))
+            # print(response)
+        print(time_list)
+
+    # 查询正在进行中的夺宝商品列表
+    def commodity_list(self) -> list:
+        """类型：1 - 全部进行中的2 - 新开3 - 即将完成
+        """
+        urls = self.url + 'treasure/list?type=1'
+        response = json.loads(str(requests.get(urls).text))
+        exhibitTreasureList = response['data']['exhibitTreasureList']
+        id_list = []
+        for commodity_index in exhibitTreasureList:
+            id_list.append(commodity_index['id'])
+        print(
+            "商品列表：{}".format(id_list)
+        )
+        return id_list
+
+    # 领取奖励
+    def receive_award(self):
+        url = self.url + 'treasure/receive/award'
+        data = {
+            "exhibitTreasureId": ''
         }
-        response = requests.get(url, headers=header)
-        print(response.text)
+
+    # 查询中奖号码规则（算号验证）
+    def select_number(self):
+
+        for treasureid in self.purchase_history():
+            url = self.url + 'treasure/prize/rule?exhibitTreasureId='+str(treasureid)+''
+            response = json.loads(str(requests.get(url, headers=self.header).text))
+            print(response)
+            # old_numberA = response['data']['numberA']
+            new_numberA = 0
+            numberAList = response['data']['numberAList']
+            for index in numberAList:
+                times = index['value']
+                new_numberA = new_numberA + int(times)
+            numberB = response['data']['numberB']
+            count = response['data']['amount']
+            old_luckyCode = response['data']['luckyCode']
+            new_luckyCode = ((int(new_numberA) + int(numberB)) % count) + 100001
+            print("系统返回code：{}，计算code:{}".format(old_luckyCode, new_luckyCode))
 
 
-if __name__ == "__main__":
-    user = '18770185021'
-    # test = snatch_treasure(user)
-    # test.purchase_history()
-    # execute = Binary_options(user)
-    # run = Topup_withdrawal(user)
-    # run.exchange(3)
-    # run.withdrawal(3)
-    # run.get_recharge_site()
+class code(object):
+    def __init__(self, username):
+        self.token = usertoken(username)
+
+    # 激活code
+    def nativate_code(self):
+        url = gain_url('激活code')
+        data = {
+            "token": self.token,
+            "pwd": "25d55ad283aa400af464c76d713c07ad"
+        }
+        response = deamds(url, data)
+
+    # 分页查询code的详细返佣记录
+    def code_flow(self):
+        url = gain_url('分页查询code的详细返佣记录')
+        data = {
+            "token": self.token,
+            "page": "1", "count": "20"
+        }
+        response = deamds(url, data)
+
+    # 查询经纪人的最近注册的好友
+    def select_register(self):
+        url = gain_url('查询经纪人的最近注册的好友')
+        data = {
+            "token": self.token,
+        }
+        response = deamds(url, data)
+
+    # 返佣提现到交易账户余额
+    def deposit(self):
+        # 提佣类型默认1: 合约2: code3: 期权0: 全部
+        url = gain_url('返佣提现到交易账户余额')
+        data = {
+            "token": self.token,
+            "type": "3"
+        }
+        response = deamds(url, data)
+
+    # 查询经纪人汇总信息
+    def select_all_message(self) -> dict:
+        url = gain_url('查询经纪人汇总信息')
+        data = {
+            "token": self.token
+        }
+        response = deamds(url, data)
+        return response
+
 

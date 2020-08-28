@@ -60,14 +60,14 @@ class MysqlSave(object):
         keystr, valuetuple = self.__dictchangesql(message)
         insertsql = """INSERT INTO {}{} VALUES{}
         """.format(tablename, keystr, valuetuple).replace("\n", "")
-        print(insertsql)
+        # print(insertsql)
         self.cursor.execute(insertsql)
 
     def create(self, tablename: str, message: list) -> dict:
         messages = tuple(message)
         message_str = str(messages).replace('\'', "")
         createsql = """CREATE TABLE {}{}""".format(tablename, message_str)
-        print(createsql)
+        # print(createsql)
         self.cursor.execute(createsql)
 
     def select(self, selectfield: list, tablename: str, condition: dict):

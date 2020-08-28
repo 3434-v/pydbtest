@@ -619,17 +619,70 @@ def rebate():
 
 # 多级关系生成
 def arithmetic(counter):
-    username = ''
-    username = pymethod.register(username)
-    username_lsit = []
+    # usernames = pymethod.register('')
+    usernames = '1665914277@test.com'
+    user_list = []
     for index in range(counter):
-        for index_lever in range(index * 2):
-            username_lsit.append(pymethod.register(username))
-            for user in username_lsit:
-                pymethod.register(user)
+        user_list.append(usernames)
+        usernames = pymethod.register(usernames)
+        pymethod.addmoney(usernames, 10000)
+        for index in range(2):
+            pymethod.Binary_options(usernames).create_granary()
+        # pymethod.create_granary(usernames)
+        # pymethod.code(usernames).nativate_code()
+    user_list.append(usernames)
+    print(user_list)
+    return user_list
+
+
+# 开关闭合问题-->code返佣
+def code_test(users_list: list):
+    # 1、先生成一个5级列表,0->对应1级头
+    # users_list = arithmetic(6)
+    for user_index in users_list:
+        pymethod.addmoney(user_index, 100000)
+        pymethod.code(user_index).nativate_code()
+        pymethod.kyc(user_index)
+        pymethod.checkkyc(user_index)
+        pymethod.create_granary(user_index)
+
+
+def get_codetodaybalance_codetodaycount(users_list: list):
+    codetodaybalance_list = []
+    codetodaycount_list = []
+    for user_index in users_list:
+        code_response = pymethod.code(user_index).select_all_message()
+        # 今日返佣金额
+        codetodaybalance = code_response['info']['codetodaybalance']
+        # 今日卖出份数
+        codetodaycount = code_response['info']['codetodaycount']
+        codetodaybalance_list.append(codetodaybalance)
+        codetodaycount_list.append(codetodaycount)
+    return codetodaybalance_list, codetodaycount_list
+
+
+# code返佣计算
+def count_code_money():
+    users_list = arithmetic(6)
+    # old_codetodaybalance_list, old_codetodaycount_list = get_codetodaybalance_codetodaycount(users_list)
+    code_test(users_list)
+    # new_codetodaybalance_list, new_codetodaycount_list = get_codetodaybalance_codetodaycount(users_list)
+    # money_list = [50, 25, 12.5, 6.25, 3.12]
+
+
+# 二元期权返佣计算
+def share_option():
+    arithmetic(6)
 
 
 if __name__ == "__main__":
-    # pass
-    arithmetic(4)
-
+    # share_option()
+    username = '1665914277@test.com'
+    pymethod.addmoney(username, 10000)
+    # username = pymethod.register('')
+    # pymethod.register(username)
+    # pymethod.addmoney(username, 100)
+    # usernames = '1661065167@test.com'
+    # user = pymethod.register(usernames)
+    # pymethod.addmoney(user, 10000)
+    # pymethod.Binary_options(user).create_granary()
